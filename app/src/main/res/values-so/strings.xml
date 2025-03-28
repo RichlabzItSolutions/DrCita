@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Caafisom</string>
+    <string name="loading_title">Caafisom</string>
+    <string name="book_an_appointment">BALAN DHAKHTAR QABSO</string>
+    <string name="video_consulatation">La-tashiga Video</string>
+    <string name="book_diagnostic_scans">BALAN BAADHITAAN AMA SCAN QABSO</string>
+    <string name="book_dental_appointment">BALAN DHAKHTARKA ILKAHA QABSO</string>
+    <string name="please_enter_your_valid_mobile_number">Please Enter Your Valid Mobile Number</string>
+    <string name="not_valid_mobile_number">Not Valid Mobile Number</string>
+    <string name="diagnostics">ogaanshaha</string>
+    <string name="medicines">Daawooyin</string>
+    <string name="book_an_ambulance">DALBO AMBULANCE</string>
+    <string name="en" translatable="false">en_IN</string>
+    <string name="hi" translatable="false">so_SO</string>
+    <string name="aboutus">CAAFiSOM waa hurmoodka tegnoolajiyada fududaysa adeegyada iyo balamaha caafimaad ee Somalia iyo Somaliland,
+        waxayna isku xidhaa bukaanka iyo xarumaha bixiya adeegyada iyo deryeelka caafimaad sida Hospitaalada, dhakhaatiirta ilkaha,
+        iyo kuwa maqaarka. Appka CAAFiSOM wuxuu kaa caawinayaa helida macluumaad ku saabsan caafimaadka iyo adeegyada caafimaad,
+        Waxaad waydiin kartaa CAAFiSOM suaalo la xidhiidha caafimaadka iyo adeegyada caafimaadkaba waxaana kuu jooga khubaro aqoon u leh arimaha
+        aad warkooda raadinayso. CAAFiSOM waa shabakada ugu balaadhan ee fududaysa balamaha iyo isku xidhka bulshada iyo adeegyada caafimaad
+        ee ka jira Somalia iyo Somaliland waxaanay diyaar u tahay inay kuugu adeegto hagarla aan adiga iyo qoyskaagaba.</string>
+    <string name="updateprofile">Cusbooneysii Xogta</string>
+    <string name="changepassword">Badalida Lambarka Sirta Ah</string>
+    <string name="aboutustitle">Nagu Saabsan</string>
+    <string name="bookingappointment">Balan Ka Qabso</string>
+    <string name="bookanamubulance">DALBO AMBULANCE</string>
+    <string name="doctorslist">Liiska Dhakhaatiirta</string>
+    <string name="checkout">Dhamaystir</string>
+    <string name="contactus">Nala Soo Xidhiidh</string>
+    <string name="hospitalslist">Hospitaalada</string>
+    <string name="forgotpassword">Ilowday lambarka sirta ah </string>
+    <string name="language">Dooro Luqada</string>
+    <string name="signin">Gal</string>
+    <string name="signup">Is diiwaan geli</string>
+    <string name="pleasesignintocontinue">Fadlan so gal si aad hore u sii socoto</string>
+    <string name="enteryourphonenumber">Geli Lambarka Taleefankaaga</string>
+    <string name="enteryourpassword">Geli Lambarka Sirta Ah</string>
+    <string name="medicalrecords">Diiwaanada Caafimaadka</string>
+    <string name="payment">Lacag bixinta</string>
+    <string name="yourpaymenthasfailed">Lacag-bixintaadii laguma guulaysan</string>
+    <string name="youcanretrythepayment">Waxaad isku dayi kartaa lacag bixinta xaga hoose si aad u sii wadato</string>
+    <string name="tryagain">Mar kale isku day</string>
+    <string name="appointmentbookedsucessful">CAAFiSOM Balantii way kuu qabatay</string>
+    <string name="appointmentbookedwith">Balantii Waa Laguu Qabtay</string>
+    <string name="viewreceipt">Itus Rasiidka</string>
+    <string name="region">Dooro Gobolka</string>
+    <string name="updateregion">Badal gobolka</string>
+    <string name="resetpassword">Badal lambarka sirta ah</string>
+    <string name="setthenewpassword">Samayso lambar sired cusub si akoonkaaga aad u gali karto iyo dhamaan sifooyinka barnaamijka.</string>
+    <string name="submit">Noo Soo Gudbi</string>
+    <string name="confirmpassword">Hubi Furaha</string>
+    <string name="enterconfirmpassword">Xaqiiji Lambarka Sirta Ah</string>
+
+    <string name="diagnosticsscans">Baadhitaan Scan</string>
+    <string name="createanaccount">Samayso Akoon</string>
+    <string name="enteryourname">Geli Magacaaga</string>
+    <string name="enteryourlastname">Geli Magacaaga Labaad</string>
+
+    <string name="alreadyhaveanaccount">Hore ayan akoon u leeyahay</string>
+    <string name="verifyyourmobile">Xaqiiji Taleefan kaaga</string>
+    <string name="enteryourotpcodehere">Halkan geli koodka OTP-gaaga</string>
+    <string name="rateusonplaystore">Naga qiimee dhanka Play Store</string>
+    <string name="termsandconditions">Shuruudaha</string>
+    <string name="Continue">Sii Wad</string>
+    <string name="customercaresupport">Qaybta Daryeelka Macaamiisha</string>
+    <string name="entername">Magacaaga Geli</string>
+    <string name="entermobile">Taleefan lambar kaaga geli</string>
+    <string name="currentpassword">Geli lambar sireed kaagii hore</string>
+    <string name="newpassword">Geli lambar sireed ka cusub</string>
+    <string name="retypenewpassword">Mar labaad geli lambar sireed ka cusub</string>
+    <string name="bookingsummary">Balanta Oo Kooban</string>
+    <string name="date">Taariikhda</string>
+    <string name="consultationfee">Lacagta Dhaktarka</string>
+    <string name="systemcharges">Khidmada</string>
+    <string name="commission">Advance Fee</string>
+
+    <string name="getintouch">Nala Soo xidhiidh</string>
+    <string name="feelfreetodropusalinebelow">Waxa aad buuxisaa foomka hoose si aad noola soo Xidhiidhtid</string>
+    <string name="entersubject">Geli Mawduuca</string>
+    <string name="enterdescription">Geli Sharaxaada</string>
+    <string name="forgetpswdtext">Geli nambarkaaga gacanta si loo xaqiijiyo habka, waxaanu kuugu soo diri doonaa 4 lambar lambarkaaga gacanta.</string>
+    <string name="customerreviews">Faallooyin Macaamiisha</string>
+    <string name="english">English</string>
+    <string name="somali">Somali</string>
+    <string name="updatelanguage">Luuqada Badal</string>
+    <string name="didntreceiveanycode" translatable="false">Miyaadan helin wax kood ah?</string>
+    <string name="resend">Dib iigu soo dir</string>
+    <string name="description">Sharaxaada</string>
+    <string name="reasonforvisit">Sababta booqashada</string>
+    <string name="photos">Sawiro</string>
+    <string name="documents">Dhukumentiyada</string>
+    <string name="rating">Qiimaynta</string>
+    <string name="cardno">Lambarka Kaadhka</string>
+    <string name="areyousurewanttodelete">Ma hubtaa inaad cancel garaysid balanta?</string>
+    <string name="ok">Haye</string>
+    <string name="cancel">Cancel</string>
+    <string name="availabletoday">Maanta waa la heli karaa</string>
+    <string name="deletepopup">Ma hubtaa inaad masaxdid?</string>
+    <string name="openinghours">Maanta waad heli kartaa</string>
+    <string name="profile">Xogta Shakhsiga</string>
+    <string name="appointments">Balamaha</string>
+    <string name="logout">Ka bax</string>
+    <string name="select_date">Dooro taariikh</string>
+    <string name="timings">Wakhtiyada shaqada</string>
+    <string name="appointment_number">Lambarka balanta</string>
+    <string name="number">Lambar</string>
+    <string name="checkoutnumber">Lambarka Balanta</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="book_ambulance_no">3883</string>
+    <string name="zaad">ZAAD</string>
+    <string name="edahab">eDAHAB</string>
+    <string name="opposite_to_ministry_of_religion_affairs">Ka soo horjeedka wasaarada diinta iyo awqaafta.</string>
+    <string name="info_caafisom_com" translatable="false">info@caafisom.com</string>
+    <string name="contact_us_no" translatable="false">+252 63 / +252 65</string>
+    <string name="_252" translatable="false">+252</string>
+    <string name="don_t_have_an_account">Ma haysto akoon?</string>
+    <string name="otp_automatic">Sugitaanka in si toos ah loo ogaado SMS-ka laguu soo diray</string>
+    <string name="receipt">Rasiidka</string>
+    <string name="successful">Waad Ku Guulaysatay Balanta</string>
+    <string name="patient_info">Macluumaadka bukaanka</string>
+    <string name="fee_amp_charge">Khidmad &amp; Kharash</string>
+    <string name="total">isugayn guud</string>
+    <string name="payment_method">Habka lacag bixinta</string>
+    <string name="other_info">Macluumaadka kale</string>
+    <string name="zaad_service">ZAAD SERVICE</string>
+    <string name="follow_the_time">Wakhtiga ilaali</string>
+    <string name="follow_the_number">Lambarka ilaali</string>
+    <string name="stay_safe">Nabad Gal!</string>
+    <string name="back_to_home">Dib ugu noqo wajahada</string>
+    <string name="share">Qof kale u dir</string>
+    <string name="support">Caawin</string>
+    <string name="save">Kaydi</string>
+    <string name="write_your_review">Qor Faaladaada</string>
+    <string name="notifications">Ogeysiisyada</string>
+    <string name="doctorname">Magaca Dhakhtarka</string>
+    <string name="doctorinfo">Macluumaadka Dhakhtarka</string>
+    <string name="scaninfo">Macluumaadka Baadhitaanka</string>
+    <string name="scanname">Magaca Baadhitaanka</string>
+    <string name="changepasswordbtn" >Badal Lambarka Sirta Ah</string>
+    <string name="appointment_for">Balanta loogu talagalay</string>
+    <string name="change">Qof kale</string>
+    <string name="proceedpayment">Codsiga lacag-bixinta waxaa lagu soo diri doonaa lambarka hoose</string>
+    <string name="proceedtopay">U Gudub Lacag bixinta</string>
+    <string name="notezaad">Fiiro gaar ah: Nambarku waa inuu ka bilowdaa 63</string>
+    <string name="noteeddahab">Fiiro gaar ah: Nambarku waa inuu ka bilowdaa 65</string>
+    <string name="free">Balantu Waa Bilaash</string>
+    <string name="confirmappointment">Hubi Balanta</string>
+    <string name="availbilitydays">Maalmaha Dhaktarku Shaqeeyo : </string>
+    <string name="notedata">Lacagtani waa hormarin si laguugu hubiyo laguuguna qabto balantan!</string>
+    <string name="dob">Taarikhda Dhalashada</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="Gender">Dooro Jinsi</string>
+    <string name="exchange">HUBSO INAY LACAGTU KUU SARIFAN TAHAY</string>
+    <string name="evc">Fiiro gaar ah: Nambarku waa inuu ka bilowdaa 61 ama 77</string>
+    <string name="evczeddahab">Fiiro gaar ah: Nambarku waa inuu ka bilowdaa 62</string>
+    <string name="ezaad">Fiiro gaar ah: Nambarku waa inuu ka bilowdaa 62 ama 61 ama 77</string>
+    <string name="somaliland">Goolada CAAFiSOM Kaso Horjeedka Al-Shukri Petrol Station.</string>
+    <string name="somaliaMogadishu">Kaso Horjeedka Hayat Mall, Wadada Makka Al Mukarama.</string>
+    <string name="mogadishu">Muqdisho</string>
+    <string name="somalialan">Hargeysa</string>
+
+    <string name="search">Raadi hospitaalka aad rabto</string>
+
+    <string name="switch_camera">Switch Camera Mode</string>
+    <string name="leave_meeting">Leave meeting</string>
+    <string name="toggle_camera">Toggle camera</string>
+    <string name="mic_turned_off">Mic turned off</string>
+    <string name="webcam_turned_off">Webcam turned off</string>
+    <string name="more_options">More options</string>
+    <string name="create_meeting">Create a meeting</string>
+    <string name="enter_meeting_code">Enter meeting code</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="join_meeting">Join a meeting</string>
+    <string name="chat">Chat</string>
+    <string name="notificationTitle">VideoSDK RTC is sharing your screen</string>
+    <string name="notificationContent">meeting is running</string>
+    <string name="write_message">Write your message</string>
+    <string name="remove">Remove</string>
+    <string name="toggle_mic">Toggle mic</string>
+    <string name="camera_is_turned_off">Camera is turned off</string>
+
+    <string-array name="meeting_options">
+        <item>One to One Meeting</item>
+        <item>Group Meeting</item>
+    </string-array>
+
+</resources>

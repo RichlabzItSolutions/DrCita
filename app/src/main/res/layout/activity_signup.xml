@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".SignupActivity">
+
+      <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:orientation="vertical"
+         android:background="@color/white"
+         android:clipChildren="true"
+         >
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="150dp"
+              android:layout_margin="16dp"
+              android:src="@drawable/dr_logo_with_name"></ImageView>
+
+          <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="16dp">
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signup"
+        android:textSize="28sp"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="#1C2838">
+
+    </TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/createanaccount"
+            android:textSize="16sp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/black"/>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/usericon"/>
+                <EditText
+                    android:id="@+id/signupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/enteryourname"
+                    android:maxLength="30"
+                    android:textColorHint="@color/black"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:background="@null">
+
+                </EditText>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/usericon"/>
+                <EditText
+                    android:id="@+id/signupLName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/enteryourlastname"
+                    android:maxLength="30"
+                    android:textColorHint="@color/black"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:background="@null">
+
+                </EditText>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/phoneicon"/>
+                <!--<TextView
+                    android:id="@+id/countrycodeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:text="@string/_252"
+                    android:gravity="center"
+                    android:drawableRight="@drawable/ic_baseline_arrow_drop_down_24"
+                    android:layout_marginStart="20dp"
+
+                    />-->
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCodePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:ccp_customMasterCountries="IN,AE"
+                    app:ccp_defaultNameCode="IN"
+                    app:ccp_showFlag="true"
+                    app:ccp_showArrow="true"
+                    app:ccp_showNameCode="false"
+                    app:ccp_showFullName="false"
+                    app:ccp_textSize="16sp"
+                    app:ccpDialog_backgroundColor="@color/white"
+                    app:ccpDialog_showTitle="true"
+                    android:layout_gravity="center"/>
+
+
+                <!--<com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCodePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    app:ccpDialog_allowSearch="false"
+                    app:ccpDialog_backgroundColor="@color/colorWhite"
+                    app:ccpDialog_fastScroller_bubbleColor="@color/colorAccent"
+                    app:ccpDialog_fastScroller_bubbleTextAppearance="@style/FastScroll"
+                    app:ccpDialog_fastScroller_handleColor="@color/colorPrimary"
+                    app:ccpDialog_searchEditTextTint="@color/colorWhite"
+                    app:ccpDialog_showTitle="true"
+                    app:ccp_arrowColor="@color/colorWhite"
+                    app:ccp_contentColor="@color/colorWhite"
+                    app:ccp_countryPreference="IN"
+                    app:ccp_defaultNameCode="IN"
+                    app:ccp_textSize="14dp" />-->
+
+
+                <EditText
+                    android:id="@+id/signupNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/enteryourphonenumber"
+                    android:singleLine="true"
+                    android:textSize="14sp"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="5dp"
+                    android:layout_gravity="center"
+                    android:background="@null">
+
+                </EditText>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/lockicon"/>
+                <EditText
+                    android:id="@+id/signupPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/enteryourpassword"
+                    android:inputType="textPassword"
+                    android:textSize="14sp"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:background="@null">
+
+                </EditText>
+
+                <ImageView
+                    android:id="@+id/iv_show_password_new"
+                    android:src="@drawable/ic_password_off"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/lockicon"/>
+                <EditText
+                    android:id="@+id/signupconfirmPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:hint="@string/enterconfirmpassword"
+                    android:inputType="textPassword"
+                    android:textSize="14sp"
+                    android:maxLength="18"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center"
+                    android:background="@null">
+
+                </EditText>
+
+                <ImageView
+                    android:id="@+id/iv_show_password_new_confirm"
+                    android:src="@drawable/ic_password_off"
+                    android:layout_marginRight="10dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signupRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/white"
+            app:backgroundTint="#4C61CC"
+            android:fontFamily="@font/roboto_bold"
+            android:background="@drawable/submit_btn_bg"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="7dp"
+            android:layout_gravity="end"
+            android:gravity="end">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/alreadyhaveanaccount"
+            android:textSize="14sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/signin"
+            android:textSize="16sp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto"
+            android:layout_marginEnd="10dp"
+            android:textColor="#4C61CC"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+    </ScrollView>
+
+</layout>

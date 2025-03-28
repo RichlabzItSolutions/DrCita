@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".PaymentsucessActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_payment"
+        android:layout_marginTop="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/purple_200"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:textSize="25sp"
+        android:text="@string/appointmentbookedsucessful">
+
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:background="@drawable/dotted_border">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:layout_margin="10dp"
+        android:text="@string/appointmentbookedwith"/>
+        <TextView
+            android:id="@+id/paymentsucessname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:textSize="18sp"
+            tools:text="Dr.Alvin on 03-May-2021"/>
+        <TextView
+            android:id="@+id/paymentsucessslotno"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:textSize="18sp"
+            tools:text="Number:2"/>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/viewreceiptBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/viewreceipt"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        app:backgroundTint="#4C61CC"
+        android:fontFamily="@font/roboto_bold"
+        android:background="@drawable/submit_btn_bg"/>
+
+
+
+</LinearLayout>
+</layout>

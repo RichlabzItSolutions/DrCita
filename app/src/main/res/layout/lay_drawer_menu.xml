@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:id="@+id/profileNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/usericon"/>
+            <TextView
+                android:id="@+id/profileTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/profile"
+                android:gravity="center_vertical"
+                android:maxLength="30"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/appoitmentsNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/appointments"/>
+            <TextView
+                android:id="@+id/appoitmentsTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/appointments"
+                android:maxLength="30"
+                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/contactusNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/contactus"/>
+            <TextView
+                android:id="@+id/contactusTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/contactus"
+                android:layout_weight="1"
+                android:maxLength="30"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/aboutusNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/aboutus"/>
+            <TextView
+                android:id="@+id/aboutusTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/aboutustitle"
+                android:maxLength="30"
+                android:layout_weight="1"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/languagesNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/language"/>
+            <TextView
+                android:id="@+id/languagesTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/language"
+                android:maxLength="30"
+                android:layout_weight="1"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/regionNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/region"/>
+            <TextView
+                android:id="@+id/regionTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/region"
+                android:maxLength="30"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24">
+
+            </ImageView>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="70dp"
+            app:strokeColor="#ebebeb"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="2dp">
+
+            <LinearLayout
+                android:id="@+id/medicalNav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="1dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/medicalrecords"/>
+                <TextView
+                    android:id="@+id/medicalTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:hint="@string/medicalrecords"
+                    android:maxLength="30"
+                    android:textColorHint="@color/black"
+                    android:textSize="14sp"
+                    android:layout_weight="1"
+                    android:singleLine="true"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="center"
+                    android:background="@null"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_baseline_chevron_right_24"/>
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+        <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/changepasswordNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/lockicon"/>
+            <TextView
+                android:id="@+id/changepasswordTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/changepassword"
+                android:maxLength="30"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:background="@null"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_chevron_right_24"/>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="70dp"
+        app:strokeColor="#ebebeb"
+        app:cardBackgroundColor="@color/white"
+        app:strokeWidth="1dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="2dp">
+
+        <LinearLayout
+            android:id="@+id/logoutNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:background="@drawable/shut_down"/>
+            <TextView
+                android:id="@+id/logoutTV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/logout"
+                android:gravity="center_vertical"
+                android:maxLength="30"
+                android:textColorHint="@color/red"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_gravity="center"
+                android:background="@null">
+
+            </TextView>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+</ScrollView>

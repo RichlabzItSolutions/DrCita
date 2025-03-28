@@ -1,0 +1,253 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Dr Cita</string>
+    <string name="loading_title">Dr Cita</string>
+    <string name="navigation_drawer_open" />
+    <string name="navigation_drawer_close" />
+    <string name="facebook_app_id">585568859190122</string>
+    <string name="fb_login_protocol_scheme">fb585568859190122</string>
+    <string name="loading_message">Caafisom</string>
+    <string name="en" translatable="false">en_IN</string>
+    <string name="hi" translatable="false">so_SO</string>
+
+    <string name="aboutus">CAAFiSOM is the leading Healthcare technology provider in Somalia/Somaliland and the region. CAAFiSOM connects the patient with their healthcare provider be it a doctor, dentist or physiotherapist. The CAAFiSOM app helps you get the latest information when it comes to your health, ask healthcare-related questions and get expert answers free of charge.
+With the largest network of doctors and healthcare providers from top clinics and hospitals across Somalia/Somaliland, you can be rest assured that CAAFiSOM has you and your families’ health covered.</string>
+    <string name="updateprofile">Update profile</string>
+    <string name="changepassword">Change Password</string>
+    <string name="book_an_appointment">Book an Appointment</string>
+    <string name="book_diagnostic_scans">BOOK DIAGNOSTIC SCANS</string>
+    <string name="video_consulatation">Video Consulatation</string>
+    <string name="diagnostics">Diagnostics</string>
+    <string name="medicines">Medicines</string>
+
+    <string name="book_dental_appointment">BOOK DENTAL APPOINTMENT</string>
+    <string name="book_an_ambulance">BOOK AN AMBULANCE</string>
+    <string name="aboutustitle">About us</string>
+    <string name="bookingappointment">Booking Appointment</string>
+    <string name="bookanamubulance">Book An Ambulance</string>
+    <string name="doctorslist">Doctors List</string>
+    <string name="checkout">Checkout</string>
+    <string name="contactus">Contact us</string>
+    <string name="hospitalslist">Hospitals</string>
+    <string name="forgotpassword">Forgot password?</string>
+    <!--<string name="forgotpassword">Ilowday lambarka sirta ah</string>-->
+
+    <string name="language">Language</string>
+    <!-- <string name="signin">Gal</string>
+    <string name="signup">Is diiwaan geli</string>
+    <string name="pleasesignintocontinue">Fadlan so gal si aad hore u sii socoto</string>
+    <string name="enteryourphonenumber">Geli Lambarka Taleefankaaga</string>
+    <string name="enteryourpassword">Geli Lambarka Sirta Ah</string>-->
+
+    <string name="signin">Log in</string>
+    <string name="signup">Register</string>
+    <string name="pleasesignintocontinue">Please log in to continue.</string>
+    <string name="enteryourphonenumber">Phone Number.</string>
+    <string name="enteryourpassword">Password</string>
+    <string name="medicalrecords">Medical Records</string>
+    <string name="payment">Payment</string>
+    <string name="yourpaymenthasfailed">Your Payment has failed</string>
+    <string name="youcanretrythepayment">You can retry the payment below to continue this</string>
+    <string name="tryagain">TRY AGAIN</string>
+    <string name="appointmentbookedsucessful">Appointment Booked Successfully</string>
+    <string name="appointmentbookedwith">Appointment booked with</string>
+    <string name="viewreceipt">View Receipt</string>
+    <string name="region">Region</string>
+    <string name="updateregion">Update Region</string>
+    <string name="resetpassword">Change password</string>
+    <string name="setthenewpassword">Create a new password so you can access your account and all the features of the program.</string>
+    <string name="submit">Submit</string>
+    <string name="confirmpassword">Confirm Password</string>
+    <string name="diagnosticsscans">Diagnostics Scans</string>
+    <!-- <string name="createanaccount">Samayso Akoon</string>
+    <string name="enteryourname">Geli Magacaaga</string>
+    <string name="enteryourlastname">Geli Magacaaga Labaad</string>
+    <string name="enterconfirmpassword">Xaqiiji Lambarka Sirta Ah</string>
+    <string name="alreadyhaveanaccount">Hore ayan akoon u leeyahay</string>-->
+    <string name="createanaccount">Create an Account</string>
+    <string name="enteryourname">First Name</string>
+    <string name="enteryourlastname">Last Name</string>
+    <string name="enterconfirmpassword">Confirm Password</string>
+    <string name="alreadyhaveanaccount">I already have an account.</string>
+    <string name="verifyyourmobile">Verify your phone number.</string>
+    <string name="enteryourotpcodehere">Enter your OTP code here.</string>
+    <string name="rateusonplaystore">Rate us on Play store</string>
+    <string name="termsandconditions">Terms &amp; Conditions</string>
+    <string name="Continue">Continue</string>
+    <string name="customercaresupport">Customer Care Support</string>
+    <string name="entername">Enter Name</string>
+    <string name="entermobile">Enter Mobile</string>
+    <string name="currentpassword">Current Password</string>
+    <string name="newpassword">New Password</string>
+    <string name="retypenewpassword">Re-Type New Password</string>
+    <string name="bookingsummary">Booking Summary</string>
+    <string name="date">Date</string>
+    <string name="consultationfee">Consultation Fee</string>
+    <string name="systemcharges">System Charges</string>
+    <string name="commission">Advance Fee</string>
+
+    <string name="getintouch">Get in Touch</string>
+    <string name="feelfreetodropusalinebelow">Feel free to drop us a line below</string>
+    <string name="entersubject">Enter Subject</string>
+    <string name="enterdescription">Enter Description</string>
+    <string name="forgetpswdtext">Enter your mobile number to verify the process, we will send you a 4-digit code to your mobile number.</string>
+
+    <!--
+        <string name="forgetpswdtext">Geli nambarkaaga gacanta si loo xaqiijiyo habka, waxaanu kuugu soo diri doonaa 4 lambar lambarkaaga gacanta.</string>
+    -->
+    <string name="customerreviews">Customer Reviews</string>
+    <string name="english">English</string>
+    <string name="somali">Somali</string>
+    <string name="updatelanguage">Update Language</string>
+    <string name="didntreceiveanycode" translatable="false">Didn\'t you get any code?</string>
+    <string name="resend">Send it back to me.</string>
+    <string name="description">Description</string>
+    <string name="reasonforvisit">Reason for visit</string>
+    <string name="photos">Photos</string>
+    <string name="documents">Documents</string>
+    <string name="rating">Rating</string>
+    <string name="cardno">Card No:</string>
+    <string name="areyousurewanttodelete">Are you sure you want to cancel this Appointment?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="availabletoday">Available Today</string>
+    <string name="deletepopup">Are you sure you want to delete?</string>
+    <string name="openinghours">Open 24 hours</string>
+    <string name="profile">Profile</string>
+    <string name="appointments">Appointments</string>
+    <string name="logout">Logout</string>
+    <string name="select_date">Select Date</string>
+    <string name="timings">Timings</string>
+    <string name="appointment_number">Appointment Number</string>
+    <string name="number">Number</string>
+    <string name="checkoutnumber">Number</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="book_ambulance_no">3883</string>
+    <string name="zaad">ZAAD</string>
+    <string name="edahab">eDAHAB</string>
+    <string name="opposite_to_ministry_of_religion_affairs">Opposite to the ministry of religious affairs.</string>
+    <string name="info_caafisom_com" translatable="false">info@caafisom.com</string>
+    <string name="contact_us_no" translatable="false">+252 63 / +252 65</string>
+    <string name="_252" translatable="false">+252</string>
+    <!--<string name="don_t_have_an_account">Ma haysto akoon?</string>-->
+    <string name="don_t_have_an_account">Do I have an account?</string>
+
+    <string name="not_valid_mobile_number">Not Valid Mobile Number</string>
+    <string name="please_enter_your_valid_mobile_number">Please Enter Your Valid Mobile Number</string>
+    <string name="otp_automatic">Waiting to automatically detect on SMS sent to</string>
+    <string name="receipt">Receipt</string>
+    <string name="successful">Successful</string>
+    <string name="patient_info">Patient Info</string>
+    <string name="fee_amp_charge">Fee &amp; Charge</string>
+    <string name="total">Total</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="other_info">Other Info</string>
+    <string name="zaad_service">ZAAD SERVICE</string>
+    <string name="follow_the_time">Follow the time</string>
+    <string name="follow_the_number">Follow the number</string>
+    <string name="stay_safe">Stay safe</string>
+    <string name="back_to_home">Back to home</string>
+    <string name="share">Share</string>
+    <string name="support">Support</string>
+    <string name="save">Save</string>
+    <string name="write_your_review">Write Your Review</string>
+    <string name="notifications">Notifications</string>
+    <string name="doctorname">Doctor Name</string>
+    <string name="doctorinfo">Doctor Info</string>
+    <string name="scaninfo">Scan Info</string>
+    <string name="scanname">Scan Name</string>
+    <string name="changepasswordbtn">Submit</string>
+    <string name="enterpatientname">Enter Patient Name</string>
+    <string name="enterpatientnumber">Enter Patient Mobile Number</string>
+    <string name="appointment_for">Appointment For</string>
+    <string name="change">Change</string>
+    <string name="proceedpayment">Payment request will send to below number</string>
+    <string name="proceedtopay">Proceed To Pay</string>
+    <string name="notezaad">Note: Mobile number should start with 63</string>
+    <string name="noteeddahab">Note: Mobile number should start with 65</string>
+    <string name="free">Free</string>
+    <string name="confirmappointment">Confirm Appointment</string>
+    <string name="availbilitydays">Available Days :</string>
+    <string name="notedata">Note: This payment will be deducted from the full scan payment at the hospital</string>
+    <string name="dob">Date of Birth</string>
+    <string name="Gender">Select Gender</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="exchange">MAKE SURE YOU EXCHANGED THE MONEY</string>
+    <string name="evc">Note: Mobile number should start with 61 or 77</string>
+    <string name="evczeddahab">Note: Mobile number should start with 62</string>
+    <string name="ezaad">Note: Mobile number should start with 62 or 61 or 77</string>
+    <string name="somaliland">CAAFiSOM Roundabout,Opposite Al-Shukri Petrol Station.</string>
+
+    <string name="somaliaMogadishu">Opposite Hayat Mall, Maka Al Mukarama Road,Taleeh.</string>
+    <string name="mogadishu"> Mogadishu</string>
+    <string name="somalialan">Hargeysa</string>
+
+    <string name="search">Search By Hospital Name</string>
+    <string name="title_activity_one_to_one_call">OneToOneCallActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <string name="camera_is_turned_off">Camera is turned off</string>
+    <string name="switch_camera">Switch Camera Mode</string>
+    <string name="leave_meeting">Leave meeting</string>
+    <string name="toggle_camera">Toggle camera</string>
+    <string name="mic_turned_off">Mic turned off</string>
+    <string name="webcam_turned_off">Webcam turned off</string>
+    <string name="more_options">More options</string>
+    <string name="create_meeting">Create a meeting</string>
+    <string name="enter_meeting_code">Enter meeting code</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="join_meeting">Join a meeting</string>
+    <string name="chat">Chat</string>
+    <string name="notificationTitle">VideoSDK RTC is sharing your screen</string>
+    <string name="notificationContent">meeting is running</string>
+    <string name="write_message">Write your message</string>
+    <string name="remove">Remove</string>
+    <string name="toggle_mic">Toggle mic</string>
+    <string-array name="meeting_options">
+        <item>One to One Meeting</item>
+        <item>Group Meeting</item>
+    </string-array>
+</resources>

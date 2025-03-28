@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#11000000">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4C61CC">
+        <RelativeLayout
+            android:id="@+id/notificationView"
+            android:layout_width="wrap_content"
+            android:gravity="end"
+
+            android:layout_gravity="end"
+
+            android:layout_height="wrap_content">
+
+            <!--<ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_notifications_24" />
+-->
+            <TextView
+                android:id="@+id/notificationCountTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
+                android:background="@drawable/not_bg"
+                android:gravity="center"
+                android:textColor="@color/white"
+                tools:text="2" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/dr_cita_logo_circle"
+        android:layout_centerHorizontal="true"/>
+
+
+
+        <include
+            android:id="@+id/dashboardmainlayout"
+            layout="@layout/dashboardmainlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/image" />
+
+        <include
+            android:id="@+id/notificationwithimage"
+            android:layout_below="@+id/image"
+            layout="@layout/notificationlayout"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content">
+        </include>
+        <include
+            android:id="@+id/notificationwithoutimage"
+            android:layout_below="@+id/notificationwithimage"
+            layout="@layout/notification_without_image"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content">
+        </include>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/catRV"
+            android:layout_below="@+id/image"
+            android:visibility="gone"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="90dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notificationRV"
+            android:layout_below="@+id/image"
+            android:visibility="gone"
+            android:layout_marginBottom="90dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/nodataimage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@drawable/ic_nodata_"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@android:color/white"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:fabCradleMargin="8dp"
+        app:fabCradleRoundedCornerRadius="2dp"
+        app:fabCradleVerticalOffset="0dp"
+        tools:ignore="BottomAppBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/specalist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_stethoscope_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageButton
+                android:id="@+id/notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="2dp"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_building_line"
+                app:layout_constraintBottom_toBottomOf="@+id/first_menu_item"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="@+id/first_menu_item" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/white"
+        android:src="@drawable/ic_home_4_fill"
+        app:layout_anchor="@id/bottom_app_bar" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

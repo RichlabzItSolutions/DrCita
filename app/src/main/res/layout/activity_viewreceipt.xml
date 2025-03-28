@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/baseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/transparent"
+    tools:context=".ViewreceiptActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="2dp"
+            android:padding="2dp"
+
+            android:layout_gravity="center"
+            android:src="@drawable/appicon"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/receipt"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_medium"
+            android:textColor="@color/purple_200"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:rotation="180"
+                android:background="@drawable/halfcircle"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/successful"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/purple_500"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:background="@drawable/halfcircle"/>
+
+        </LinearLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/blackdotteddash"/>
+    <TextView
+        android:id="@+id/orderid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Order: #0001"
+        android:visibility="gone"
+        android:textColor="@color/purple_500"
+        android:fontFamily="@font/roboto_medium"/>
+    <TextView
+        android:id="@+id/slotdatereceipt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Issued: 21-May-2021"
+        android:visibility="gone"
+        android:textColor="@color/purple_500"
+        android:fontFamily="@font/roboto_medium"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/blackdotteddash"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/doctorinfotitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/patient_info"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/doctornamereceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Dr. Alvin"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/patientname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Mr. John Paul "
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/doctorspecalization"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="General Physician"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/patientslot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Number '2'"
+                android:visibility="gone"
+                android:layout_marginStart="30dp"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/doctorhospital"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Motherhood Hospital"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/patientnumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="61151212"
+                android:visibility="gone"
+                android:layout_weight="1"
+                android:layout_marginStart="30dp"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/doctorlocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Burco"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blackdotteddash"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/doctortitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/receiptdoctorname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Dr.Alvin"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:id="@+id/specializationLayout"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Specialist"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/receiptdoctorspecailazation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="General Physician"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fee_amp_charge"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/receiptfee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="$121.00"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/total"
+                android:textSize="28sp"
+                android:textAllCaps="true"
+                android:layout_weight="1"
+                android:textColor="@color/purple_200"
+                android:fontFamily="@font/roboto_bold"/>
+            <TextView
+                android:id="@+id/receiptcharges"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="$121"
+                android:textSize="28sp"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/purple_200"
+                android:fontFamily="@font/roboto_bold"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blackdotteddash"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_method"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/other_info"
+                    android:layout_marginStart="30dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/paymentService"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="@string/zaad_service"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/follow_the_time"
+                    android:layout_marginStart="30dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="63-XX-232-XXX-XX"
+                    android:layout_weight="1"
+                    android:visibility="invisible"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/follow_the_number"
+                    android:layout_marginStart="30dp"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/phonenumberreceipt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="61151212"
+                    android:layout_weight="1"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stay_safe"
+                    android:layout_weight="1"
+                    android:layout_marginStart="30dp"
+                    android:textColor="@color/purple_500"
+                    android:fontFamily="@font/roboto_medium"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bottomBtnLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:id="@+id/homeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/homeicon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/homebtn"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/back_to_home"
+                    android:singleLine="true"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/purple_200"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shareLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/sharebtn"
+                    app:tint="#868686" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/purple_200"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/suportLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/supporticon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/callbtn"
+                    app:tint="#868686" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/support"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/purple_200"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/bookmarkLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/bookmarkbtn"
+                    app:tint="#868686" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/purple_200"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+</layout>

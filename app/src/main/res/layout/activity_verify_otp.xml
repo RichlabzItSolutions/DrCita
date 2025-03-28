@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/splashbackground"
+    tools:context=".VerifyOtpActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/dr_logo_with_name"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="28sp"
+            android:textAllCaps="false"
+            android:text="@string/verifyyourmobile"
+            android:textColor="#1C2739"
+             />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enteryourotpcodehere"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/otp_automatic" />
+
+        <TextView
+            android:id="@+id/mobile_no_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/forgotPassLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="30dp"
+            android:padding="10dp"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/editOtp1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="7dp"
+                android:background="@drawable/ractangle_otp_input"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editOtp2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="7dp"
+                android:layout_toRightOf="@+id/editOtp1"
+                android:textColor="@color/black"
+                android:background="@drawable/ractangle_otp_input"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editOtp3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="7dp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/editOtp2"
+                android:background="@drawable/ractangle_otp_input"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/editOtp4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="7dp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/editOtp3"
+                android:background="@drawable/ractangle_otp_input"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textAlignment="center"
+                android:textSize="24sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:text="@string/didntreceiveanycode" />
+
+            <TextView
+                android:id="@+id/resend_otp_"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:textColor="#4C61CC"
+                android:text="@string/resend" />
+
+
+        </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/verifyotpSubmitBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            app:backgroundTint="#4C61CC"
+            android:fontFamily="@font/roboto_bold"
+            android:background="@drawable/submit_btn_bg"/>
+
+    </LinearLayout>
+</LinearLayout>
+</layout>

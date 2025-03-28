@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="120dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/dr_logo_with_name"></ImageView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:text="Welcome to Dashboard"
+        android:textSize="28sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/purple_200">
+
+    </TextView>
+
+
+
+</LinearLayout>
