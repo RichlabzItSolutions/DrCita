@@ -32,6 +32,8 @@
     <string name="language">Dooro Luqada</string>
     <string name="signin">Gal</string>
     <string name="signup">Is diiwaan geli</string>
+    <string name="camera_permission_desc">You need to accept CAMERA permission to complete this task</string>
+
     <string name="pleasesignintocontinue">Fadlan so gal si aad hore u sii socoto</string>
     <string name="enteryourphonenumber">Geli Lambarka Taleefankaaga</string>
     <string name="enteryourpassword">Geli Lambarka Sirta Ah</string>

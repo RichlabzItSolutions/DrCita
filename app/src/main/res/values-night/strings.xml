@@ -7,6 +7,9 @@
 
     <string name="camera_is_turned_off">Camera is turned off</string>
 
+    <string name="camera_permission_desc">You need to accept CAMERA permission to complete this task</string>
+
+
     <string name="not_valid_mobile_number">Not Valid Mobile Number</string>
     <string name="please_enter_your_valid_mobile_number">Please Enter Your Valid Mobile Number</string>
 

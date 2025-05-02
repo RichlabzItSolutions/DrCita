@@ -1,18 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.CaafisomUser" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Primary brand color. -->
+   <!-- <style name="Theme.CaafisomUser" parent="Theme.AppCompat.Light.DarkActionBar">
+        &lt;!&ndash; Primary brand color. &ndash;&gt;
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_200</item>
         <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
+        &lt;!&ndash; Secondary brand color. &ndash;&gt;
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
+        &lt;!&ndash; Status bar color. &ndash;&gt;
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-    </style>
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
+    </style>-->
 
     <style name="Theme.AppCompat.NoActionBar">
         <item name="colorPrimaryDark">@color/purple_200</item>

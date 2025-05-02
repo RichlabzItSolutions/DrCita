@@ -303,10 +303,10 @@ public class BookanAppotimentActivity extends LanguageBaseActivity implements Vi
                     Constants.ToastShort(BookanAppotimentActivity.this, "Enter Patient Phone Number");
                     return;
                 }
-                if (!(patientnumberET.getText().toString().matches(Constants.MobilePattern))) {
+               /* if (!(patientnumberET.getText().toString().matches(Constants.MobilePattern))) {
                     Constants.ToastShort(BookanAppotimentActivity.this, Constants.enter_valid_mobile_no);
                     return;
-                }
+                }*/
                 popupBook(patientnameET.getText().toString(),patientnumberET.getText().toString());
 
             }
@@ -453,7 +453,7 @@ public class BookanAppotimentActivity extends LanguageBaseActivity implements Vi
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public void onClick(View view) {
+    /*public void onClick(View view) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, date, myCalendar
                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
@@ -471,7 +471,47 @@ public class BookanAppotimentActivity extends LanguageBaseActivity implements Vi
                 }
             }
         });
+
+        Calendar minDate = Calendar.getInstance();
+        minDate.add(Calendar.DAY_OF_MONTH, 10);
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        datePickerDialog.show();
+    }*/
+
+    public void onClick(View view) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, date,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH));
+
+        datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                activityBookanAppotimentBinding.appotimentdate.setText(
+                        dayOfMonth + "-" + (monthOfYear + 1) + "-" + year
+                );
+
+                if (isFromList){
+                    getDoctorSlots(2, doctorID);
+                } else {
+                    getDoctorSlots(1, doctorID);
+                }
+            }
+        });
+
+        // Set min date to today
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+        // Set max date to 10 days from now
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.DAY_OF_MONTH, 10);
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+
         datePickerDialog.show();
     }
 

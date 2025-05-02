@@ -48,10 +48,8 @@
         android:layout_height="110dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/dr_cita_logo_circle"
+        android:src="@drawable/drcircle"
         android:layout_centerHorizontal="true"/>
-
-
 
         <include
             android:id="@+id/dashboardmainlayout"
@@ -68,6 +66,7 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content">
         </include>
+
         <include
             android:id="@+id/notificationwithoutimage"
             android:layout_below="@+id/notificationwithimage"
@@ -77,6 +76,7 @@
             android:layout_width="wrap_content">
         </include>
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/catRV"
             android:layout_below="@+id/image"
@@ -85,7 +85,7 @@
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="90dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/notificationRV"
             android:layout_below="@+id/image"

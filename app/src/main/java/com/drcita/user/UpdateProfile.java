@@ -2,23 +2,41 @@ package com.drcita.user;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.bumptech.glide.Glide;
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
+import com.canhub.cropper.CropImageView;
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityUpdateProfileBinding;
 import com.drcita.user.models.profile.GetProfileRequest;
@@ -30,12 +48,17 @@ import com.drcita.user.retrofit.ApiClient;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.MediaType;
@@ -46,14 +69,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateProfile extends LanguageBaseActivity {
-
-    private ActivityUpdateProfileBinding activityUpdateProfileBinding;
+    public ActivityUpdateProfileBinding activityUpdateProfileBinding;
+    private ActivityResultLauncher<Intent> pickFileLauncher,cropLauncher;
     Uri resultUri;
-    private MultipartBody.Part multiPartBody;
-    private String userId, name, mobile;
-    private ProgressDialog progress;
-    private Button updateprofileBtn;
-
+     MultipartBody.Part multiPartBody;
+    public String userId, name, mobile;
+    ActivityResultLauncher<CropImageContractOptions> crop;
+    public final String[] permissions = new String[]{android.Manifest.permission.CAMERA,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    ImageView selectedImageView;
+     File file;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +90,9 @@ public class UpdateProfile extends LanguageBaseActivity {
         name = sp.getString(Constants.NAME, name);
         mobile = sp.getString(Constants.MOBILE, mobile);
 
-        setSupportActionBar(activityUpdateProfileBinding.toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setTitle("Update Profile");
+       /* setSupportActionBar(activityUpdateProfileBinding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Update Profile");*/
         activityUpdateProfileBinding.backUpdateprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,13 +104,21 @@ public class UpdateProfile extends LanguageBaseActivity {
         activityUpdateProfileBinding.roundedimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.with(UpdateProfile.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
+
+                selectedImageView=activityUpdateProfileBinding.roundedimg;
+                int result = ContextCompat.checkSelfPermission(UpdateProfile.this, Manifest.permission.CAMERA);
+                if (result == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(UpdateProfile.this, R.string.camera_permission_desc, Toast.LENGTH_SHORT).show();
+                    final Handler handler = new Handler();
+                    checkPermission();
+                } else {
+                    crop.launch(new CropImageContractOptions(null, new CropImageOptions()));
+                }
             }
         });
+
+        registerResult();
+
         activityUpdateProfileBinding.updateprofileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,7 +177,7 @@ public class UpdateProfile extends LanguageBaseActivity {
         }
     }
 
-    private void updateNameResponse(UpdateNameResponse updateNameResponse) {
+    public void updateNameResponse(UpdateNameResponse updateNameResponse) {
         if (updateNameResponse.getStatus().equals("success")) {
             dismissLoadingDialog();
             Log.d("TAG", "signupResponse: " + updateNameResponse.getMessage());
@@ -151,7 +185,7 @@ public class UpdateProfile extends LanguageBaseActivity {
         }
     }
 
-    private void getUserProfile() {
+    public void getUserProfile() {
         showLoadingDialog();
         if (Constants.haveInternet(getApplicationContext())) {
             GetProfileRequest request = new GetProfileRequest();
@@ -199,14 +233,14 @@ public class UpdateProfile extends LanguageBaseActivity {
         }
        /* Picasso.with(getApplicationContext()).load("https://helps2others.com/public/uploads/profile_pics/595020220108073614.jpg")
                 .into(activityUpdateProfileBinding.roundedimg);*/
-       /* if (!getProfileResponse.getData().getPicture().isEmpty()) {
+        if (!getProfileResponse.getData().getPicture().isEmpty()) {
             Target target = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Log.e(TAG, "onBitmapLoaded: " );
                   //  activityUpdateProfileBinding.roundedimg.setImageTintList(null);
-                    activityUpdateProfileBinding.roundedimg.setImageBitmap();
-                    https://helps2others.com/public/uploads/profile_pics/595020220108073614.jpg
+                    activityUpdateProfileBinding.roundedimg.setImageBitmap(bitmap);
+                    //https://helps2others.com/public/uploads/profile_pics/595020220108073614.jpg
                 }
 
                 @Override
@@ -227,7 +261,6 @@ public class UpdateProfile extends LanguageBaseActivity {
         } else {
 
         }
-*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -241,18 +274,58 @@ public class UpdateProfile extends LanguageBaseActivity {
         }
     }
 
-    private void uploadPhoto(Uri fileUri) {
-        File file = new File(fileUri.getPath());
+   /* public void uploadPhoto(Uri fileUri) {
+         file = new File(fileUri.getPath());
         RequestBody requestFile = RequestBody.create(MediaType.parse("image"), file);
         multiPartBody = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
         uploadPhotoToServer();
+    }*/
+
+
+    public void uploadPhoto(Uri fileUri) {
+        try {
+            File file = createTempFileFromUri(fileUri);
+            if (file != null) {
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+                multiPartBody = MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+                uploadPhotoToServer();
+            } else {
+                Toast.makeText(this, "File creation failed", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Failed to prepare image for upload", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void uploadPhotoToServer() {
+
+
+    public File createTempFileFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        if (inputStream == null) return null;
+
+        File tempFile = new File(getCacheDir(), "upload_" + System.currentTimeMillis() + ".jpg");
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        outputStream.close();
+        inputStream.close();
+
+        return tempFile;
+    }
+
+
+    public void uploadPhotoToServer() {
         UploadPhotoRequest request = new UploadPhotoRequest();
         request.setUserId(userId);
         String requestData = new Gson().toJson(request);
         RequestBody description = RequestBody.create(okhttp3.MultipartBody.FORM, requestData);
+
         if (Constants.haveInternet(UpdateProfile.this)) {
             showLoadingDialog();
             ApiClient.getRestAPI().uploadPic(description, multiPartBody).enqueue(new Callback<UpdateNameResponse>() {
@@ -300,10 +373,87 @@ public class UpdateProfile extends LanguageBaseActivity {
     }
 
 
+
+    public void registerResult(){
+        crop = registerForActivityResult(new CropImageContract(), new ActivityResultCallback<CropImageView.CropResult>() {
+            @Override
+            public void onActivityResult(CropImageView.CropResult result) {
+                resultUri = result.getUriContent();
+
+                uploadPhoto(resultUri);
+
+            }
+        });
+
+    }
+
+
+   /* @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            crop.launch(new CropImageContractOptions(null, new CropImageOptions()));
+        }
+    }*/
+    private void checkPermission() {
+        int result;
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        for (String p : permissions) {
+            result = ContextCompat.checkSelfPermission(UpdateProfile.this, p);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                listPermissionsNeeded.add(p);
+            }
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            int MULTIPLE_PERMISSIONS = 10;
+            ActivityCompat.requestPermissions(UpdateProfile.this, listPermissionsNeeded.toArray(new String[0]), MULTIPLE_PERMISSIONS);
+        }
+    }
+
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+    }*/
+
+    /*private File uriToFile(Uri uri, Context context) {
+        try {
+            String fileName = getFileNameFromUri(uri, context);
+            File file = new File(context.getCacheDir(), fileName);
+            try (InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                 FileOutputStream outputStream = new FileOutputStream(file)) {
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private String getFileNameFromUri(Uri uri, Context context) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (index != -1) {
+                        result = cursor.getString(index);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
     }*/
 
 }

@@ -7,19 +7,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/splashbackground"
+    android:background="@drawable/spleshimage"
     tools:context=".SplashScreenActivity">
 
 
 
-    <ImageView
+   <!-- <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/loading"
         android:layout_gravity="center"
         android:layout_margin="46dp"
-        android:src="@drawable/dr_cita_logo">
-    </ImageView>
+        android:src="@drawable/imagedr">
+    </ImageView>-->
     <ImageView
         android:layout_width="200dp"
         android:layout_height="50dp"

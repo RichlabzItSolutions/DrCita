@@ -254,8 +254,7 @@
             app:cardCornerRadius="70dp"
             app:strokeColor="#ebebeb"
             app:cardBackgroundColor="@color/white"
-            app:strokeWidth="1dp"
-            >
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:id="@+id/calendardate"

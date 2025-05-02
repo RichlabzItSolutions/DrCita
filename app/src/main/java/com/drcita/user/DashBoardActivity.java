@@ -97,6 +97,8 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         userId = sp.getString(Constants.USER_ID, userId);
        // profilestatus = sp.getString(Constants.PROFILESTATUS, profilestatus);
 
+
+
        /* new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -127,6 +129,12 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         navMobile = headerView.findViewById(R.id.navMobile);
         image = headerView.findViewById(R.id.imageView);
         navMobile.setText(mobile);
+
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setLayoutManager(new LinearLayoutManager(DashBoardActivity.this, LinearLayoutManager.HORIZONTAL,false));
+        dataItems = new ArrayList<>();
+        caregoryAdapter = new CaregoryAdapter(DashBoardActivity.this, dataItems);
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setAdapter(caregoryAdapter);
+
 
         //toggle.syncState();
         // activityDashBoardBinding.layoutDashboard.toolbar.setNavigationIcon(R.drawable.ic_baseline_dehaze_24);
@@ -578,7 +586,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 public void onResponse(@NonNull Call<SpecalitiesResponse> call, @NonNull retrofit2.Response<SpecalitiesResponse> response) {
                     getSpecalistsResponse(Objects.requireNonNull(response.body()));
                 }
-
                 @Override
                 public void onFailure(@NonNull Call<SpecalitiesResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();

@@ -91,6 +91,8 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="enterdescription">Enter Description</string>
     <string name="forgetpswdtext">Enter your mobile number to verify the process, we will send you a 4-digit code to your mobile number.</string>
 
+    <string name="camera_permission_desc">You need to accept CAMERA permission to complete this task</string>
+
     <!--
         <string name="forgetpswdtext">Geli nambarkaaga gacanta si loo xaqiijiyo habka, waxaanu kuugu soo diri doonaa 4 lambar lambarkaaga gacanta.</string>
     -->
