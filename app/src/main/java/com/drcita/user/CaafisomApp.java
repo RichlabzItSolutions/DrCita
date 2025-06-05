@@ -9,6 +9,7 @@ import com.drcita.user.common.LanguageUtil;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.FirebaseApp;
+import com.marcinorlowski.fonty.Fonty;
 
 import live.videosdk.rtc.android.VideoSDK;
 
@@ -26,6 +27,14 @@ public class CaafisomApp extends Application {
         VideoSDK.initialize(getApplicationContext());
         AndroidNetworking.initialize(getApplicationContext());
         context = this;
+
+        Fonty.context(this)
+                .normalTypeface("jakartharegular.ttf")
+                .italicTypeface("jakarthasemibold.ttf")
+                .boldTypeface("jakarthabold.ttf")
+                .build();
+
+
         setLanguage();
     }
 

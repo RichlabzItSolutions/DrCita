@@ -14,6 +14,17 @@ public class LoginResponse {
     @Expose
     private String status;
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    @Expose
+    private  boolean success;
+
     public Data getData() {
         return data;
     }

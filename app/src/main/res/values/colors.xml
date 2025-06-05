@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#4C61CC</color>
+    <color name="purple_200">#2A9145</color>
     <color name="purple_500">#1C2838</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#00B236</color>
@@ -29,5 +29,7 @@
     <color name="colorPrimary">#5568FE</color>
     <color name="colorPrimaryVariant">#1A1C22</color>
     <color name="mtrl_textinput_default_box_stroke_color">#FAFAFA</color>
+    <color name="dashboardtextcolor">#1C1B1F</color>
+    <color name="green">#62AA48</color>
 
 </resources>

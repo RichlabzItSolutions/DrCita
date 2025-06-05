@@ -163,6 +163,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation 'com.github.MarcinOrlowski:fonty:3.1.5'
 
 
 }

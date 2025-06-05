@@ -7,6 +7,8 @@ import com.drcita.user.models.ambulance.AmbulanceRequest;
 import com.drcita.user.models.appointment.AppointmentListResponse;
 import com.drcita.user.models.appointment.AppointmentRequest;
 import com.drcita.user.models.appointment.CAncelAppointmentRequest;
+import com.drcita.user.models.cities.CityRequestData;
+import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.contact.ContactRequest;
 import com.drcita.user.models.doctorDetails.DoctorRequest;
 import com.drcita.user.models.doctorDetails.DoctorResponse;
@@ -18,6 +20,8 @@ import com.drcita.user.models.doctorslots.SlotBookingNumberRequest;
 import com.drcita.user.models.doctorslots.SlotResponse;
 import com.drcita.user.models.forgotpassword.ForgotPasswordRequest;
 import com.drcita.user.models.forgotpassword.ForgotPasswordResponse;
+import com.drcita.user.models.home.HomeDataRequest;
+import com.drcita.user.models.home.HomeResponse;
 import com.drcita.user.models.hospitalreviews.HospitalReviewRequest;
 import com.drcita.user.models.hospitalreviews.HospitalReviewResponse;
 import com.drcita.user.models.hospitals.HospitalsRequest;
@@ -27,7 +31,10 @@ import com.drcita.user.models.login.LoginRequest;
 import com.drcita.user.models.login.LoginResponse;
 import com.drcita.user.models.medicalrecords.GetMedicalRecordsRequest;
 import com.drcita.user.models.medicalrecords.GetMedicalRecordsResponse;
+import com.drcita.user.models.newProviderlist.ProviderResponse;
+import com.drcita.user.models.newProviderlist.ProvidersRequestData;
 import com.drcita.user.models.notifications.NotificationResponse;
+import com.drcita.user.models.otp.OtpResponse;
 import com.drcita.user.models.otp.VerifyotpRequest;
 import com.drcita.user.models.otp.VerifyotpResponse;
 import com.drcita.user.models.payment.PaymentRequest;
@@ -42,6 +49,7 @@ import com.drcita.user.models.region.UpdateRegionRequest;
 import com.drcita.user.models.resetpassword.ChangePasswodRequest;
 import com.drcita.user.models.resetpassword.ResetPasswordRequest;
 import com.drcita.user.models.resetpassword.ResetPasswordResponse;
+import com.drcita.user.models.restresponse.RestResponse;
 import com.drcita.user.models.review.WriteReviewRequest;
 import com.drcita.user.models.scans.DiagnosticsRequest;
 import com.drcita.user.models.scans.DiagnosticsResponse;
@@ -50,7 +58,10 @@ import com.drcita.user.models.scans.ScansListResponse;
 import com.drcita.user.models.signup.SignupRequest;
 import com.drcita.user.models.signup.SignupResponse;
 import com.drcita.user.models.specalities.SpecalitiesResponse;
+import com.drcita.user.models.states.StateRequest;
+import com.drcita.user.models.states.StateResponse;
 import com.drcita.user.models.systemcharges.SystemchargesResponse;
+import com.drcita.user.models.userlocation.UpdateUserLocationRequestData;
 import com.drcita.user.models.viewmedicalrecords.ViewmedicalRequest;
 import com.drcita.user.models.viewmedicalrecords.ViewmedicalResponse;
 import com.drcita.user.models.viewreceipt.ViewreceiptRequest;
@@ -78,6 +89,9 @@ public interface ApiInterface {
 //    @POST("user/verifyOTP")
 //    Call<VerifyotpResponse>verifyOTP(@Body VerifyotpRequest verifyotpRequest);
 
+ @POST("user/fetchHomePage")
+ Call<HomeResponse>  getHomedata(@Body HomeDataRequest dataRequest);
+
 
  @POST("user/verifyOTPMogadishu")
  Call<VerifyotpResponse>verifyOTP(@Body VerifyotpRequest verifyotpRequest);
@@ -85,8 +99,8 @@ public interface ApiInterface {
 //    @POST("user/loginUser")
 //    Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
 
-   @POST("user/loginUserMogadishu")
-   Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
+//   @POST("user/loginUserMogadishu")
+//   Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
 
     @POST("user/forgotPassword")
     Call<ForgotPasswordResponse>forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
@@ -192,4 +206,24 @@ public interface ApiInterface {
     Call<SystemchargesResponse>systemCharges();
 
 
+    // newly added
+
+   @POST("api/user/getProvidersListNew")
+   Call<ProviderResponse> getProviderResponse(@Body ProvidersRequestData requestData);
+
+ @POST("user/loginNew")
+ Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
+
+ @POST("user/verifyOtpNew")
+   Call<OtpResponse> verifyOtp(@Body VerifyotpRequest request);
+
+
+ @POST("user/fetchStates")
+   Call<StateResponse> getStates(@Body StateRequest stateRequest);
+
+ @POST("user/fetchCities")
+  Call<CityResponse> getCities(@Body CityRequestData cityRequestData);
+
+ @POST("user/updateLocation")
+    Call<RestResponse> updateUserLocation(@Body UpdateUserLocationRequestData requestData);
 }

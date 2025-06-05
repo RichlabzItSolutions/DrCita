@@ -84,8 +84,6 @@ public class BookanAppotimentActivity extends LanguageBaseActivity implements Vi
                 doctorData = Parcels.unwrap(extras.getParcelable("doctorData"));
                 doctorData1 = Parcels.unwrap(extras.getParcelable("doctorData1"));
                 type=extras.getString("type");
-                Log.d("TAG", "onCreate: "+doctorData);
-                Log.d("TAG", "onCreate: "+doctorData1);
                 isFromList = extras.getBoolean(Constants.list);
                 if(doctorData!=null) {
                     providerId = doctorData.getProviderId();

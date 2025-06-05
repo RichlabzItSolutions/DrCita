@@ -42,9 +42,11 @@ public class AdResponse {
     }
 
     public class Ad {
-        int id;
-        String image;
-        String url;
+        private int id;
+        private String title;
+        private String image;
+        private String url; // Can be null
+        private int position;
 
         public int getId() {
             return id;
@@ -52,6 +54,14 @@ public class AdResponse {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
         }
 
         public String getImage() {
@@ -70,13 +80,12 @@ public class AdResponse {
             this.url = url;
         }
 
-        @Override
-        public String toString() {
-            return "Ad{" +
-                    "id=" + id +
-                    ", image='" + image + '\'' +
-                    ", url='" + url + '\'' +
-                    '}';
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
         }
     }
 }

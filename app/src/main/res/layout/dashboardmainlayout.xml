@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#00000000"
-        >
+        android:background="@color/white">
 
+        <!-- GridLayout Section -->
         <GridLayout
             android:id="@+id/mainGrid"
             android:rowCount="4"
@@ -18,224 +18,249 @@
             android:alignmentMode="alignMargins"
             android:columnOrderPreserved="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="6dp"
-            >
-
+            android:paddingEnd="5dp"
+            android:paddingBottom="6dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                <!-- ROW 1  -->
-                <!-- COLUMN 1  -->
+                android:orientation="vertical">
+                <!-- First Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="4dp"
-                    >
+                    android:layout_marginBottom="4dp">
+
+                    <!-- Book Appointment -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/profile_layout"
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
+                        android:layout_height="150dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp"
-                        app:cardElevation="5dp"
+                        android:backgroundTint="@color/white"
+                        android:background="@drawable/rounded_white_box"
+                        app:cardElevation="2dp"
                         app:cardCornerRadius="8dp">
 
                         <LinearLayout
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:orientation="vertical"
+                            android:gravity="center"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="match_parent">
 
                             <ImageView
-                                android:src="@drawable/ic_book_appointment"
+                                android:src="@drawable/ic_bookanappointment"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_width="46dp"
-                                android:layout_height="46dp" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp" />
 
                             <TextView
-                                android:textAlignment="center"
                                 android:text="@string/book_an_appointment"
-                                android:textColor="#000"
-                                android:textSize="13sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/dashboardtextcolor"
+                                android:textSize="15sp"
+                                android:gravity="center"
+                                android:textStyle="bold"
                                 android:layout_marginTop="3dp"
                                 android:fontFamily="@font/roboto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
-
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
 
-                    <!-- COLUMN 2  -->
-
+                    <!-- Video Consultation -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/bookmrictscan"
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        app:cardElevation="5dp"
+                        android:layout_height="150dp"
                         android:layout_weight="1"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="2dp"
+                        android:backgroundTint="@color/white"
+                        android:background="@drawable/rounded_white_box"
+                        app:cardElevation="2dp"
                         app:cardCornerRadius="8dp">
 
                         <LinearLayout
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:orientation="vertical"
+                            android:gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:src="@drawable/ic_video_consulatation"
+                                android:src="@drawable/ic_videoconsult"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp" />
 
                             <TextView
-                                android:textAlignment="center"
                                 android:text="@string/video_consulatation"
-                                android:textColor="#000"
-                                android:layout_marginTop="3dp"
-                                android:textSize="13sp"
+                                android:textAlignment="center"
+                                android:textColor="@color/dashboardtextcolor"
+                                android:textSize="15sp"
+                                android:gravity="center"
+                                android:textStyle="bold"
                                 android:fontFamily="@font/roboto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
-
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
-
                 </LinearLayout>
 
-                <!-- ROW 2  -->
-                <!-- COLUMN 1  -->
+                <!-- Second Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="4dp">
 
-                    >
-
+                    <!-- Diagnostics -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/bookadentalappotimentlayout"
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
+                        android:layout_height="150dp"
                         android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp"
-                        app:cardElevation="5dp"
+                        android:backgroundTint="@color/white"
+                        android:background="@drawable/rounded_white_box"
+                        app:cardElevation="2dp"
                         app:cardCornerRadius="8dp">
 
                         <LinearLayout
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:orientation="vertical"
+                            android:gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:src="@drawable/ic_diagnostics"
+                                android:src="@drawable/ic_daigonstics"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp" />
 
                             <TextView
-                                android:textAlignment="center"
                                 android:text="@string/diagnostics"
-                                android:textColor="#000"
-                                android:textSize="13sp"
-                                android:layout_gravity="center"
+                                android:textAlignment="center"
+                                android:textColor="@color/dashboardtextcolor"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
                                 android:layout_marginTop="3dp"
                                 android:fontFamily="@font/roboto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
-
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
 
-                    <!-- COLUMN 2  -->
-
+                    <!-- Medicines -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/bookanambulance"
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
-                        android:backgroundTint="@color/white"
-                        android:layout_columnWeight="1"
-                        android:layout_rowWeight="1"
-                        app:cardElevation="5dp"
+                        android:layout_height="150dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="2dp"
+                        android:backgroundTint="@color/white"
+                        android:background="@drawable/rounded_white_box"
+                        app:cardElevation="2dp"
                         app:cardCornerRadius="8dp">
 
                         <LinearLayout
-                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:orientation="vertical"
+                            android:gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:src="@drawable/ic_medicine"
+                                android:src="@drawable/ic_medical"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_width="46dp"
-                                android:layout_height="46dp" />
+                                android:layout_width="100dp"
+                                android:layout_height="100dp" />
 
                             <TextView
-                                android:textAlignment="center"
                                 android:text="@string/medicines"
-                                android:textColor="#000"
-                                android:textSize="13sp"
-                                android:layout_gravity="center"
+                                android:textAlignment="center"
+                                android:textColor="@color/dashboardtextcolor"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:gravity="center"
                                 android:layout_marginTop="3dp"
                                 android:fontFamily="@font/roboto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
-
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
-
             </LinearLayout>
+
         </GridLayout>
 
+        <!-- Specializations Header -->
+        <LinearLayout
+            android:id="@+id/section_specializations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_specializations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Specializations"
+                android:textStyle="bold"
+                android:textSize="21sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="5dp" />
+
+            <TextView
+                android:id="@+id/tv_view_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View all"
+                android:textColor="#2A9145"
+                android:textSize="14sp"
+                android:gravity="end"
+                android:layout_marginEnd="5dp" />
+        </LinearLayout>
+
+        <!-- Specialist RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_Specailist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:scrollbars="horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+        <!-- Category RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/catRVCategory"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            android:scrollbars="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:scrollbars="horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible" />
+
+        <!-- Optional Hidden Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -243,30 +268,56 @@
             android:visibility="gone"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/layout_bg"
-            >
+            android:background="@drawable/layout_bg" />
 
-
-          <!--  <ss.com.bannerslider.Slider
-                android:id="@+id/image_slider"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
-                android:fitsSystemWindows="true"
-                app:slider_animateIndicators="true"
-                app:slider_defaultBanner="1"
-                android:visibility="gone"
-                app:slider_indicatorSize="8dp"
-                android:adjustViewBounds="true"
-                app:slider_interval="4000"
-                app:slider_loopSlides="true" />-->
-        </LinearLayout>
+        <!-- ViewPager -->
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPagerMain"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_height="130dp"/>
-    </LinearLayout>
+            android:layout_height="130dp"
+            android:layout_marginTop="20dp" />
 
+        <!-- Top Hospitals Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_top_hospitals"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Top Hospitals"
+                android:textStyle="bold"
+                android:textSize="21sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="5dp" />
+
+            <TextView
+                android:id="@+id/tv_view_all_hospitals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View all"
+                android:textColor="#2A9145"
+                android:textSize="14sp"
+                android:gravity="end"
+                android:layout_marginEnd="5dp" />
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_tophospital"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:scrollbars="horizontal"
+            android:layout_marginBottom="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <!-- You can add a RecyclerView or ListView here to show top hospitals -->
+    </LinearLayout>
 </ScrollView>

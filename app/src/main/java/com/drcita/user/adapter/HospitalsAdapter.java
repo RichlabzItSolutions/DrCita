@@ -20,6 +20,7 @@ import com.drcita.user.R;
 import com.drcita.user.WriteReview;
 import com.drcita.user.common.Constants;
 import com.drcita.user.models.hospitals.DataItem;
+import com.drcita.user.models.newProviderlist.NewProviderList;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -29,15 +30,15 @@ import java.util.List;
 
 public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.Viewholder> implements Filterable {
     private HospitalsListActivity context;
-    private List<DataItem> dataItems = new ArrayList<DataItem>();
+    private List<NewProviderList> dataItems = new ArrayList<NewProviderList>();
 
-    private List<DataItem> mFilteredList = new ArrayList<DataItem>();
+    private List<NewProviderList> mFilteredList = new ArrayList<NewProviderList>();
     private boolean isfromdental;
     private int providerId;
     private String hospitalName,rating,time,location,ratingcount,ratingStar,free;
 
 
-    public HospitalsAdapter(HospitalsListActivity hospitalsListActivity, List<DataItem> hospitalsResponses, boolean isfromdental) {
+    public HospitalsAdapter(HospitalsListActivity hospitalsListActivity, List<NewProviderList> hospitalsResponses, boolean isfromdental) {
         this.context = hospitalsListActivity;
         this.dataItems = hospitalsResponses;
         this.mFilteredList=hospitalsResponses;
@@ -53,19 +54,19 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull HospitalsAdapter.Viewholder holder, int position) {
-        DataItem list = mFilteredList.get(position);
+        NewProviderList list = mFilteredList.get(position);
         providerId = list.getProviderId();
         hospitalName = list.getHospitalName();
-        rating = ""+list.getRating();
-        time = ""+list.getOpeningHours();
-        location = ""+list.getRegion();
-        ratingcount =""+list.getRating();
-        free = ""+list.getFree();
+//        rating = ""+list.ge();
+//        time = ""+list.getOpeningHours();
+//        location = ""+list.getRegion();
+//        ratingcount =""+list.getRating();
+//        free = ""+list.getFree();
         holder.hospitalname.setText(list.getHospitalName());
-        holder.ratingTV.setText(""+list.getRating());
-        holder.time.setText(list.getOpeningHours());
-        holder.location.setText(""+list.getRegion());
-        holder.ratingcount.setText(""+list.getRatedCount());
+//        holder.ratingTV.setText(""+list.getRating());
+//        holder.time.setText(list.getOpeningHours());
+//        holder.location.setText(""+list.getRegion());
+//        holder.ratingcount.setText(""+list.getRatedCount());
 
         if (free.equals("Yes")){
             holder.free.setText(R.string.free);
@@ -95,8 +96,8 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
                 if (charString.isEmpty()) {
                     mFilteredList = dataItems;
                 } else {
-                    ArrayList<DataItem> filteredList = new ArrayList<>();
-                    for (DataItem receipt : dataItems) {
+                    ArrayList<NewProviderList> filteredList = new ArrayList<>();
+                    for (NewProviderList receipt : dataItems) {
 
                         if (receipt.getHospitalName().toLowerCase().startsWith(charString.toLowerCase()))
                         {
@@ -117,7 +118,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mFilteredList = (ArrayList<DataItem>) filterResults.values;
+                mFilteredList = (ArrayList<NewProviderList>) filterResults.values;
                 notifyDataSetChanged();
             }
 
@@ -153,7 +154,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             ratingcount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataItem dataItem = mFilteredList.get(getAdapterPosition());
+                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
                     Intent intent = new Intent(context, HospitalReviewActivity.class);
                     intent.putExtra("dataItem", Parcels.wrap(dataItem));
                     context.startActivity(intent);
@@ -162,7 +163,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             hospitallogo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataItem dataItem = mFilteredList.get(getAdapterPosition());
+                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
                     Intent intent = new Intent(context, DoctorsListActivity.class);
                     intent.putExtra("dataItem", Parcels.wrap(dataItem));
                     intent.putExtra(Constants.isfromdental,isfromdental);
@@ -172,7 +173,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             hospitalname.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DataItem dataItem = mFilteredList.get(getAdapterPosition());
+                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
                     Intent intent = new Intent(context, DoctorsListActivity.class);
                     intent.putExtra("dataItem", Parcels.wrap(dataItem));
                     intent.putExtra(Constants.isfromdental,isfromdental);

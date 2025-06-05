@@ -16,6 +16,7 @@ public class LanguageBaseActivity extends AppCompatActivity {
     private CustomDailog progress;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

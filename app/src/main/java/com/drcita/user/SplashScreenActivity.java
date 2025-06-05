@@ -27,17 +27,20 @@ public class SplashScreenActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         userId = sp.getString(Constants.USER_ID, userId);
         profilestatus = sp.getInt(Constants.PROFILESTATUS, profilestatus);
-      //  Toast.makeText(getApplicationContext(), "profilestatus"+profilestatus, Toast.LENGTH_SHORT).show();
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (userId == null || userId.equals("") ) {
-                    Intent i=new Intent(SplashScreenActivity.this, SignupActivity.class);
+                    Intent i=new Intent(SplashScreenActivity.this, LoginActivity.class);
                     startActivity(i);
                     finish();
                 }  else if(!userId.equals("0") && profilestatus == 0){
-                    Intent i=new Intent(SplashScreenActivity.this, ProfileActivity.class);
+//                    Intent i=new Intent(SplashScreenActivity.this, ProfileActivity.class);
+//                    startActivity(i);
+
+                    Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);
                     startActivity(i);
                 } else {
                     Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);

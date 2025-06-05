@@ -20,14 +20,13 @@ import com.drcita.user.ViewreceiptActivity;
 import com.drcita.user.models.appointment.DataItem;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class AppointmentsAdapter extends RecyclerView.Adapter<AppointmentsAdapter.Viewholder> {
     private AppointmentsActivity context;
-    private List<DataItem> dataItems = new ArrayList<DataItem>();
+    private List<DataItem> dataItems;
     private String userId;
     private ProgressDialog progress;
 

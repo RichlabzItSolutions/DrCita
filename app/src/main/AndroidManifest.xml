@@ -21,6 +21,8 @@
         android:name=".CaafisomApp"
         android:allowBackup="true"
         android:exported="true"
+
+
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -185,6 +187,19 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
+        <activity
+            android:name=".Activity.NewVerifyOtpActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
+        <activity
+            android:name=".Activity.UserLocationScreenActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".VerifyOtpActivity"

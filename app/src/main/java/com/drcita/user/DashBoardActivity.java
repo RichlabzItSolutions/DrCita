@@ -4,16 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,11 +28,12 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.drcita.user.Activity.VideoConsultationActivity;
 import com.drcita.user.adapter.CaregoryAdapter;
 import com.drcita.user.adapter.MainSliderAdapter;
 import com.drcita.user.adapter.NotificationAdapter;
+import com.drcita.user.adapter.dashbaord.hospital.HospitalAdapter;
+import com.drcita.user.adapter.dashbaord.specilization.SpecializationAdapter;
 import com.drcita.user.common.Constants;
 import com.drcita.user.common.CustomDailog;
 import com.drcita.user.common.ViewPagerAdapter;
@@ -33,23 +41,28 @@ import com.drcita.user.databinding.ActivityDashBoardBinding;
 import com.drcita.user.models.GlobalRequest;
 import com.drcita.user.models.ads.AdResponse;
 import com.drcita.user.models.appointment.AppointmentRequest;
+import com.drcita.user.models.dashboard.specilization.Specialization;
+import com.drcita.user.models.home.City;
+import com.drcita.user.models.home.HomeDataRequest;
+import com.drcita.user.models.home.HomeResponse;
+import com.drcita.user.models.home.Providers;
 import com.drcita.user.models.notifications.NotificationResponse;
 import com.drcita.user.models.profile.GetProfileRequest;
 import com.drcita.user.models.profile.GetProfileResponse;
 import com.drcita.user.models.specalities.DataItem;
 import com.drcita.user.models.specalities.SpecalitiesResponse;
 import com.drcita.user.retrofit.ApiClient;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.google.android.material.shape.RelativeCornerSize;
 import com.google.android.material.shape.RoundedCornerTreatment;
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
@@ -58,7 +71,6 @@ import java.util.TimerTask;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-//import ss.com.bannerslider.Slider;
 
 public class DashBoardActivity extends LanguageBaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -83,6 +95,15 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
     List<AdResponse.Ad> adResponse;
     Boolean doubleBackToExitPressedOnce = false;
 
+    SpecializationAdapter specializationAdapter;
+    List<Specialization> specializationList;
+
+    private List<Specialization> specializations;
+    private List<AdResponse.Ad> ads;
+    private List<City> cities;
+    private List<Providers> providers;
+
+    List<String> citieslist = Arrays.asList("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,28 +114,10 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         name = sp.getString(Constants.NAME, name);
         mobile = sp.getString(Constants.MOBILE, mobile);
-        //Toast.makeText(getApplicationContext(), "mobile"+mobile, Toast.LENGTH_SHORT).show();
         userId = sp.getString(Constants.USER_ID, userId);
-       // profilestatus = sp.getString(Constants.PROFILESTATUS, profilestatus);
 
-
-
-       /* new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (profilestatus.equals("1")){
-                    Intent intent = new Intent(getApplicationContext(),DashBoardActivity.class);
-                    startActivity(intent);
-                }
-                else {
-                    Intent intent = new Intent(getApplicationContext(),ProfileActivity.class);
-                    startActivity(intent);
-                }
-
-            }
-        }, 500);*/
         setSupportActionBar(activityDashBoardBinding.layoutDashboard.toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24);
@@ -135,10 +138,10 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         caregoryAdapter = new CaregoryAdapter(DashBoardActivity.this, dataItems);
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setAdapter(caregoryAdapter);
 
-
-        //toggle.syncState();
-        // activityDashBoardBinding.layoutDashboard.toolbar.setNavigationIcon(R.drawable.ic_baseline_dehaze_24);
         activityDashBoardBinding.navView.setNavigationItemSelectedListener(this);
+
+        // Create a MaterialShapeDrawable (required for FAB cradle)
+
 
         MaterialShapeDrawable bottomBarBackground = (MaterialShapeDrawable) activityDashBoardBinding.layoutDashboard.bottomAppBar.getBackground();
         bottomBarBackground.setShapeAppearanceModel(
@@ -148,10 +151,24 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                         .setTopLeftCornerSize(new RelativeCornerSize(0.65f))
                         .setTopRightCornerSize(new RelativeCornerSize(0.65f))
                         .build());
+        GradientDrawable gradientDrawable = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] { Color.parseColor("#9FC44A"), Color.parseColor("#55A447") }
+        );
+        gradientDrawable.setShape(GradientDrawable.RECTANGLE);
+        gradientDrawable.setCornerRadii(new float[]{
+                120f, 120f,  // Top-left radius
+                120f, 120f,  // Top-right radius
+                0f, 0f,    // Bottom-right
+                0f, 0f     // Bottom-left
+        });
 
-       /* Slider.init(new PicassoImageLoadingService(this));
-        mainSliderAdapter = new MainSliderAdapter(getApplicationContext(), photosList);
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.imageSlider.setAdapter(mainSliderAdapter);*/
+        BottomAppBar bottomAppBar = activityDashBoardBinding.layoutDashboard.bottomAppBar;
+        bottomAppBar.setBackground(gradientDrawable);
+        bottomAppBar.setBackgroundTintList(null);
+
+        getDashBoardData();
+
         activityDashBoardBinding.layoutDrawer.logoutNav.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.logoutTV.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.profileNav.setOnClickListener(this);
@@ -172,55 +189,40 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         activityDashBoardBinding.layoutDrawer.changepasswordTV.setOnClickListener(this);
        /* activityDashBoardBinding.layoutDrawer.callNav.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.callTV.setOnClickListener(this);*/
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.profileLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
-                intent.putExtra("specailization", 0);
-                startActivity(intent);
-            }
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.profileLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
+            intent.putExtra("specailization", 0);
+            startActivity(intent);
         });
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookadentalappotimentlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
-                intent.putExtra("specailization", 14);
-                intent.putExtra(Constants.isfromdental,true);
-                startActivity(intent);
-            }
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookadentalappotimentlayout.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
+            intent.putExtra("specailization", 14);
+            intent.putExtra(Constants.isfromdental,true);
+            startActivity(intent);
         });
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookmrictscan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), VideoConsultationActivity.class);
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookmrictscan.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), VideoConsultationActivity.class);
 
-                intent.putExtra("type","2");
-                startActivity(intent);
+            intent.putExtra("type","2");
+            startActivity(intent);
 
-            }
         });
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookanambulance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BookanambulanceActivity.class);
-                startActivity(intent);
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookanambulance.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), BookanambulanceActivity.class);
+            startActivity(intent);
 
-            }
         });
 
-        activityDashBoardBinding.layoutDashboard.specalist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.VISIBLE);
-                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
-                activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-                activityDashBoardBinding.layoutDashboard.fab.getDrawable().setTint(getResources().getColor(R.color.white));
-                activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
-                getSpecalists();
-            }
+        activityDashBoardBinding.layoutDashboard.specalist.setOnClickListener(view -> {
+            activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.VISIBLE);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.fab.getDrawable().setTint(getResources().getColor(R.color.white));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+           getSpecalists();
         });
         activityDashBoardBinding.layoutDashboard.notification.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,17 +237,14 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
             }
         });
 
-        activityDashBoardBinding.layoutDashboard.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.VISIBLE);
-                activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-                activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-                activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.md_grey_1000));
-            }
+        activityDashBoardBinding.layoutDashboard.fab.setOnClickListener(view -> {
+            activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.VISIBLE);
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.md_grey_1000));
         });
 
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setClipToPadding(false);
@@ -272,30 +271,17 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         }
 
         autoSlide();
-
-        activityDashBoardBinding.layoutDashboard.notificationView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notification();
-            }
-        });
-
-
     }
-
-
     private void autoSlide() {
         final Handler handler = new Handler();
         Timer timer = new Timer();
-        final Runnable runnable = new Runnable() {
-            public void run() {
-                int currentPage=activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getCurrentItem();
-                //return to first page, if current page is last page
-                if (currentPage == activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getChildCount()-1) {
-                    currentPage = -1;
-                }
-                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setCurrentItem(++currentPage, true);
+        final Runnable runnable = () -> {
+            int currentPage=activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getCurrentItem();
+            //return to first page, if current page is last page
+            if (currentPage == activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getChildCount()-1) {
+                currentPage = -1;
             }
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setCurrentItem(++currentPage, true);
         };
         timer.schedule(new TimerTask() {
             @Override
@@ -316,13 +302,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, getResources().getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show();
 
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 1500);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 1500);
     }
 
 
@@ -350,16 +330,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 public void onResponse(@NonNull Call<AdResponse> call, @NonNull Response<AdResponse> response) {
                     if (response.isSuccessful()) {
                         dismissLoadingDialog();
-                        adResponse=response.body().getData();
-                        String[] images = new String[response.body().getData().size()];
 
-                        for (int i = 0; i < response.body().getData().size(); i++) {
-                          ad = response.body().getData().get(i);
-                            images[i] = ad.getImage();
-                        }
-                        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(DashBoardActivity.this, images,adResponse);
-                        //Adding the Adapter to the ViewPager
-                        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setAdapter(mViewPagerAdapter);
 
 
 
@@ -423,13 +394,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
     private void getProfileResponse(GetProfileResponse getProfileResponse) {
         nameView.setText("Hi, " + getProfileResponse.getData().getName());
 
-       /* if (getProfileResponse.getData().getProfileStatus()==0){
-            Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
-            startActivity(intent);
-        }else {
-            Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
-            startActivity(intent);
-        }*/
 
         if (getProfileResponse.getData().getPicture()!=null && !getProfileResponse.getData().getPicture().isEmpty()) {
             Picasso.with(this).load(getProfileResponse.getData().getPicture()).into(image);
@@ -574,6 +538,111 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         }
     }
 
+// dashboardResponse
+
+    private void getDashBoardData() {
+        showLoadingDialog();
+        if (Constants.haveInternet(getApplicationContext())) {
+            HomeDataRequest globalRequest = new HomeDataRequest();
+            globalRequest.setStateId(24);
+            globalRequest.setCityId(14);
+            ApiClient.getRestAPI().getHomedata(globalRequest).enqueue(new Callback<HomeResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<HomeResponse> call, @NonNull retrofit2.Response<HomeResponse> response) {
+                    getHomeResponse(Objects.requireNonNull(response.body()));
+                }
+                @Override
+                public void onFailure(@NonNull Call<HomeResponse> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                    dismissLoadingDialog();
+                }
+            });
+        } else {
+            Constants.InternetSettings(DashBoardActivity.this);
+        }
+    }
+
+    private void getHomeResponse(HomeResponse body) {
+
+        try{
+            specializations=body.getData().getSpecializations();
+            cities=body.getData().getCities();
+            providers=body.getData().getProviders();
+            adResponse=body.getData().getAds();
+
+            // adds
+            String[] images = new String[adResponse.size()];
+
+            for (int i = 0; i < adResponse.size(); i++) {
+                ad = adResponse.get(i);
+                images[i] = ad.getImage();
+            }
+            ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(DashBoardActivity.this, images,adResponse);
+            //Adding the Adapter to the ViewPager
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setAdapter(mViewPagerAdapter);
+
+
+
+            specializationAdapter = new SpecializationAdapter(this,specializations);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setAdapter(specializationAdapter);
+
+
+           //providers
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setLayoutManager(
+                    new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            );
+
+
+            HospitalAdapter adapter = new HospitalAdapter(this, providers);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setAdapter(adapter);
+
+            citieslist =new ArrayList<>(cities.size());
+                 for(City city:cities)
+                 {
+                     citieslist.add(city.getCityName());
+                 }
+
+            activityDashBoardBinding.layoutDashboard.tvLocation.setOnClickListener(v ->
+            {
+                showDropdownPopup(activityDashBoardBinding.layoutDashboard.tvLocation, citieslist);
+            });
+
+
+//
+
+
+        }catch (Exception exception)
+        {
+            exception.getMessage();
+        }
+
+    }
+
+    private void showDropdownPopup(final TextView anchorView, final List<String> items) {
+        // Inflate the dropdown layout
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.dropdown_list, null);
+
+        ListView listView = popupView.findViewById(R.id.lvCities);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.simple_list_item_black, items);
+        listView.setAdapter(adapter);
+
+        // Create PopupWindow
+        final PopupWindow popupWindow = new PopupWindow(popupView, anchorView.getWidth(),
+                WindowManager.LayoutParams.WRAP_CONTENT, true);
+
+        // Handle item click
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            anchorView.setText(items.get(position));
+            popupWindow.dismiss();
+        });
+
+        // Show dropdown below the TextView
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAsDropDown(anchorView, 0, 0);
+    }
 
 
     private void getSpecalists() {

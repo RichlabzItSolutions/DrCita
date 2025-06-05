@@ -1,79 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    tools:context=".HospitalsListActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+
+        tools:context=".HospitalsListActivity">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200">
+        android:orientation="vertical"
+        android:background="@drawable/bg_toolbar_gradient"
+        tools:context=".HospitalsListActivity">
 
-        <LinearLayout
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent">
 
-            <ImageView
-                android:id="@+id/back_hospitalsList"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_arrow_left" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginStart="-50dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="@string/hospitalslist"
-                android:textColor="@color/white"
-                android:textSize="18sp">
+                android:orientation="horizontal">
 
-            </TextView>
+                <ImageView
+                    android:id="@+id/back_hospitalsList"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_arrow_left" />
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@string/hospitalslist"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-    </androidx.appcompat.widget.Toolbar>
-    <AutoCompleteTextView
-        android:id="@+id/searcautoCompleteTextView"
+        <!-- Tab Layout -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+
+            app:tabTextColor="@android:color/white"
+            app:tabIndicatorColor="#4CAF50"
+            app:tabSelectedTextColor="#000000"
+         />
+    </LinearLayout>
+
+    <!-- Search and Filters -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:padding="5dp"
-        android:textColor="@color/black"
-        android:hint="@string/search"
-        android:textColorHint="@color/black"
-        android:layout_margin="5dp"
-        android:background="@drawable/button_backgrond_search"
-        android:textSize="14dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:id="@+id/ll_searchlayout"
+        android:padding="8dp">
+        <!-- Search -->
+        <AutoCompleteTextView
+            android:id="@+id/searcautoCompleteTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1.5"
+            android:textColor="@color/black"
+            android:hint="@string/search"
+            android:textColorHint="@color/black"
+            android:background="@drawable/button_backgrond_search"
+            android:textSize="14dp"
+            android:padding="5dp"
+            android:drawableEnd="@drawable/search_scale"
+            tools:ignore="LabelFor" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_backgrond_search">
 
-        tools:ignore="LabelFor" />
+            <Spinner
+                android:id="@+id/spnSpecialization"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingEnd="36dp"
+                android:background="@android:color/transparent" />
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/spinner_" />
+        </FrameLayout>
 
 
 
-    <ImageView
-        android:id="@+id/nodataimage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:src="@drawable/ic_nodata_"
-        android:visibility="gone"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hospitalsRV"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivFilter"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/customfilter"
+            android:padding="8dp"
+            android:layout_weight=".5"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <!-- No data image -->
+        <ImageView
+            android:id="@+id/nodataimage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_nodata_"
 
-</LinearLayout>
+          />
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hospitalsRV"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </layout>

@@ -20,6 +20,16 @@ public class Data {
     private int region;
     @Expose
     private int language;
+    @Expose
+    private  String otp;
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
 
     public int getRegion() {
         return region;

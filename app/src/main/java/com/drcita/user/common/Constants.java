@@ -26,6 +26,8 @@ public class Constants {
     public static final String MOBILE = "mobile";
     public static final String REGION = "region";
     public static final String LANGUAGE1 = "language1";
+    public static final String STATE_ID = "stateId";
+    public static final String CITY_ID = "cityid";
     public static final String PROFILESTATUS = "profile_status";
     public static final Boolean LOGIN = false;
     public static String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
