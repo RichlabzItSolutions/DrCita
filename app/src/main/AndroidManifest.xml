@@ -21,8 +21,6 @@
         android:name=".CaafisomApp"
         android:allowBackup="true"
         android:exported="true"
-
-
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
@@ -89,6 +87,17 @@
             android:name=".ChangePasswordActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
+        <activity
+            android:name=".DoctorAppointmentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
+
+        <activity
+            android:name=".ProfileUpdateActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".ViewreceiptActivity"
             android:exported="true"
@@ -120,6 +129,10 @@
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".DoctorsListActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+        <activity
+            android:name=".MembersListActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity

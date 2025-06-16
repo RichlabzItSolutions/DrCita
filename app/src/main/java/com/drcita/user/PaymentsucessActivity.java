@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.drcita.user.databinding.ActivityPaymentsucessBinding;
+import com.drcita.user.models.appointment.AppointmentData;
 
 import org.parceler.Parcels;
 
@@ -17,8 +18,8 @@ import java.util.Date;
 public class PaymentsucessActivity extends LanguageBaseActivity {
 
     private ActivityPaymentsucessBinding binding;
-    private com.drcita.user.models.doctors.DataItem doctorData;
-    private com.drcita.user.models.scans.DataItems doctorData1;
+    private AppointmentData doctorData;
+//    private com.drcita.user.models.scans.DataItems doctorData1;
     private int slotNo;
     private String date;
     private int id;
@@ -33,17 +34,16 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 doctorData = Parcels.unwrap(extras.getParcelable("doctorData"));
-                doctorData1 = Parcels.unwrap(extras.getParcelable("doctorData1"));
                 slotNo = extras.getInt("slotNo");
-                date = extras.getString("date");
                 position = extras.getInt("position");
                 id = extras.getInt("id");
-
                  payment = extras.getInt("payment");
 
             }
         } else {
         }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // or "dd-MM-yyyy"
+        date = sdf.format(new Date());
         String strCurrentDate = "dd-mm-YYYY";
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Date newDate = null;
@@ -52,38 +52,30 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        binding.tvDetails.setText("Appointment ID #"+doctorData.getAppointmentId()+"\nSlot time      :"+ doctorData.getSlotTime());
 
         format = new SimpleDateFormat("dd-MM-yyyy");
         String date1 = format.format(newDate);
         if (position==2) {
-            binding.paymentsucessname.setText(doctorData1.getScanName() + " "+ "on" +" "+ ""+date1);
-
-            binding.paymentsucessslotno.setVisibility(View.GONE);
-            binding.paymentsucessslotno.setText("Number: "+" "+slotNo);
             binding.viewreceiptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), ViewreceiptActivity.class);
-                    intent.putExtra("id", id);
-                    intent.putExtra("doctorData1", Parcels.wrap(doctorData1));
+                    intent.putExtra("id", doctorData.getAppointmentId());
+                    intent.putExtra("doctorData1", Parcels.wrap(doctorData));
                     intent.putExtra("position",2);
                      intent.putExtra("payment",payment);
                     startActivity(intent);
                 }
             });
         }else {
-            binding.paymentsucessname.setText(doctorData.firstName + doctorData.lastName+  " "+ "on" +" "+ ""+date1);
-            binding.paymentsucessslotno.setText("Number: "+" "+slotNo);
-            binding.viewreceiptBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), ViewreceiptActivity.class);
-                    intent.putExtra("doctorData", Parcels.wrap(doctorData));
-                    intent.putExtra("id", id);
-                    intent.putExtra("position",1);
-                    // intent.putExtra("payment",payment);
-                    startActivity(intent);
-                }
+            binding.viewreceiptBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(), ViewreceiptActivity.class);
+                intent.putExtra("doctorData", Parcels.wrap(doctorData));
+                intent.putExtra("id", doctorData.getAppointmentId());
+                intent.putExtra("position",1);
+                // intent.putExtra("payment",payment);
+                startActivity(intent);
             });
         }
     }

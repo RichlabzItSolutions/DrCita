@@ -35,7 +35,7 @@
                 android:background="@drawable/usericon"/>
             <TextView
                 android:id="@+id/profileTV"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:text="@string/profile"
                 android:gravity="center_vertical"

@@ -3,11 +3,15 @@
     android:shape="rectangle">
 
     <gradient
-        android:angle="270"
+        android:angle="180"
         android:startColor="#2A9145"
         android:endColor="#A5C74B"
         android:type="linear" />
+
+    <!-- Add curve to bottom edge -->
+    <corners
+        android:bottomLeftRadius="10dp"
+        android:bottomRightRadius="10dp"
+        android:topLeftRadius="0dp"
+        android:topRightRadius="0dp" />
 </shape>
-
-
-

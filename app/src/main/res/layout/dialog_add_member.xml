@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogAddMember"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:padding="20dp">
+
+    <!-- Close icon (X) -->
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_cancel"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp" />
+
+    <!-- Content container -->
+    <LinearLayout
+        android:id="@+id/contentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/ivClose"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Member"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/jakarthasemibold"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:paddingBottom="10dp" />
+
+        <!-- Name -->
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:textColorHint="@color/gray"
+            android:textColor="@color/black"
+            android:fontFamily="@font/jakartharegular"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:background="@drawable/bg_edittext" />
+
+        <!-- Age & Gender -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/etAge"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/jakartharegular"
+                android:layout_height="wrap_content"
+                android:hint="Age"
+                android:textColorHint="@color/gray"
+                android:textColor="@color/black"
+                android:inputType="number"
+                android:padding="10dp"
+                android:maxLength="2"
+                android:background="@drawable/bg_edittext" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/edittext_bg">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:id="@+id/spinnerGender"
+                    android:padding="5dp"
+                    android:background="@android:color/transparent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/spinner_" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- DOB & Relation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/etDOB"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="DOB"
+                android:fontFamily="@font/jakartharegular"
+                android:textColorHint="@color/gray"
+                android:focusable="false"
+                android:drawableEnd="@drawable/ic_baseline_calendar"
+                android:textColor="@color/black"
+                android:padding="10dp"
+                android:background="@drawable/bg_edittext" />
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/edittext_bg">
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:padding="5dp"
+                    android:id="@+id/spinnerRelation"
+                    android:background="@android:color/transparent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/spinner_" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Address -->
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            android:visibility="invisible"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_edittext" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/green"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</RelativeLayout>

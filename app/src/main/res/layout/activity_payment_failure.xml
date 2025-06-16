@@ -46,13 +46,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/paymentfailure">
+        android:src="@drawable/ic_failure">
 
     </ImageView>
         <TextView
@@ -61,8 +60,16 @@
             android:textColor="#F44336"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="12sp"
             android:text="@string/yourpaymenthasfailed"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="Booking Failed"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -88,6 +95,36 @@
             app:backgroundTint="#4C61CC"
             android:fontFamily="@font/roboto_medium"
             android:background="@drawable/submit_btn_bg"/>
+        <LinearLayout
+            android:id="@+id/btnBackHome"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/btn_outline_gray"
+            android:backgroundTint="#F3F3F3"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back to home"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginStart="8dp" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/home"
+                android:contentDescription="Home Icon" />
+        </LinearLayout>
 
 
     </LinearLayout>

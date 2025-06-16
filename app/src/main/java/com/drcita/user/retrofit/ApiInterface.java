@@ -6,7 +6,11 @@ import com.drcita.user.models.ads.AdResponse;
 import com.drcita.user.models.ambulance.AmbulanceRequest;
 import com.drcita.user.models.appointment.AppointmentListResponse;
 import com.drcita.user.models.appointment.AppointmentRequest;
+import com.drcita.user.models.appointment.AppointmentResponse;
+import com.drcita.user.models.appointment.BookAppointmentRequest;
 import com.drcita.user.models.appointment.CAncelAppointmentRequest;
+import com.drcita.user.models.appointment.DocterDetailResoponse;
+import com.drcita.user.models.appointment.DocterDetailsRequest;
 import com.drcita.user.models.cities.CityRequestData;
 import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.contact.ContactRequest;
@@ -38,8 +42,15 @@ import com.drcita.user.models.otp.OtpResponse;
 import com.drcita.user.models.otp.VerifyotpRequest;
 import com.drcita.user.models.otp.VerifyotpResponse;
 import com.drcita.user.models.payment.PaymentRequest;
+import com.drcita.user.models.profile.AddNewMember;
+import com.drcita.user.models.profile.AddProfile;
+import com.drcita.user.models.profile.BloodGroupResponse;
+import com.drcita.user.models.profile.DiseaseResponse;
 import com.drcita.user.models.profile.GetProfileRequest;
 import com.drcita.user.models.profile.GetProfileResponse;
+import com.drcita.user.models.profile.ProfileResponse;
+import com.drcita.user.models.profile.RelationResponse;
+import com.drcita.user.models.profile.UpdateMemberRequest;
 import com.drcita.user.models.profile.UpdateNameRequest;
 import com.drcita.user.models.profile.UpdateNameResponse;
 import com.drcita.user.models.profile.UpdateProfileRequest;
@@ -58,15 +69,22 @@ import com.drcita.user.models.scans.ScansListResponse;
 import com.drcita.user.models.signup.SignupRequest;
 import com.drcita.user.models.signup.SignupResponse;
 import com.drcita.user.models.specalities.SpecalitiesResponse;
+import com.drcita.user.models.specilization.DocterModelResponse;
+import com.drcita.user.models.specilization.DoctorSearchRequest;
 import com.drcita.user.models.states.StateRequest;
 import com.drcita.user.models.states.StateResponse;
 import com.drcita.user.models.systemcharges.SystemchargesResponse;
 import com.drcita.user.models.userlocation.UpdateUserLocationRequestData;
+import com.drcita.user.models.userprofile.MemberResponse;
+import com.drcita.user.models.userprofile.MemeberProfileRequest;
+import com.drcita.user.models.userprofile.MemeberRequest;
+import com.drcita.user.models.userprofile.ProfileDiseaseResponse;
+import com.drcita.user.models.userprofile.UserRequestData;
+import com.drcita.user.models.userprofile.UsersResponse;
 import com.drcita.user.models.viewmedicalrecords.ViewmedicalRequest;
 import com.drcita.user.models.viewmedicalrecords.ViewmedicalResponse;
 import com.drcita.user.models.viewreceipt.ViewreceiptRequest;
 import com.drcita.user.models.viewreceipt.ViewreceiptResponse;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -81,20 +99,20 @@ public interface ApiInterface {
 //    @POST("user/registerUserNew")
 //    Call<SignupResponse>register(@Body SignupRequest signupRequest);
 
-       @POST("user/registerUserNewMogadishu")
-   Call<SignupResponse>register(@Body SignupRequest signupRequest);
+    @POST("user/registerUserNewMogadishu")
+    Call<SignupResponse> register(@Body SignupRequest signupRequest);
 
 
 //
 //    @POST("user/verifyOTP")
 //    Call<VerifyotpResponse>verifyOTP(@Body VerifyotpRequest verifyotpRequest);
 
- @POST("user/fetchHomePage")
- Call<HomeResponse>  getHomedata(@Body HomeDataRequest dataRequest);
+    @POST("user/fetchHomePage")
+    Call<HomeResponse> getHomedata(@Body HomeDataRequest dataRequest);
 
 
- @POST("user/verifyOTPMogadishu")
- Call<VerifyotpResponse>verifyOTP(@Body VerifyotpRequest verifyotpRequest);
+    @POST("user/verifyOTPMogadishu")
+    Call<VerifyotpResponse> verifyOTP(@Body VerifyotpRequest verifyotpRequest);
 
 //    @POST("user/loginUser")
 //    Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
@@ -103,127 +121,170 @@ public interface ApiInterface {
 //   Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
 
     @POST("user/forgotPassword")
-    Call<ForgotPasswordResponse>forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
+    Call<ForgotPasswordResponse> forgotPassword(@Body ForgotPasswordRequest forgotPasswordRequest);
 
     @POST("user/resetPassword")
-    Call<ResetPasswordResponse>resetPassword(@Body ResetPasswordRequest resetPasswordRequest);
+    Call<ResetPasswordResponse> resetPassword(@Body ResetPasswordRequest resetPasswordRequest);
 
     @POST("user/city")
-    Call<Response>city(@Body GlobalRequest globalRequest);
+    Call<Response> city(@Body GlobalRequest globalRequest);
 
-     @POST("user/cityMogadishu")
-     Call<Response>cityMogadishu(@Body GlobalRequest globalRequest);
+    @POST("user/cityMogadishu")
+    Call<Response> cityMogadishu(@Body GlobalRequest globalRequest);
 
     @POST("user/userProfileUpdate")
-    Call<UpdateProfileResponse>userProfileUpdate(@Body UpdateProfileRequest updateProfileRequest);
+    Call<UpdateProfileResponse> userProfileUpdate(@Body UpdateProfileRequest updateProfileRequest);
 
     @Multipart
     @POST("user/uploadPic")
-    Call<UpdateNameResponse>uploadPic(@Part("data") RequestBody json, @Part MultipartBody.Part picture);
+    Call<UpdateNameResponse> uploadPic(@Part("data") RequestBody json, @Part MultipartBody.Part picture);
 
     @POST("user/getUserProfile")
-    Call<GetProfileResponse>getUserProfile(@Body GetProfileRequest getProfileRequest);
+    Call<GetProfileResponse> getUserProfile(@Body GetProfileRequest getProfileRequest);
 
     @POST("user/updateName")
-    Call<UpdateNameResponse>updateName(@Body UpdateNameRequest updateNameRequest);
+    Call<UpdateNameResponse> updateName(@Body UpdateNameRequest updateNameRequest);
 
     @POST("user/updateLanguage")
-    Call<GlobalResponse>updateLanguage(@Body UpdateLanguageRequest updateLanguageRequest);
+    Call<GlobalResponse> updateLanguage(@Body UpdateLanguageRequest updateLanguageRequest);
 
     @POST("user/getProvidersList")
-    Call<HospitalsResponse>getProvidersList(@Body HospitalsRequest hospitalsRequest);
+    Call<HospitalsResponse> getProvidersList(@Body HospitalsRequest hospitalsRequest);
 
     @POST("user/writeProviderReview")
-    Call<GlobalResponse>writeProviderReview(@Body WriteReviewRequest writeReviewRequest);
+    Call<GlobalResponse> writeProviderReview(@Body WriteReviewRequest writeReviewRequest);
 
     @POST("user/getProviderReviews")
-    Call<HospitalReviewResponse>getProviderReviews(@Body HospitalReviewRequest hospitalReviewRequest);
+    Call<HospitalReviewResponse> getProviderReviews(@Body HospitalReviewRequest hospitalReviewRequest);
 
     @POST("user/getDoctorsList")
-    Call<DoctorsListResponse>getDoctorsList(@Body HospitalReviewRequest hospitalReviewRequest);
+    Call<DoctorsListResponse> getDoctorsList(@Body HospitalReviewRequest hospitalReviewRequest);
 
     @POST("user/getDoctorSlots")
-    Call<DoctorslotsListResponse>getDoctorSlots(@Body DoctorslotsListRequest doctorslotsListRequest);
+    Call<DoctorslotsListResponse> getDoctorSlots(@Body DoctorslotsListRequest doctorslotsListRequest);
 
     @POST("user/getSlotNumber")
-    Call<SlotResponse>getSlotNumber(@Body SlotBookingNumberRequest slotBookingNumberRequest);
+    Call<SlotResponse> getSlotNumber(@Body SlotBookingNumberRequest slotBookingNumberRequest);
 
     @POST("user/bookAppointment")
-    Call<SlotResponse>bookAppointment(@Body BookAppRequest bookAppRequest);
+    Call<SlotResponse> bookAppointment(@Body BookAppRequest bookAppRequest);
 
     @POST("user/updateRegion")
-    Call<GlobalResponse>updateRegion(@Body UpdateRegionRequest updateRegionRequest);
+    Call<GlobalResponse> updateRegion(@Body UpdateRegionRequest updateRegionRequest);
 
 //    @POST("user/payNow")
 //    Call<GlobalResponse>payNow(@Body PaymentRequest paymentRequest);
 
-     @POST("user/payNowMogadishu")
-     Call<GlobalResponse>payNow(@Body PaymentRequest paymentRequest);
+    @POST("user/payNowMogadishu")
+    Call<GlobalResponse> payNow(@Body PaymentRequest paymentRequest);
 
     @POST("user/getUserAppointments")
-    Call<AppointmentListResponse>getUserAppointments(@Body AppointmentRequest appointmentRequest);
+    Call<AppointmentListResponse> getUserAppointments(@Body AppointmentRequest appointmentRequest);
 
     @POST("user/contactRequest")
-    Call<GlobalResponse>contactRequest(@Body ContactRequest contactRequest);
+    Call<GlobalResponse> contactRequest(@Body ContactRequest contactRequest);
 
     @POST("user/changePassword")
-    Call<GlobalResponse>changePassword(@Body ChangePasswodRequest changePasswodRequest);
+    Call<GlobalResponse> changePassword(@Body ChangePasswodRequest changePasswodRequest);
 
     @POST("user/requestAmbulance")
-    Call<GlobalResponse>requestAmbulance(@Body AmbulanceRequest ambulanceRequest);
+    Call<GlobalResponse> requestAmbulance(@Body AmbulanceRequest ambulanceRequest);
 
     @POST("user/getUserAppointmentDetails")
-    Call<ViewreceiptResponse>viewReceipt(@Body ViewreceiptRequest viewreceiptRequest);
+    Call<ViewreceiptResponse> viewReceipt(@Body ViewreceiptRequest viewreceiptRequest);
 
     @GET("user/userAds")
-    Call<AdResponse>getAds();
+    Call<AdResponse> getAds();
 
     @POST("user/specialities")
-    Call<SpecalitiesResponse>specialities(@Body GlobalRequest globalRequest);
+    Call<SpecalitiesResponse> specialities(@Body GlobalRequest globalRequest);
 
     @POST("user/getUserNotifications")
-    Call<NotificationResponse>getNotifications(@Body AppointmentRequest appointmentRequest);
+    Call<NotificationResponse> getNotifications(@Body AppointmentRequest appointmentRequest);
 
     @POST("user/getScanProvidersList")
-    Call<DiagnosticsResponse>getScanProvidersList(@Body DiagnosticsRequest diagnosticsRequest);
+    Call<DiagnosticsResponse> getScanProvidersList(@Body DiagnosticsRequest diagnosticsRequest);
 
     @POST("user/getScansList")
-    Call<ScansListResponse>getScansList(@Body ScansListRequest scansListRequest);
+    Call<ScansListResponse> getScansList(@Body ScansListRequest scansListRequest);
 
     @POST("user/cancelAppointment")
-    Call<GlobalResponse>cancelAppointment(@Body CAncelAppointmentRequest cAncelAppointmentRequest);
+    Call<GlobalResponse> cancelAppointment(@Body CAncelAppointmentRequest cAncelAppointmentRequest);
 
     @POST("user/getUserMedicalRecords")
-    Call<GetMedicalRecordsResponse>getUserMedicalRecords(@Body GetMedicalRecordsRequest getMedicalRecordsRequest);
+    Call<GetMedicalRecordsResponse> getUserMedicalRecords(@Body GetMedicalRecordsRequest getMedicalRecordsRequest);
 
     @POST("user/getMedicalRecord")
-    Call<ViewmedicalResponse>getMedicalRecord(@Body ViewmedicalRequest viewmedicalRequest);
+    Call<ViewmedicalResponse> getMedicalRecord(@Body ViewmedicalRequest viewmedicalRequest);
 
     @POST("user/getDoctorDetails")
-    Call<DoctorResponse>getDoctorDetails(@Body DoctorRequest doctorRequest);
+    Call<DoctorResponse> getDoctorDetails(@Body DoctorRequest doctorRequest);
 
     @GET("user/systemCharges")
-    Call<SystemchargesResponse>systemCharges();
+    Call<SystemchargesResponse> systemCharges();
 
 
     // newly added
 
-   @POST("api/user/getProvidersListNew")
-   Call<ProviderResponse> getProviderResponse(@Body ProvidersRequestData requestData);
+    @POST("user/getProvidersListNew")
+    Call<ProviderResponse> getProviderResponse(@Body ProvidersRequestData requestData);
 
- @POST("user/loginNew")
- Call<LoginResponse>loginUser(@Body LoginRequest loginRequest);
+    @POST("user/loginNew")
+    Call<LoginResponse> loginUser(@Body LoginRequest loginRequest);
 
- @POST("user/verifyOtpNew")
-   Call<OtpResponse> verifyOtp(@Body VerifyotpRequest request);
+    @POST("user/verifyOtpNew")
+    Call<OtpResponse> verifyOtp(@Body VerifyotpRequest request);
 
 
- @POST("user/fetchStates")
-   Call<StateResponse> getStates(@Body StateRequest stateRequest);
+    @POST("user/fetchStates")
+    Call<StateResponse> getStates(@Body StateRequest stateRequest);
 
- @POST("user/fetchCities")
-  Call<CityResponse> getCities(@Body CityRequestData cityRequestData);
+    @POST("user/fetchCities")
+    Call<CityResponse> getCities(@Body CityRequestData cityRequestData);
 
- @POST("user/updateLocation")
+    @POST("user/updateLocation")
     Call<RestResponse> updateUserLocation(@Body UpdateUserLocationRequestData requestData);
+
+
+    @POST("user/getDoctorsListNew")
+    Call<DocterModelResponse> getDocterList(@Body DoctorSearchRequest request);
+
+    @POST("user/getDoctorDetailsNew")
+    Call<DocterDetailResoponse> getdocterDetails(@Body DocterDetailsRequest response);
+    @POST("user/fetchUsersNew")
+    Call<UsersResponse> getUserProfile(@Body UserRequestData requestData);
+
+    @POST("user/bookAppointmentNew")
+    Call<AppointmentResponse> bookAppointment(@Body BookAppointmentRequest appointmentRequest);
+
+    @POST("user/updateMemberNew")
+    Call<RestResponse>  updateMember(@Body UpdateMemberRequest request);
+
+    @POST("user/addMemberNew")
+    Call<RestResponse> addMemberNew(@Body AddNewMember request);
+
+    @GET("user/fetchRelations")
+    Call<RelationResponse> getRelationships();
+
+    @GET("user/fetchDiseases")
+    Call<DiseaseResponse> getDiseaseResponse();
+
+    @POST("user/updateProfileNew")
+
+    Call<RestResponse> addProfile(@Body AddProfile addProfile);
+
+    @GET("user/fetchBloodGroups")
+    Call<BloodGroupResponse> fetchBloodgroups();
+
+    @POST("user/getProfileNew")
+
+    Call<ProfileResponse> getProfile(@Body GetProfileRequest data);
+
+
+    @POST("user/fetchMembers")
+    Call<MemberResponse> getMembers(@Body MemeberRequest request);
+
+    @POST("user/fetchMemberDetailsNew")
+    Call<ProfileDiseaseResponse> getProfileMember(@Body MemeberProfileRequest request);
+
 }

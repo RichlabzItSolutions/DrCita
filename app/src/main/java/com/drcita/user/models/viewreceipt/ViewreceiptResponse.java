@@ -1,32 +1,40 @@
 package com.drcita.user.models.viewreceipt;
 
 public class ViewreceiptResponse{
-	private Data data;
+	private boolean success;
 	private String message;
-	private String status;
+	private AppointmentDetails data;
 
-	public void setData(Data data){
-		this.data = data;
+	public boolean isSuccess() {
+		return success;
 	}
 
-	public Data getData(){
-		return data;
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
-
-	public void setMessage(String message){
-		this.message = message;
-	}
-
-	public String getMessage(){
+	public String getMessage() {
 		return message;
 	}
 
-	public void setStatus(String status){
-		this.status = status;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public String getStatus(){
-		return status;
+	public AppointmentDetails getData() {
+		return data;
+	}
+
+	public void setData(AppointmentDetails data) {
+		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "ViewreceiptResponse{" +
+				"success=" + success +
+				", message='" + message + '\'' +
+				", data=" + data +
+				'}';
 	}
 }

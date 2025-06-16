@@ -31,7 +31,7 @@
             android:padding="2dp"
 
             android:layout_gravity="center"
-            android:src="@drawable/appicon"/>
+            android:src="@drawable/logo"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Order: #0001"
-        android:visibility="gone"
+
         android:textColor="@color/purple_500"
         android:fontFamily="@font/roboto_medium"/>
     <TextView
@@ -96,13 +96,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Issued: 21-May-2021"
-        android:visibility="gone"
+
         android:textColor="@color/purple_500"
         android:fontFamily="@font/roboto_medium"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:text="Appointment date"
+        android:id="@+id/tv_appointmentdate"
+        android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/blackdotteddash"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -118,7 +123,7 @@
                 android:id="@+id/doctorinfotitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:textStyle="bold"
                 android:layout_weight="1"
                 android:textColor="@color/purple_500"
                 android:fontFamily="@font/roboto_medium"/>
@@ -128,6 +133,7 @@
                 android:text="@string/patient_info"
                 android:layout_marginStart="30dp"
                 android:layout_weight="1"
+                android:textStyle="bold"
                 android:textColor="@color/purple_500"
                 android:fontFamily="@font/roboto_medium"/>
 
@@ -240,6 +246,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:layout_marginTop="5dp">
 
             <TextView
@@ -265,6 +272,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:visibility="gone"
             android:id="@+id/specializationLayout"
             android:orientation="horizontal">
 
@@ -273,7 +281,7 @@
                 android:layout_height="wrap_content"
                 tools:text="Specialist"
                 android:layout_weight="1"
-                android:textColor="@color/purple_500"
+                android:textColor="@color/black"
                 android:fontFamily="@font/roboto_medium"/>
             <TextView
                 android:id="@+id/receiptdoctorspecailazation"
@@ -310,6 +318,31 @@
                 android:fontFamily="@font/roboto_medium"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Coupon &amp; Discount"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+            <TextView
+                android:id="@+id/coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="$121.00"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/purple_500"
+                android:fontFamily="@font/roboto_medium"/>
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -329,7 +362,7 @@
                 android:id="@+id/receiptcharges"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="$121"
+                tools:text="₹121"
                 android:textSize="28sp"
                 android:gravity="end"
                 android:layout_weight="1"

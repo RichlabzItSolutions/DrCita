@@ -29,25 +29,22 @@ public class SplashScreenActivity extends AppCompatActivity {
         profilestatus = sp.getInt(Constants.PROFILESTATUS, profilestatus);
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (userId == null || userId.equals("") ) {
-                    Intent i=new Intent(SplashScreenActivity.this, LoginActivity.class);
-                    startActivity(i);
-                    finish();
-                }  else if(!userId.equals("0") && profilestatus == 0){
+        new Handler().postDelayed(() -> {
+            if (userId == null || userId.equals("") ) {
+                Intent i=new Intent(SplashScreenActivity.this, LoginActivity.class);
+                startActivity(i);
+                finish();
+            }  else if(!userId.equals("0") && profilestatus == 0){
 //                    Intent i=new Intent(SplashScreenActivity.this, ProfileActivity.class);
 //                    startActivity(i);
 
-                    Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);
-                    startActivity(i);
-                } else {
-                    Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);
-                    startActivity(i);
-                }
-
+                Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);
+                startActivity(i);
+            } else {
+                Intent i=new Intent(SplashScreenActivity.this, DashBoardActivity.class);
+                startActivity(i);
             }
+
         }, 3000);
 
     }

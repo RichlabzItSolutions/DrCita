@@ -1,19 +1,13 @@
 package com.drcita.user.Activity;
-
-import static android.content.ContentValues.TAG;
-import static android.icu.text.DisplayContext.LENGTH_SHORT;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
+
+import com.drcita.user.DashBoardActivity;
 import com.drcita.user.LanguageBaseActivity;
 import com.drcita.user.LoginActivity;
 import com.drcita.user.R;
@@ -270,6 +266,11 @@ public class NewVerifyOtpActivity extends LanguageBaseActivity {
                 finish();
 
 
+            }
+            else {
+                Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
+                startActivity(intent);
+                finish();
             }
 
 

@@ -41,4 +41,9 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorHeight">6dp</item> <!-- Increase height -->
+        <item name="tabIndicatorColor">#4CAF50</item>
+    </style>
 </resources>

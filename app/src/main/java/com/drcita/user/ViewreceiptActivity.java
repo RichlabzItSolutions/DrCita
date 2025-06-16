@@ -22,7 +22,9 @@ import androidx.databinding.DataBindingUtil;
 
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityViewreceiptBinding;
+import com.drcita.user.models.appointment.AppointmentData;
 import com.drcita.user.models.systemcharges.SystemchargesResponse;
+import com.drcita.user.models.viewreceipt.AppointmentDetails;
 import com.drcita.user.models.viewreceipt.ViewreceiptRequest;
 import com.drcita.user.models.viewreceipt.ViewreceiptResponse;
 import com.drcita.user.retrofit.ApiClient;
@@ -49,10 +51,8 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
 
 
     private ActivityViewreceiptBinding binding;
-    private String CUSTOMER_CARE_MOBILE_NO = "+91-9491363419";
-    private static final int REQUEST_PHONE_CALL = 100;
-    private com.drcita.user.models.doctors.DataItem doctorData;
-    private com.drcita.user.models.scans.DataItems doctorData1;
+
+
     private String userId;
     private int id;
     private ProgressDialog progress;
@@ -76,14 +76,12 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 id = extras.getInt("id");
-                doctorData = Parcels.unwrap(extras.getParcelable("doctorData"));
-                doctorData1 = Parcels.unwrap(extras.getParcelable("doctorData1"));
                 position = extras.getInt("position");
                 payment = extras.getInt("payment",payment);
             }
         } else {
         }
-        getUserAppointmentDetails(position);
+        getUserAppointmentDetails(1);
 
         binding.homeLayout.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
@@ -109,7 +107,8 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
         });
 
         Dexter.withContext(this)
-                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
+                .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.MANAGE_EXTERNAL_STORAGE)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
@@ -208,88 +207,35 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         mobilenumber = sp.getString(Constants.MOBILE, mobilenumber);
         dismissLoadingDialog();
-        String description = viewreceiptResponse.getMessage();
-        if (viewreceiptResponse.getStatus().equals("success")) {
-            dismissLoadingDialog();
-            com.drcita.user.models.viewreceipt.Data dataItems = viewreceiptResponse.getData();
-            binding.slotdatereceipt.setText("Slot Date:" + dataItems.getBookedOn());
-            providerNumber = dataItems.getProviderMobile();
-            if (position==2){
-                binding.doctornamereceipt.setText(dataItems.getScanName());
 
-                 if(dataItems.getPaymentMethod().matches("Free"))
-                 {
-                     binding.receiptcharges.setText("Free");
-                     binding.receiptfee.setText("Free");
-                 }
-                 else {
-                     if (dataItems.getRegion().matches("Mogadishu")) {
-                         binding.receiptcharges.setText("$" + dataItems.getConsultationFee());
-                         binding.receiptfee.setText("$" + dataItems.getConsultationFee());
+        AppointmentDetails dataItems = viewreceiptResponse.getData();
 
-                     }
-                     else
-                     {
-                         binding.receiptcharges.setText("SLSH" + dataItems.getConsultationFee());
-                         binding.receiptfee.setText("SLSH" + dataItems.getConsultationFee());
-                     }
+         binding.patientname.setText(dataItems.getAppointment().getPatientName());
+         binding.orderid.setText("Appointment Id :"+dataItems.getAppointment().getAppointmentId() );
+         binding.doctornamereceipt.setText(dataItems.getAppointment().getDoctorName());
+         binding.receiptfee.setText(String.valueOf("₹"+dataItems.getAppointment().getConsultationFee()));
+         binding.coupon.setText(String.valueOf(dataItems.getAppointment().getCouponDiscount()));
 
-                 }
+         binding.tvAppointmentdate.setText("Appointment Date : " +dataItems.getAppointment().getSlotDate() +"\nAppointment Time :" +dataItems.getAppointment().getSlotTime());
+            binding.slotdatereceipt.setText("Issued On:" + dataItems.getAppointment().getBookedOn());
+            binding.receiptcharges.setText("₹"+dataItems.getAppointment().getTotalAmount());
+            providerNumber = dataItems.getAppointment().getProviderMobile();
 
-
-                binding.doctorhospital.setText(dataItems.getHospitalName());
-                binding.receiptdoctorname.setText(dataItems.getScanName());
-                binding.doctortitle.setText(getString(R.string.scanname));
-                binding.doctorinfotitle.setText(getString(R.string.scaninfo));
-                binding.phonenumberreceipt.setText("Provider Number "+dataItems.getProviderMobile());
-                binding.specializationLayout.setVisibility(View.GONE);
-                binding.doctorspecalization.setVisibility(View.INVISIBLE);
-            }else {
-                binding.doctornamereceipt.setText(dataItems.getDoctorName());
-
-
-                if(dataItems.getPaymentMethod().matches("Free"))
-                {
-                    binding.receiptcharges.setText("Free");
-                    binding.receiptfee.setText("Free");
-                }
-                else {
-                    if (dataItems.getRegion().matches("Mogadishu")) {
-                        binding.receiptcharges.setText("$" + dataItems.getConsultationFee());
-                        binding.receiptfee.setText("$" + dataItems.getConsultationFee());
-
-                    }
-                    else
-                    {
-                        binding.receiptcharges.setText("SLSH" + dataItems.getConsultationFee());
-                        binding.receiptfee.setText("SLSH" + dataItems.getConsultationFee());
-                    }
-
-                }
-                binding.doctorhospital.setText(dataItems.getHospitalName());
-                binding.receiptdoctorname.setText(dataItems.getDoctorName());
+                binding.doctorhospital.setText(dataItems.getAppointment().getHospitalName());
+                binding.receiptdoctorname.setText(dataItems.getAppointment().getDoctorName());
                 binding.doctortitle.setText(getString(R.string.doctorname));
                 binding.doctorinfotitle.setText(getString(R.string.doctorinfo));
-                binding.receiptdoctorspecailazation.setText(dataItems.getSpecialisation());
-                binding.doctorspecalization.setText(dataItems.getSpecialisation());
-                binding.phonenumberreceipt.setText("Provider Number "+dataItems.getProviderMobile());
+                binding.receiptdoctorspecailazation.setText(dataItems.getAppointment().getSpecialisation());
+                binding.doctorspecalization.setText(dataItems.getAppointment().getSpecialisation());
+                binding.phonenumberreceipt.setText("Provider Number "+dataItems.getAppointment().getProviderMobile());
 
-                /*binding.specializationLayout.setVisibility(View.VISIBLE);
-                binding.doctorspecalization.setVisibility(View.VISIBLE);*/
-            }
-            binding.paymentService.setText(dataItems.getPaymentMethod());
-            binding.doctorlocation.setText(dataItems.getRegion());
-            binding.patientname.setText(dataItems.getPatientName());
-            binding.patientslot.setText(getString(R.string.number)+": " + dataItems.getSlotNumber());
-            binding.orderid.setText(getString(R.string.cardno) + dataItems.getSlotNumber());
-           // binding.phonenumberreceipt.setText(dataItems.getProviderMobile());
-            binding.slotdatereceipt.setText(dataItems.getSlotDate());
-           // dateRecipt = dataItems.getSlotDate();
-           // slotNumber = dataItems.getSlotNumber();
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), description, Snackbar.LENGTH_SHORT).show();
+
+            binding.doctorlocation.setText(dataItems.getAppointment().getRegion());
+
+            binding.patientslot.setText(getString(R.string.number)+": " + dataItems.getAppointment().getAppointmentId());
+
         }
-    }
+
 
 
     private void takeScreenshot(int i) {
@@ -369,6 +315,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

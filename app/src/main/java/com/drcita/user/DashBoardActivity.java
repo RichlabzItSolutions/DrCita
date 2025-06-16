@@ -467,7 +467,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         switch (view.getId()) {
             case R.id.profileTV:
             case R.id.profileNav:
-                Intent intent = new Intent(getApplicationContext(), UpdateProfile.class);
+                Intent intent = new Intent(getApplicationContext(), ProfileUpdateActivity.class);
                 startActivity(intent);
                 break;
 

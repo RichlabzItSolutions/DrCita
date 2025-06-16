@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.drcita.user.DoctorAppointmentActivity;
 import com.drcita.user.DoctorsListActivity;
 import com.drcita.user.HospitalReviewActivity;
 import com.drcita.user.HospitalsListActivity;
@@ -30,9 +32,9 @@ import java.util.List;
 
 public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.Viewholder> implements Filterable {
     private HospitalsListActivity context;
-    private List<NewProviderList> dataItems = new ArrayList<NewProviderList>();
+    private List<NewProviderList> dataItems;
 
-    private List<NewProviderList> mFilteredList = new ArrayList<NewProviderList>();
+    private List<NewProviderList> mFilteredList;
     private boolean isfromdental;
     private int providerId;
     private String hospitalName,rating,time,location,ratingcount,ratingStar,free;
@@ -57,26 +59,8 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
         NewProviderList list = mFilteredList.get(position);
         providerId = list.getProviderId();
         hospitalName = list.getHospitalName();
-//        rating = ""+list.ge();
-//        time = ""+list.getOpeningHours();
-//        location = ""+list.getRegion();
-//        ratingcount =""+list.getRating();
-//        free = ""+list.getFree();
         holder.hospitalname.setText(list.getHospitalName());
-//        holder.ratingTV.setText(""+list.getRating());
-//        holder.time.setText(list.getOpeningHours());
-//        holder.location.setText(""+list.getRegion());
-//        holder.ratingcount.setText(""+list.getRatedCount());
-
-        if (free.equals("Yes")){
-            holder.free.setText(R.string.free);
-            holder.free.setVisibility(View.VISIBLE);
-
-        }else if(free.equals("No")){
-            holder.free.setVisibility(View.GONE);
-
-        }
-
+//
         if (!list.getPicture().isEmpty()) {
             Picasso.with(context).load(list.getPicture())
                     .into(holder.hospitallogo);
@@ -130,6 +114,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
         ImageView rating;
         LinearLayout ratingedit;
         TextView hospitalname,ratingTV,ratingcount,time,location,free;
+        Button btnBook;
 
         public Viewholder(@NonNull View itemView) {
             super(itemView);
@@ -142,6 +127,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             ratingedit = itemView.findViewById(R.id.ratingedit);
             hospitallogo = itemView.findViewById(R.id.hospitallogo);
             free = itemView.findViewById(R.id.free);
+            btnBook=itemView.findViewById(R.id.btnBook);
 
             ratingedit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,15 +156,20 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
                     context.startActivity(intent);
                 }
             });
-            hospitalname.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
-                    Intent intent = new Intent(context, DoctorsListActivity.class);
-                    intent.putExtra("dataItem", Parcels.wrap(dataItem));
-                    intent.putExtra(Constants.isfromdental,isfromdental);
-                    context.startActivity(intent);
-                }
+            hospitalname.setOnClickListener(view -> {
+                NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
+                Intent intent = new Intent(context, DoctorsListActivity.class);
+                intent.putExtra("dataItem", Parcels.wrap(dataItem));
+                intent.putExtra(Constants.isfromdental,isfromdental);
+                context.startActivity(intent);
+            });
+            btnBook.setOnClickListener(view -> {
+                NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
+                Intent intent = new Intent(context, HospitalsListActivity.class);
+                intent.putExtra("specailization", dataItem.getProviderId());
+                context.startActivity(intent);
+                context.finish();
+
             });
 
         }

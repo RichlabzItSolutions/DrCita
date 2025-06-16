@@ -31,5 +31,6 @@
     <color name="mtrl_textinput_default_box_stroke_color">#FAFAFA</color>
     <color name="dashboardtextcolor">#1C1B1F</color>
     <color name="green">#62AA48</color>
+    <color name="gray">#A0A0A0</color>
 
 </resources>
