@@ -9,6 +9,14 @@ public class ProvidersRequestData {
     private List<Integer> consultationMode;
     private String area;
 
+    public ProvidersRequestData(int cityId, String searchStr, List<Integer> specializationId, List<Integer> consultationMode, String area) {
+        this.cityId = cityId;
+        this.searchStr = searchStr;
+        this.specializationId = specializationId;
+        this.consultationMode = consultationMode;
+        this.area = area;
+    }
+
     // Getters and Setters
     public int getCityId() {
         return cityId;

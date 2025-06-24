@@ -69,7 +69,6 @@
                         android:id="@+id/tvUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Seshu Kusam"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -78,7 +77,6 @@
                         android:id="@+id/tvMobile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="7780515180"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -193,14 +191,13 @@
             android:layout_below="@+id/ll_topbar" />
 
 
-
         <include
             android:id="@+id/notificationwithimage"
             layout="@layout/notificationlayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@+id/image"
-            android:visibility="gone"></include>
+            android:visibility="gone" />
 
         <include
             android:id="@+id/notificationwithoutimage"

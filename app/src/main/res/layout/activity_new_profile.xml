@@ -114,13 +114,25 @@
                         android:visibility="gone"
                         android:id="@+id/ll_memberdetailswhom"
                         android:orientation="vertical">
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/jakartharegular"
-                            android:text="For Whom"
-                            android:layout_marginTop="10dp"
-                            android:textColor="@color/black"/>
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/jakartharegular"
+                                android:text="For Whom"
+                                android:layout_marginTop="10dp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/red"
+                                android:text="*"/>
+
+                        </LinearLayout>
+
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
@@ -144,14 +156,26 @@
                     </LinearLayout>
 
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/jakartharegular"
-                        android:text="Full Name"
-                        android:layout_marginTop="10dp"
-                        android:textColor="@color/black"/>
+
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/jakartharegular"
+                            android:text="Full Name "
+
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:text="*"/>
+                    </LinearLayout>
+
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -162,84 +186,109 @@
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_height="wrap_content">
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:fontFamily="@font/jakartharegular"
-                            android:text="Gender"
-                            android:textColor="@color/black"/>
-                    </LinearLayout>
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    android:fontFamily="@font/jakartharegular"
+                                    android:text="Gender"
+                                    android:textColor="@color/black"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/red"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="2dp"
+                                    android:text="*"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:fontFamily="@font/jakartharegular"
-                            android:text="Age"
-                            android:layout_marginStart="5dp"
-                            android:textColor="@color/black"/>
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/jakartharegular"
+                                    android:text="Age"
+                                    android:layout_marginStart="5dp"
+                                    android:textColor="@color/black"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/red"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="2dp"
+                                    android:text="*"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content">
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="48dp"
-                    android:background="@drawable/edittext_bg">
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:id="@+id/spinnerGender"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        android:background="@android:color/transparent"
-                        android:layout_height="match_parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content">
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_bg">
+                        <Spinner
+                            android:layout_width="match_parent"
+                            android:id="@+id/spinnerGender"
+                            android:paddingStart="1dp"
+                            android:paddingEnd="1dp"
+                            android:background="@android:color/transparent"
+                            android:layout_height="match_parent" />
 
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/spinner_" />
-                </FrameLayout>
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="5dp"
-                    android:layout_height="48dp"
-                    android:inputType="number"
-                    android:maxLength="2"
-                    android:id="@+id/et_age"
-                    android:padding="10dp"
-                    android:background="@drawable/edittext_bg"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/spinner_" />
+                    </FrameLayout>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="5dp"
+                        android:layout_height="48dp"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:id="@+id/et_age"
+                        android:padding="10dp"
+                        android:background="@drawable/edittext_bg"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
                 <!-- DOB & Relation -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,10 +302,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="DOB"
                             android:textColor="@color/black"/>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -266,11 +315,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/jakartharegular"
                             android:text="Marital Status"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -284,8 +339,8 @@
                         android:id="@+id/etDOB"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
-
+                        android:layout_height="48dp"
+                        android:textSize="12sp"
                         android:fontFamily="@font/jakartharegular"
                         android:textColorHint="@color/gray"
                         android:focusable="false"
@@ -328,10 +383,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="Mobile Number"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -341,11 +402,18 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginStart="5dp"
                             android:fontFamily="@font/jakartharegular"
                             android:text="Email ID"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:id="@+id/tv_emailstar"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -363,6 +431,7 @@
                         android:fontFamily="@font/jakartharegular"
                         android:textColorHint="@color/gray"
                         android:maxLength="10"
+                        android:textSize="12sp"
                         android:inputType="number"
                         android:drawableEnd="@drawable/mobile"
                         android:textColor="@color/black"
@@ -379,6 +448,7 @@
                         android:layout_marginStart="5dp"
                         android:textColor="@color/black"
                         android:padding="10dp"
+                        android:textSize="12sp"
                         android:lines="1"
                         android:singleLine="true"
                         android:background="@drawable/edittext_bg" />
@@ -396,10 +466,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="State"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -409,11 +485,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="City"
                             android:layout_marginStart="5dp"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_weight="1"
+                            android:layout_marginStart="2dp"
+                            android:text="*"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -471,13 +553,25 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/jakartharegular"
-                        android:text="Address"
-                        android:drawablePadding="5dp"
-                        android:textColor="@color/black"/>
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/jakartharegular"
+                            android:text="Address"
+                            android:drawablePadding="5dp"
+                            android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:text="*"/>
+                    </LinearLayout>
+
                     <EditText
                         android:id="@+id/et_address"
                         android:layout_width="match_parent"
@@ -513,14 +607,21 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:layout_marginTop="5dp"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="Blood Group"
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -530,11 +631,18 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:fontFamily="@font/jakartharegular"
                             android:text="Past Surgeries"
                             android:layout_marginStart="5dp"
+
                             android:textColor="@color/black"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red"
+                            android:layout_marginStart="2dp"
+                            android:layout_weight="1"
+                            android:text="*"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -573,7 +681,8 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:id="@+id/sppastsurgeries"
-                            android:padding="5dp"
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp"
                             android:background="@android:color/transparent"
                             android:layout_height="match_parent" />
 

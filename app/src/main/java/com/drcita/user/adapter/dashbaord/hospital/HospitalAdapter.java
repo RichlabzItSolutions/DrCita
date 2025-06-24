@@ -1,21 +1,25 @@
 package com.drcita.user.adapter.dashbaord.hospital;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.drcita.user.HospitalsListActivity;
 import com.drcita.user.R;
 import com.drcita.user.models.dashboard.hospital.Hospital;
 import com.drcita.user.models.dashboard.specilization.Specialization;
 import com.drcita.user.models.home.Providers;
+import com.drcita.user.models.newProviderlist.NewProviderList;
 
 import java.util.List;
 
@@ -52,6 +56,15 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
                 .error(R.drawable.neurology)      // optional
                 .into(holder.imgHospitalLogo);
 
+         holder.ll_hospital.setOnClickListener(view -> {
+         Providers dataItem = hospitals.get(position);
+            Intent intent = new Intent(context, HospitalsListActivity.class);
+            intent.putExtra("hospitalId", dataItem.getId());
+            intent.putExtra("specialization",0);
+            context.startActivity(intent);
+
+
+        });
 
     }
 
@@ -63,11 +76,15 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
     static class HospitalViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgHospitalLogo;
         private TextView tv_providersname;
+        LinearLayout ll_hospital;
 
         HospitalViewHolder(View itemView) {
             super(itemView);
             imgHospitalLogo = itemView.findViewById(R.id.imgHospitalLogo);
             tv_providersname=itemView.findViewById(R.id.tvSpecialization);
+            ll_hospital=itemView.findViewById(R.id.ll_hospital);
+
+
         }
 
         void bind(Hospital hospital) {

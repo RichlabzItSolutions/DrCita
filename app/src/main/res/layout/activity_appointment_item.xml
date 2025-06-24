@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    android:background="@color/white"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="12dp">
+
+        <!-- Row: Doctor Image + Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/doctorImage"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/rounded_image"
+                android:scaleType="centerCrop"
+                android:src="@drawable/docter_img" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/doctorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dr. Pranoti Deshpande"
+                    android:textColor="#000"
+                    android:fontFamily="@font/jakarthabold"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/doctorSpeciality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DERMATOLOGY"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/jakartharegular"
+                    android:textColor="#63AA48" />
+
+                <TextView
+                    android:id="@+id/hospitalName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Continental Hospital"
+                    android:textSize="13sp"
+
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/jakartharegular"
+                    android:drawablePadding="3dp"
+                    android:drawableStart="@drawable/hospitalicon"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/multiSpeciality"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Multi-Speciality"
+                    android:textSize="13sp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/jakartharegular"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/statusOnline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Online"
+                android:textSize="12sp"
+                android:textColor="#4CAF50"
+                android:layout_gravity="top" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blackdotteddash"/>
+        <!-- Row: Date + Time -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            android:layout_marginBottom="5dp"
+            android:id="@+id/viewreceiptBtn">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Appointment #: "
+                    android:textSize="17sp"
+                    android:textColor="#000" />
+                <TextView
+                    android:id="@+id/appointment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 2000002"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/jakarthabold"
+                    android:textColor="@color/green" />
+            </LinearLayout>
+
+
+
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/reciptview" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            android:layout_marginTop="12dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:src="@drawable/ic_calendar" />
+
+                <TextView
+                    android:id="@+id/appointmentDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10th July"
+                    android:textSize="13sp"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_clock"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/appointmentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10th July"
+                    android:textSize="13sp"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_paidamount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Paid Amount : 2000"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:fontFamily="@font/jakarthabold"/>
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blackdotteddash"/>
+        <!-- Row: Date + Time -->
+
+        <!-- Row: Buttons + Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/btnReschedule"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:backgroundTint="#E8F5E9"
+                android:fontFamily="@font/jakartharegular"
+                android:text="Reschedule"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/button_bg_rescs"
+
+                android:gravity="center_vertical|center_horizontal"
+                android:textAllCaps="false"
+                android:paddingHorizontal="12dp"
+                android:textColor="#08944E"
+                android:textSize="12sp" />
+
+            <Space
+                android:layout_width="12dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/button_bg_rounded"
+                android:backgroundTint="#FFEBEE"
+                android:clickable="true"
+                android:drawableStart="@drawable/trash"
+                android:drawablePadding="6dp"
+                android:focusable="true"
+                android:fontFamily="@font/jakartharegular"
+                android:gravity="center_vertical|center_horizontal"
+                android:paddingHorizontal="12dp"
+                android:text="Cancel"
+                android:textColor="#F44336"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/appointmentStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/jakartharegular"
+                android:gravity="end"
+                android:text="Pending"
+                android:textColor="#FF9800"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

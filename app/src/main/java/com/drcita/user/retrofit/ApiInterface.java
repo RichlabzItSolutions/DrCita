@@ -11,6 +11,11 @@ import com.drcita.user.models.appointment.BookAppointmentRequest;
 import com.drcita.user.models.appointment.CAncelAppointmentRequest;
 import com.drcita.user.models.appointment.DocterDetailResoponse;
 import com.drcita.user.models.appointment.DocterDetailsRequest;
+import com.drcita.user.models.appointment.ResechudleAppointmentRequest;
+import com.drcita.user.models.appointment.singleAppointmentRequest;
+import com.drcita.user.models.appointmentbookingsummary.AppointmentsBookingResponse;
+import com.drcita.user.models.appointmentbookingsummary.CancelReasonResponse;
+import com.drcita.user.models.appointmentbookingsummary.CancelRequest;
 import com.drcita.user.models.cities.CityRequestData;
 import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.contact.ContactRequest;
@@ -30,6 +35,8 @@ import com.drcita.user.models.hospitalreviews.HospitalReviewRequest;
 import com.drcita.user.models.hospitalreviews.HospitalReviewResponse;
 import com.drcita.user.models.hospitals.HospitalsRequest;
 import com.drcita.user.models.hospitals.HospitalsResponse;
+import com.drcita.user.models.hospitals.SingleDocterRequest;
+import com.drcita.user.models.hospitals.SingleDoctorResponse;
 import com.drcita.user.models.language.UpdateLanguageRequest;
 import com.drcita.user.models.login.LoginRequest;
 import com.drcita.user.models.login.LoginResponse;
@@ -45,6 +52,8 @@ import com.drcita.user.models.payment.PaymentRequest;
 import com.drcita.user.models.profile.AddNewMember;
 import com.drcita.user.models.profile.AddProfile;
 import com.drcita.user.models.profile.BloodGroupResponse;
+import com.drcita.user.models.profile.CheckUserRequest;
+import com.drcita.user.models.profile.CheckUserResponse;
 import com.drcita.user.models.profile.DiseaseResponse;
 import com.drcita.user.models.profile.GetProfileRequest;
 import com.drcita.user.models.profile.GetProfileResponse;
@@ -85,6 +94,11 @@ import com.drcita.user.models.viewmedicalrecords.ViewmedicalRequest;
 import com.drcita.user.models.viewmedicalrecords.ViewmedicalResponse;
 import com.drcita.user.models.viewreceipt.ViewreceiptRequest;
 import com.drcita.user.models.viewreceipt.ViewreceiptResponse;
+
+import org.checkerframework.checker.units.qual.C;
+
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -211,7 +225,7 @@ public interface ApiInterface {
     @POST("user/cancelAppointment")
     Call<GlobalResponse> cancelAppointment(@Body CAncelAppointmentRequest cAncelAppointmentRequest);
 
-    @POST("user/getUserMedicalRecords")
+    @POST("user/fetchMedicalRecordsNew")
     Call<GetMedicalRecordsResponse> getUserMedicalRecords(@Body GetMedicalRecordsRequest getMedicalRecordsRequest);
 
     @POST("user/getMedicalRecord")
@@ -286,5 +300,37 @@ public interface ApiInterface {
 
     @POST("user/fetchMemberDetailsNew")
     Call<ProfileDiseaseResponse> getProfileMember(@Body MemeberProfileRequest request);
+
+    @POST("user/checkUserNew")
+    Call<CheckUserResponse> checkUser(@Body CheckUserRequest request);
+
+    @POST("user/getAppointmentsNew")
+    Call<AppointmentsBookingResponse> getBookingAppointment(@Body GlobalRequest request);
+    @GET("user/fetchReasonsForUser")
+    Call<CancelReasonResponse> getCancelReason();
+
+    @POST("user/cancelAppointmentNew")
+    Call<RestResponse> cancelAppointment(@Body CancelRequest request);
+
+    @POST("user/getAppointmentNew")
+    Call<DocterDetailResoponse> getBookedAppointments(@Body singleAppointmentRequest response);
+
+    @POST("user/resheduleAppointment")
+
+    Call<AppointmentResponse> bookAppointment(@Body ResechudleAppointmentRequest appointmentRequest);
+
+
+    @POST("user/fetchAllMembers")
+    Call<MemberResponse> getFetchAll(@Body MemeberRequest request);
+
+    @Multipart
+    @POST("user/addMedicalRecordNew")
+    Call<RestResponse> uploadMedicalRecord(
+            @Part MultipartBody.Part data,
+            @Part List<MultipartBody.Part> images,
+            @Part List<MultipartBody.Part> pdfs
+    );
+
+
 
 }

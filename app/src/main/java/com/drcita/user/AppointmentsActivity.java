@@ -50,7 +50,7 @@ public class AppointmentsActivity extends LanguageBaseActivity {
         setSupportActionBar(activityAppointmentsBinding.toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setTitle("Appointments");
-        activityAppointmentsBinding.backAppotiment.setOnClickListener(view -> finish());
+//        activityAppointmentsBinding.backAppotiment.setOnClickListener(view -> finish());
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         userId = sp.getString(Constants.USER_ID, userId);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);

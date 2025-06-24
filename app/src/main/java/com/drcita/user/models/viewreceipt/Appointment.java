@@ -19,7 +19,15 @@ public class Appointment {
         private int totalAmount;
         private String transactionId;
         private String bookedOn;
+        private String appointmentMode;
 
+    public String getAppointmentMode() {
+        return appointmentMode;
+    }
+
+    public void setAppointmentMode(String appointmentMode) {
+        this.appointmentMode = appointmentMode;
+    }
 
     public String getAppointmentId() {
         return appointmentId;

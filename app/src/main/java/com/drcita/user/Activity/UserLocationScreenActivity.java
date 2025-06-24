@@ -177,6 +177,10 @@ public class UserLocationScreenActivity  extends LanguageBaseActivity {
         try {
             if(body.isSuccess())
             {
+                SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
+                // Save state and city IDs
+                preferences.edit().putString(Constants.STATE_ID, String.valueOf(selectedStateId)).apply();
+                preferences.edit().putString(Constants.CITY_ID, String.valueOf(selectCityId)).apply();
                 Intent i =new Intent(this, DashBoardActivity.class);
                 startActivity(i);
             }

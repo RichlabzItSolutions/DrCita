@@ -43,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
+            android:textSize="12sp"
             android:textColorHint="@color/gray"
             android:textColor="@color/black"
             android:fontFamily="@font/jakartharegular"
@@ -68,6 +69,7 @@
                 android:textColor="@color/black"
                 android:inputType="number"
                 android:padding="10dp"
+                android:textSize="12sp"
                 android:maxLength="2"
                 android:background="@drawable/bg_edittext" />
 
@@ -80,7 +82,8 @@
                 <Spinner
                     android:layout_width="match_parent"
                     android:id="@+id/spinnerGender"
-                    android:padding="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
                     android:background="@android:color/transparent"
                     android:layout_height="match_parent" />
 
@@ -112,6 +115,7 @@
                 android:drawableEnd="@drawable/ic_baseline_calendar"
                 android:textColor="@color/black"
                 android:padding="10dp"
+                android:textSize="12sp"
                 android:background="@drawable/bg_edittext" />
 
             <FrameLayout
@@ -122,7 +126,8 @@
                 android:background="@drawable/edittext_bg">
                 <Spinner
                     android:layout_width="match_parent"
-                    android:padding="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
                     android:id="@+id/spinnerRelation"
                     android:background="@android:color/transparent"
                     android:layout_height="match_parent" />
@@ -142,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Address"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:padding="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_edittext" />

@@ -60,6 +60,8 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
         providerId = list.getProviderId();
         hospitalName = list.getHospitalName();
         holder.hospitalname.setText(list.getHospitalName());
+        holder.txtSpecialization.setText(list.getHospitalType());
+        holder.tvaddress.setText(list.getAddress());
 //
         if (!list.getPicture().isEmpty()) {
             Picasso.with(context).load(list.getPicture())
@@ -113,7 +115,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
         ImageView hospitallogo;
         ImageView rating;
         LinearLayout ratingedit;
-        TextView hospitalname,ratingTV,ratingcount,time,location,free;
+        TextView hospitalname,ratingTV,ratingcount,time,location,free,txtSpecialization,tvaddress;
         Button btnBook;
 
         public Viewholder(@NonNull View itemView) {
@@ -128,45 +130,44 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             hospitallogo = itemView.findViewById(R.id.hospitallogo);
             free = itemView.findViewById(R.id.free);
             btnBook=itemView.findViewById(R.id.btnBook);
+            tvaddress=itemView.findViewById(R.id.txtLocation);
+            txtSpecialization=itemView.findViewById(R.id.txtSpecialization);
 
-            ratingedit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, WriteReview.class);
-                    intent.putExtra("providerId",providerId);
-                    context.startActivity(intent);
-                }
-            });
-            ratingcount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
-                    Intent intent = new Intent(context, HospitalReviewActivity.class);
-                    intent.putExtra("dataItem", Parcels.wrap(dataItem));
-                    context.startActivity(intent);
-                }
-            } );
-            hospitallogo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
-                    Intent intent = new Intent(context, DoctorsListActivity.class);
-                    intent.putExtra("dataItem", Parcels.wrap(dataItem));
-                    intent.putExtra(Constants.isfromdental,isfromdental);
-                    context.startActivity(intent);
-                }
-            });
-            hospitalname.setOnClickListener(view -> {
-                NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
-                Intent intent = new Intent(context, DoctorsListActivity.class);
-                intent.putExtra("dataItem", Parcels.wrap(dataItem));
-                intent.putExtra(Constants.isfromdental,isfromdental);
-                context.startActivity(intent);
-            });
+//            ratingedit.setOnClickListener(view -> {
+//                Intent intent = new Intent(context, WriteReview.class);
+//                intent.putExtra("providerId",providerId);
+//                context.startActivity(intent);
+//            });
+//            ratingcount.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
+//                    Intent intent = new Intent(context, HospitalReviewActivity.class);
+//                    intent.putExtra("dataItem", Parcels.wrap(dataItem));
+//                    context.startActivity(intent);
+//                }
+//            } );
+//            hospitallogo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
+//                    Intent intent = new Intent(context, DoctorsListActivity.class);
+//                    intent.putExtra("dataItem", Parcels.wrap(dataItem));
+//                    intent.putExtra(Constants.isfromdental,isfromdental);
+//                    context.startActivity(intent);
+//                }
+//            });
+//            hospitalname.setOnClickListener(view -> {
+//                NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
+//                Intent intent = new Intent(context, DoctorsListActivity.class);
+//                intent.putExtra("dataItem", Parcels.wrap(dataItem));
+//                intent.putExtra(Constants.isfromdental,isfromdental);
+//                context.startActivity(intent);
+//            });
             btnBook.setOnClickListener(view -> {
                 NewProviderList dataItem = mFilteredList.get(getAdapterPosition());
                 Intent intent = new Intent(context, HospitalsListActivity.class);
-                intent.putExtra("specailization", dataItem.getProviderId());
+                intent.putExtra("hospitalId", dataItem.getProviderId());
                 context.startActivity(intent);
                 context.finish();
 

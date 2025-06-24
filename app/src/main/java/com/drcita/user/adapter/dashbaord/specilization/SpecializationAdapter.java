@@ -2,19 +2,23 @@ package com.drcita.user.adapter.dashbaord.specilization;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.drcita.user.HospitalsListActivity;
 import com.drcita.user.R;
 import com.drcita.user.models.dashboard.specilization.Specialization;
+import com.drcita.user.models.home.Providers;
 
 import java.util.List;
 
@@ -51,7 +55,15 @@ public class SpecializationAdapter extends RecyclerView.Adapter<SpecializationAd
                 .error(R.drawable.neurology)      // optional
                 .into( holder.imgSpecialization);
 
+        holder.ll_specilaization.setOnClickListener(view -> {
+            Specialization dataItem = specializationList.get(position);
+            Intent intent = new Intent(context, HospitalsListActivity.class);
+            intent.putExtra("hospitalId", 0);
+            intent.putExtra("specialization",dataItem.getId());
+            context.startActivity(intent);
 
+
+        });
     }
 
     @Override
@@ -62,11 +74,12 @@ public class SpecializationAdapter extends RecyclerView.Adapter<SpecializationAd
     public static class SpecializationViewHolder extends RecyclerView.ViewHolder {
         ImageView imgSpecialization;
         TextView tvSpecialization;
-
+        LinearLayout ll_specilaization;
         public SpecializationViewHolder(@NonNull View itemView) {
             super(itemView);
             imgSpecialization = itemView.findViewById(R.id.imgSpecialization);
             tvSpecialization = itemView.findViewById(R.id.tvSpecialization);
+            ll_specilaization=itemView.findViewById(R.id.ll_specilization);
         }
     }
 }

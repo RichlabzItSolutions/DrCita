@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#4C61CC"
+    android:background="@color/green"
     android:fitsSystemWindows="true"
     android:orientation="horizontal">
 
@@ -16,21 +16,16 @@
         android:gravity="center"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/rounded_profile_textview">
-        <androidx.cardview.widget.CardView
-            android:id="@+id/myCardView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:cardCornerRadius="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true">
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:scaleType="fitCenter"
+        android:visibility="invisible"
         app:srcCompat= "@drawable/avtar"
         app:tint="@color/white"/>
-        </androidx.cardview.widget.CardView>
+
     </RelativeLayout>
 
     <LinearLayout
@@ -46,6 +41,7 @@
         tools:text= ""
         android:singleLine="true"
         android:textSize="20sp"
+
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_bold"
         android:textAppearance= "@style/TextAppearance.AppCompat.Body1" />

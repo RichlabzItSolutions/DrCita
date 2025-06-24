@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -111,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="20dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -163,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -215,6 +218,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -267,6 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -319,6 +324,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -370,6 +376,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
+                    android:tint="@color/green"
                     android:src="@drawable/ic_baseline_chevron_right_24"/>
 
 
@@ -398,6 +405,7 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+
                 android:background="@drawable/lockicon"/>
             <TextView
                 android:id="@+id/changepasswordTV"
@@ -422,6 +430,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
+                android:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24"/>
 
 

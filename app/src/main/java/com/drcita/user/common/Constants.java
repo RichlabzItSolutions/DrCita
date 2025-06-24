@@ -3,8 +3,11 @@ package com.drcita.user.common;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.ParseException;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +16,8 @@ import androidx.appcompat.app.AlertDialog;
 import com.drcita.user.models.signup.SignupResponse;
 import com.google.gson.Gson;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +33,10 @@ public class Constants {
     public static final String LANGUAGE1 = "language1";
     public static final String STATE_ID = "stateId";
     public static final String CITY_ID = "cityid";
+    public static final String MOBILE_ID="mobile";
+    public static final String User_Name="name";
     public static final String PROFILESTATUS = "profile_status";
+
     public static final Boolean LOGIN = false;
     public static String emailPattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     public static String MobilePattern = "[6]{1}[1235]{1}[0-9]{7}";
@@ -117,6 +125,31 @@ public class Constants {
             }
         }catch (Exception e){
             Toast.makeText(context, "Server error", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public static boolean isMoreThanTwoHoursLeft(String slotDate, String slotTime) {
+        try {
+            // Combine slotDate and slotTime to one datetime string
+            String input = slotDate + " " + slotTime;
+            SimpleDateFormat sdf = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+            }
+            Date appointmentTime = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                appointmentTime = sdf.parse(input);
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.HOUR_OF_DAY, 2);
+            Date twoHoursFromNow = calendar.getTime();
+
+            return appointmentTime != null && appointmentTime.after(twoHoursFromNow);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        } catch (java.text.ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 }

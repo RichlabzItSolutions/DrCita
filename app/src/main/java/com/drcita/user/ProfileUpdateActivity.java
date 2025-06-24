@@ -1,8 +1,8 @@
 package com.drcita.user;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static android.widget.Toast.LENGTH_SHORT;
-
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +31,7 @@ import com.drcita.user.models.profile.Disease;
 import com.drcita.user.models.profile.DiseaseResponse;
 import com.drcita.user.models.profile.DiseaseStatus;
 import com.drcita.user.models.profile.GetProfileRequest;
+import com.drcita.user.models.profile.ProfileData;
 import com.drcita.user.models.profile.ProfileResponse;
 import com.drcita.user.models.profile.RelationResponse;
 import com.drcita.user.models.profile.UpdateMemberRequest;
@@ -40,13 +41,11 @@ import com.drcita.user.models.states.StateResponse;
 import com.drcita.user.models.userprofile.MemeberProfileRequest;
 import com.drcita.user.models.userprofile.ProfileDiseaseResponse;
 import com.drcita.user.retrofit.ApiClient;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,9 +64,11 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     List<String> cityNames = new ArrayList<>();
 
     List<String> bloodGroups = new ArrayList<>();
+    List<String> relationshipsData=new ArrayList<>();
 
     int selectedStateId = -1;
     int bloodgroupId = -1;
+    int forWhoomId=-1;
     int pastsurgeryid;
     int selectCityId = -1;
     String selectedStateName = "", selectedCityName = "", bloodgroup = "";
@@ -77,6 +78,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     DiseaseAdapter adapter;
     private int relationId;
     private String from, subuserId;
+    private int selectedEditCityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,25 +101,26 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
             startActivity(intent);
 
         });
-
         if (getIntent().hasExtra("from")) {
             from = getIntent().getStringExtra("from");
             if (from.equals("profile")) {
-                subuserId = getIntent().getStringExtra("subuserId");
-                membersProfile(subuserId);
-                activityNewvprofileBinding.llAddmemeber.setVisibility(View.GONE);
-                activityNewvprofileBinding.tvMemberheader.setVisibility(View.VISIBLE);
-                activityNewvprofileBinding.llMemberdetailswhom.setVisibility(View.VISIBLE);
+                     subuserId = getIntent().getStringExtra("subuserId");
+                 membersProfile(subuserId);
+                activityNewvprofileBinding.tvEmailstar.setVisibility(GONE);
+                activityNewvprofileBinding.llAddmemeber.setVisibility(GONE);
+                activityNewvprofileBinding.tvMemberheader.setVisibility(VISIBLE);
+                activityNewvprofileBinding.llMemberdetailswhom.setVisibility(VISIBLE);
                 activityNewvprofileBinding.tvTitle.setText("Member Details");
                 activityNewvprofileBinding.tvMemberheader.setText("Profile Details");
-                activityNewvprofileBinding.tvMemberheader.setPaintFlags(activityNewvprofileBinding.tvMemberheader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//                activityNewvprofileBinding.tvMemberheader.setPaintFlags(activityNewvprofileBinding.tvMemberheader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
             }
         } else {
             activityNewvprofileBinding.tvTitle.setText("My Profile");
-            activityNewvprofileBinding.llAddmemeber.setVisibility(View.VISIBLE);
-            activityNewvprofileBinding.tvMemberheader.setVisibility(View.GONE);
-            activityNewvprofileBinding.llMemberdetailswhom.setVisibility(View.GONE);
+            activityNewvprofileBinding.tvEmailstar.setVisibility(VISIBLE);
+            activityNewvprofileBinding.llAddmemeber.setVisibility(VISIBLE);
+            activityNewvprofileBinding.tvMemberheader.setVisibility(GONE);
+            activityNewvprofileBinding.llMemberdetailswhom.setVisibility(GONE);
             // retrieve user profile data
             setUpProfile();
         }
@@ -139,12 +142,10 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                                 if (response.isSuccessful() && response.body() != null) {
                                     getMembersProfile(response.body());
 
-
                                 }
 
                             }
                         }
-
                         @Override
                         public void onFailure(@NonNull Call<ProfileDiseaseResponse> call, @NonNull Throwable t) {
                             t.printStackTrace();
@@ -165,53 +166,57 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     private void getMembersProfile(ProfileDiseaseResponse profile) {
         try {
 
+
+            // Basic Info
             activityNewvprofileBinding.etFullname.setText(profile.getData().getProfile().getFullName());
-            activityNewvprofileBinding.spinnerGender.setSelection(profile.getData().getProfile().getGender());
+            activityNewvprofileBinding.spinnerGender.setSelection(profile.getData().getProfile().getGender() );
             activityNewvprofileBinding.etAge.setText(String.valueOf(profile.getData().getProfile().getAge()));
-
             activityNewvprofileBinding.etDOB.setText(profile.getData().getProfile().getDob());
-
-            activityNewvprofileBinding.spinnerRelation.setSelection((profile.getData().getProfile().getMaritalStatus() - 1));
-
+            activityNewvprofileBinding.spinnerRelation.setSelection(profile.getData().getProfile().getMaritalStatus());
             activityNewvprofileBinding.etmobile.setText(profile.getData().getProfile().getMobile());
+            activityNewvprofileBinding.etmobile.setEnabled(true);
             activityNewvprofileBinding.etemail.setText(profile.getData().getProfile().getEmail());
-
             activityNewvprofileBinding.etAddress.setText(profile.getData().getProfile().getAddress());
-            activityNewvprofileBinding.sppastsurgeries.setSelection(profile.getData().getProfile().getPastSurgeries());
+
+            activityNewvprofileBinding.sppastsurgeries.setSelection(profile.getData().getProfile().getPastSurgeries()+1);
+
+            // Bind diseases
             List<Disease> apiDiseases = profile.getData().getDiseases();
             for (Disease disease : apiDiseases) {
-                disease.setSelection(disease.getStatus()); // Set it ONCE
+                disease.setSelection(disease.getStatus());
             }
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-            activityNewvprofileBinding.rvDiseases.setLayoutManager(layoutManager);
-            adapter = new DiseaseAdapter(profile.getData().getDiseases());
+            activityNewvprofileBinding.rvDiseases.setLayoutManager(new GridLayoutManager(this, 1));
+            adapter = new DiseaseAdapter(apiDiseases);
             activityNewvprofileBinding.rvDiseases.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            int selectedIndex = -1;
+            // Bind state
             int selectedStateId = profile.getData().getProfile().getStateId();
-            for (int i = 0; i < stateList.size(); i++) {
-                if (stateList.get(i).getId() == selectedStateId) {
-                    selectedIndex = i;
+            int selectedStateIndex = getIndexForStateId(selectedStateId);
+            if (selectedStateIndex != -1) {
+                // +1 if "Select State" is added manually at position 0
+                activityNewvprofileBinding.spinnerStates.setSelection(selectedStateIndex + 1);
+            }
+
+            // Store selected city ID for later use
+            selectedEditCityId = profile.getData().getProfile().getCityId();
+
+            // Bind blood group
+            int selectedBloodGroupIndex = getIndexForBloodGroupId(profile.getData().getProfile().getBloodGroupId());
+            if (selectedBloodGroupIndex != -1) {
+                activityNewvprofileBinding.spbloodgroup.setSelection(selectedBloodGroupIndex + 1);
+            }
+            int forwhomid = profile.getData().getProfile().getRelationId();
+            for (int i = 0; i < relationshipdata.size(); i++) {
+                if (relationshipdata.get(i).getId() == forwhomid) {
+                    forWhoomId = i;
                     break;
                 }
             }
-
-            if (selectedIndex != -1) {
-                activityNewvprofileBinding.spinnerStates.setSelection(selectedIndex + 1);
+            if (forWhoomId != -1) {
+                activityNewvprofileBinding.spWhom.setSelection(forWhoomId);
             }
 
-            // get Blood Group
-            int selectBloodGroupId = profile.getData().getProfile().getBloodGroupId();
-            for (int i = 0; i < bloodGroup.size(); i++) {
-                if (bloodGroup.get(i).getId() == selectBloodGroupId) {
-                    bloodgroupId = i;
-                    break;
-                }
-            }
-            if (bloodgroupId != -1) {
-                activityNewvprofileBinding.spbloodgroup.setSelection(bloodgroupId + 1);
-            }
         } catch (Exception e) {
             e.getMessage();
         }
@@ -233,7 +238,6 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                         dismissLoadingDialog();
                         if (response.isSuccessful()) {
                             if (response.isSuccessful() && response.body() != null) {
-
                                 getUserProfileResponse(response.body());
                             }
 
@@ -253,69 +257,56 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
             e.getMessage();
         }
     }
-
-    @SuppressLint("NotifyDataSetChanged")
     private void getUserProfileResponse(ProfileResponse profile) {
-
         try {
 
+            SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
+            preferences.edit().putString(Constants.User_Name,  profile.getData().getProfile().getFullName()).apply();
+
+            // Basic Info
             activityNewvprofileBinding.etFullname.setText(profile.getData().getProfile().getFullName());
-            activityNewvprofileBinding.spinnerGender.setSelection(profile.getData().getProfile().getGender());
+            activityNewvprofileBinding.spinnerGender.setSelection(profile.getData().getProfile().getGender() );
             activityNewvprofileBinding.etAge.setText(String.valueOf(profile.getData().getProfile().getAge()));
-
             activityNewvprofileBinding.etDOB.setText(profile.getData().getProfile().getDob());
-
-            activityNewvprofileBinding.spinnerRelation.setSelection((profile.getData().getProfile().getMaritalStatus() - 1));
-
+            activityNewvprofileBinding.spinnerRelation.setSelection(profile.getData().getProfile().getMaritalStatus());
             activityNewvprofileBinding.etmobile.setText(profile.getData().getProfile().getMobile());
+            activityNewvprofileBinding.etmobile.setEnabled(false);
             activityNewvprofileBinding.etemail.setText(profile.getData().getProfile().getEmail());
-
             activityNewvprofileBinding.etAddress.setText(profile.getData().getProfile().getAddress());
-            activityNewvprofileBinding.sppastsurgeries.setSelection(profile.getData().getProfile().getPastSurgeries());
+            activityNewvprofileBinding.sppastsurgeries.setSelection(profile.getData().getProfile().getPastSurgeries()+1);
+
+            // Bind diseases
             List<Disease> apiDiseases = profile.getData().getDiseases();
             for (Disease disease : apiDiseases) {
-                disease.setSelection(disease.getStatus()); // Set it ONCE
+                disease.setSelection(disease.getStatus());
             }
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-            activityNewvprofileBinding.rvDiseases.setLayoutManager(layoutManager);
-            adapter = new DiseaseAdapter(profile.getData().getDiseases());
+            activityNewvprofileBinding.rvDiseases.setLayoutManager(new GridLayoutManager(this, 1));
+            adapter = new DiseaseAdapter(apiDiseases);
             activityNewvprofileBinding.rvDiseases.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
-            int selectedIndex = -1;
+            // Bind state
             int selectedStateId = profile.getData().getProfile().getStateId();
-            for (int i = 0; i < stateList.size(); i++) {
-                if (stateList.get(i).getId() == selectedStateId) {
-                    selectedIndex = i;
-                    break;
-                }
+            int selectedStateIndex = getIndexForStateId(selectedStateId);
+            if (selectedStateIndex != -1) {
+                // +1 if "Select State" is added manually at position 0
+                activityNewvprofileBinding.spinnerStates.setSelection(selectedStateIndex + 1);
             }
 
-            if (selectedIndex != -1) {
-                activityNewvprofileBinding.spinnerStates.setSelection(selectedIndex + 1);
+            // Store selected city ID for later use
+            selectedEditCityId = profile.getData().getProfile().getCityId();
+
+            // Bind blood group
+            int selectedBloodGroupIndex = getIndexForBloodGroupId(profile.getData().getProfile().getBloodGroupId());
+            if (selectedBloodGroupIndex != -1) {
+                activityNewvprofileBinding.spbloodgroup.setSelection(selectedBloodGroupIndex + 1);
             }
-
-
-            // get Blood Group
-
-            int selectBloodGroupId = profile.getData().getProfile().getBloodGroupId();
-            for (int i = 0; i < bloodGroup.size(); i++) {
-                if (bloodGroup.get(i).getId() == selectBloodGroupId) {
-                    bloodgroupId = i;
-                    break;
-                }
-            }
-
-            if (bloodgroupId != -1) {
-                activityNewvprofileBinding.spbloodgroup.setSelection(bloodgroupId + 1);
-            }
-
 
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace(); // Log the error
         }
-
     }
+
 
     private void setupFoodPreference() {
         try {
@@ -341,7 +332,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     private void setUpPreviousSurgeryStatus() {
         try {
 
-            List<String> genderList = Arrays.asList("No", "Yes");
+            List<String> genderList = Arrays.asList("select surgeries","No","Yes");
             // Gender variable
             final int[] pastSurgeryStatus = {1}; // Default to unmarried
 
@@ -352,11 +343,16 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
                     switch (pos) {
-                        case 0: // unMarried
+                        case 0: //
+                            pastSurgeryStatus[0] = -1;
+                            pastsurgeryid = -1;
+                            break;
+                        case 1: //
                             pastSurgeryStatus[0] = 0;
                             pastsurgeryid = 0;
                             break;
-                        case 1: // married
+
+                        case 2: //
                             pastSurgeryStatus[0] = 1;
                             pastsurgeryid = 1;
                             break;
@@ -420,37 +416,89 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
 
     private void submitDataToServer() {
         try {
-
-            if (activityNewvprofileBinding.etFullname.getText().length() == 0) {
-
+            // Validate full name
+            if (activityNewvprofileBinding.etFullname.getText().toString().trim().isEmpty()) {
                 activityNewvprofileBinding.etFullname.setError("Please enter full name");
                 return;
-            } else if (activityNewvprofileBinding.etAge.getText().length() == 0 && activityNewvprofileBinding.etDOB.getText().length() == 0) {
-                Toast.makeText(this, "Enter your age  or  dob", LENGTH_SHORT).show();
-            } else if ((activityNewvprofileBinding.etmobile.getText().length() == 0) && (!activityNewvprofileBinding.etmobile.getText().toString().matches(Constants.MobilePatternzaadevcezad))) {
-                activityNewvprofileBinding.etmobile.setError("Please enter your  valid mobile number");
-            } else if ((activityNewvprofileBinding.etemail.getText().length() == 0) && (!isValidEmail(activityNewvprofileBinding.etemail.getText().toString()))) {
-                // Valid email
-                activityNewvprofileBinding.etemail.setError("Please enter a valid email address");
-            } else if (selectedStateName.equals("Select State") && selectedCityName.equals("Select City")) {
-
-                Toast.makeText(this, "Please select both state and city", LENGTH_SHORT).show();
-            } else if (bloodgroupId == -1) {
-                Toast.makeText(this, "Please select blood group", LENGTH_SHORT).show();
-            } else {
-
-                if (from != null) {
-
-                    calltoMemberAPI();
-                } else {
-                    calltoAPI();
-                    Toast.makeText(this, "Please select both state and city", LENGTH_SHORT).show();
-                }
             }
+
+            // Validate age or DOB
+            String ageStr = activityNewvprofileBinding.etAge.getText().toString().trim();
+            String dobStr = activityNewvprofileBinding.etDOB.getText().toString().trim();
+
+            if (ageStr.isEmpty() && dobStr.isEmpty()) {
+                Toast.makeText(this, "Enter your age or DOB", LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!ageStr.isEmpty() && ageStr.equals("0")) {
+                activityNewvprofileBinding.etAge.setError("Please enter valid age");
+                return;
+            }
+
+            // Validate mobile
+            String mobile = activityNewvprofileBinding.etmobile.getText().toString().trim();
+            if (mobile.isEmpty() || mobile.matches(Constants.MobilePatternzaadevcezad)) {
+                activityNewvprofileBinding.etmobile.setError("Please enter a valid mobile number");
+                return;
+            }
+
+            // Validate email
+            String email = activityNewvprofileBinding.etemail.getText().toString().trim();
+            if (from == null && (email.isEmpty() || !isValidEmail(email))) {
+                activityNewvprofileBinding.etemail.setError("Please enter a valid email address");
+                return;
+            }
+
+            // Validate state and city
+            if ("Select State".equals(selectedStateName) || "Select City".equals(selectedCityName)) {
+                Toast.makeText(this, "Please select both state and city", LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validate address
+            if (activityNewvprofileBinding.etAddress.getText().toString().trim().isEmpty()) {
+                activityNewvprofileBinding.etAddress.setError("Please enter address");
+                return;
+            }
+
+            // Validate blood group
+            if (bloodgroupId == -1) {
+                Toast.makeText(this, "Please select blood group", LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validate past surgery
+            if (pastsurgeryid == -1) {
+                Toast.makeText(this, "Please select previous surgeries", LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validate gender
+            if (genderId == 0) {
+                Toast.makeText(this, "Please select gender", LENGTH_SHORT).show();
+                return;
+            }
+
+            // Validate marital status
+            if (martialStausId == 0) {
+                Toast.makeText(this, "Please select marital status", LENGTH_SHORT).show();
+                return;
+            }
+
+            // All validations passed — make API call
+            if (from != null) {
+                calltoMemberAPI();
+            } else {
+                calltoAPI();
+            }
+
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace(); // Proper logging
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void calltoMemberAPI() {
         try {
@@ -483,10 +531,20 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                         dismissLoadingDialog();
                         if (response.isSuccessful()) {
                             if (response.isSuccessful() && response.body() != null) {
+                                finish();
                                 Toast.makeText(ProfileUpdateActivity.this, response.body().getMessage(), LENGTH_SHORT).show();
 
                             }
 
+                        }
+                        else
+                        {
+                            try {
+                                Constants.displayError(response.errorBody().string(), getBaseContext());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            dismissLoadingDialog();
                         }
                     }
 
@@ -512,6 +570,12 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
         try {
             SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
             String userId = sp.getString(Constants.USER_ID, "");
+
+            SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
+// Save state and city IDs
+            preferences.edit().putString(Constants.STATE_ID, String.valueOf(selectedStateId)).apply();
+            preferences.edit().putString(Constants.CITY_ID, String.valueOf(selectCityId)).apply();
+
             List<DiseaseStatus> selectedDiseases = adapter.getSelectedDiseases();
             AddProfile profile = new AddProfile(
                     Integer.parseInt(userId),
@@ -541,9 +605,17 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                         if (response.isSuccessful()) {
                             if (response.isSuccessful() && response.body() != null) {
                                 Toast.makeText(ProfileUpdateActivity.this, response.body().getMessage(), LENGTH_SHORT).show();
-
+                                finish();
                             }
 
+                        }
+                        else {
+                            try {
+                                Constants.displayError(response.errorBody().string(), getBaseContext());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            dismissLoadingDialog();
                         }
                     }
 
@@ -565,48 +637,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
 
     }
 
-    private void setupDisease() {
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-        activityNewvprofileBinding.rvDiseases.setLayoutManager(layoutManager);
-        try {
-            fetchDisease();
 
-        } catch (Exception ex) {
-            ex.getMessage();
-        }
-
-    }
-
-    private void fetchDisease() {
-
-        if (Constants.haveInternet(getApplicationContext())) {
-            showLoadingDialog();
-
-            ApiClient.getRestAPI().getDiseaseResponse().enqueue(new Callback<DiseaseResponse>() {
-                @Override
-                public void onResponse(@NonNull Call<DiseaseResponse> call, @NonNull Response<DiseaseResponse> response) {
-                    dismissLoadingDialog();
-                    if (response.isSuccessful()) {
-                        if (response.isSuccessful() && response.body() != null) {
-
-                            getDiseaseResponse(response.body());
-                        }
-
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<DiseaseResponse> call, @NonNull Throwable t) {
-                    t.printStackTrace();
-                    Toast.makeText(ProfileUpdateActivity.this, t.getMessage(), LENGTH_SHORT).show();
-                    dismissLoadingDialog();
-                }
-            });
-
-        } else {
-            Constants.haveInternet(ProfileUpdateActivity.this);
-        }
-    }
 
     private void getDiseaseResponse(DiseaseResponse body) {
         try {
@@ -671,7 +702,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     private void setUpMaritalStatus() {
         try {
 
-            List<String> genderList = Arrays.asList("Unmarried", "Married");
+            List<String> genderList = Arrays.asList("Select Marital Status", "Married","Unmarried");
             // Gender variable
             final int[] maritaklValue = {1}; // Default to unmarried
 
@@ -679,22 +710,21 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
             ArrayAdapter<String> genderAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, genderList);
             activityNewvprofileBinding.spinnerRelation.setAdapter(genderAdapter);
 
-
             activityNewvprofileBinding.spinnerRelation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
                     switch (pos) {
-                        case 0: // unMarried
+                        case 0:
+                            maritaklValue[0] = 0;
+                            martialStausId = 0;
+                            break;
+                        case 1: //Married
                             maritaklValue[0] = 1;
                             martialStausId = 1;
                             break;
-                        case 1: // married
+                        case 2: // unMarried
                             maritaklValue[0] = 2;
                             martialStausId = 2;
-                            break;
-                        case 2: // Other
-                            maritaklValue[0] = 3;
-                            martialStausId = 3;
                             break;
                     }
                 }
@@ -767,13 +797,15 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
 
     private void displayRelatiomshipsResponse(List<RelationResponse.Relation> data) {
         relationshipdata = data;
-        List<String> relation = new ArrayList<>();
+        relationshipsData.clear(); // Optional: avoid duplicates on reload
+//        relationshipsData.add("Select Blood Group"); // Add this at index 0
+
         for (RelationResponse.Relation user : relationshipdata) {
-            relation.add(user.getRelation());
+            relationshipsData.add(user.getRelation());
         }
 
-        //        // Relation Spinner
-        ArrayAdapter<String> relationAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, relation);
+         // Relation Spinner
+        ArrayAdapter<String> relationAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, relationshipsData);
         activityNewvprofileBinding.spWhom.setAdapter(relationAdapter);
         activityNewvprofileBinding.spWhom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -798,7 +830,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
 
     private void setupGender() {
         // Setup gender spinner items
-        List<String> genderList = Arrays.asList("Female", "Male", "Others");
+        List<String> genderList = Arrays.asList("Select Gender","Male","Female","Others");
         // Gender variable
         final int[] genderValue = {1}; // Default to Female
 
@@ -810,28 +842,29 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
                 switch (pos) {
-                    case 0: // Female
+                    case 0: // Select Gender
+                        genderValue[0] = 0;
+                        genderId = 0;
+                        break;
+                    case 1: // Male
                         genderValue[0] = 1;
                         genderId = 1;
                         break;
-                    case 1: // Male
+                    case 2: // Female
                         genderValue[0] = 2;
                         genderId = 2;
                         break;
-                    case 2: // Other
+                    case 3: // Other
                         genderValue[0] = 3;
                         genderId = 3;
                         break;
                 }
 
             }
-
             public void onNothingSelected(AdapterView<?> parent) {
             }
 
-
         });
-
 
     }
 
@@ -923,11 +956,10 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
 
 
     }
-
     private void fetchCities(int stateId) {
-
         if (Constants.haveInternet(getApplicationContext())) {
             showLoadingDialog();
+
             CityRequestData otpRequest = new CityRequestData();
             otpRequest.setStateId(stateId);
 
@@ -935,21 +967,30 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                 @Override
                 public void onResponse(@NonNull Call<CityResponse> call, @NonNull Response<CityResponse> response) {
                     dismissLoadingDialog();
-                    if (response.isSuccessful()) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            cityList = response.body().getData();
-                            cityNames.clear();
-                            cityNames.add("Select City");
 
-                            for (CityResponse.City city : cityList) {
-                                cityNames.add(city.getCityName());
+                    if (response.isSuccessful() && response.body() != null) {
+                        cityList = response.body().getData();
+                        cityNames.clear();
+                        cityNames.add("Select City");
+
+                        int selectedIndex = 0; // default to "Select City"
+
+                        for (int i = 0; i < cityList.size(); i++) {
+                            CityResponse.City city = cityList.get(i);
+                            cityNames.add(city.getCityName());
+
+                            // Check if city matches the saved city ID
+                            if (city.getId() == selectedEditCityId) {
+                                selectedIndex = i + 1; // +1 because "Select City" is at index 0
                             }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(ProfileUpdateActivity.this, R.layout.spinner_item, cityNames);
-                            adapter.setDropDownViewResource(R.layout.spinner_item);
-                            activityNewvprofileBinding.spinnerCitys.setAdapter(adapter);
                         }
 
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(ProfileUpdateActivity.this, R.layout.spinner_item, cityNames);
+                        adapter.setDropDownViewResource(R.layout.spinner_item);
+                        activityNewvprofileBinding.spinnerCitys.setAdapter(adapter);
+
+                        // Set previously selected city
+                        activityNewvprofileBinding.spinnerCitys.setSelection(selectedIndex);
                     }
                 }
 
@@ -969,7 +1010,35 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     public boolean isValidEmail(String email) {
         return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+    private int getIndexForStateId(int stateId) {
+        for (int i = 0; i < stateList.size(); i++) {
+            if (stateList.get(i).getId() == stateId) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
+    private int getIndexForBloodGroupId(int bloodGroupId) {
+        for (int i = 0; i < bloodGroup.size(); i++) {
+            if (bloodGroup.get(i).getId() == bloodGroupId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (from == null) {
+            setUpProfile();
+        } else {
+            membersProfile(subuserId);
+
+
+        }
+    }
 }
 
 

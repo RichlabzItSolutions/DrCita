@@ -29,6 +29,8 @@ import com.drcita.user.models.otp.VerifyotpRequest;
 import com.drcita.user.retrofit.ApiClient;
 import com.marcinorlowski.fonty.Fonty;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -253,6 +255,9 @@ public class NewVerifyOtpActivity extends LanguageBaseActivity {
             preferences.edit().putString(Constants.STATE_ID, String.valueOf(verifyotpResponse.getData().getUser().getStateId())).apply();
             preferences.edit().putString(Constants.CITY_ID, String.valueOf(verifyotpResponse.getData().getUser().getCityId())).apply();
             preferences.edit().putString(Constants.USER_ID,String.valueOf (verifyotpResponse.getData().getUser().getId())).apply();
+            preferences.edit().putString(Constants.MOBILE_ID,verifyotpResponse.getData().getUser().getMobile()).apply();
+            preferences.edit().putString(Constants.User_Name,verifyotpResponse.getData().getUser().getFullName()).apply();
+
 
 // Get the saved values with default fallback "0"
             int stateId = Integer.parseInt(preferences.getString(Constants.STATE_ID, "0"));

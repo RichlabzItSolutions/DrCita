@@ -136,10 +136,10 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="not_valid_mobile_number">Not Valid Mobile Number</string>
     <string name="please_enter_your_valid_mobile_number">Please Enter Your Valid Mobile Number</string>
     <string name="otp_automatic">Waiting to automatically detect on SMS sent to</string>
-    <string name="receipt">Receipt</string>
+    <string name="receipt">RECEIPT</string>
     <string name="successful">Successful</string>
     <string name="patient_info">Patient Info</string>
-    <string name="fee_amp_charge">Fee &amp; Charge</string>
+    <string name="fee_amp_charge">Consultation Fee</string>
     <string name="total">Total</string>
     <string name="payment_method">Payment Method</string>
     <string name="other_info">Other Info</string>
@@ -251,6 +251,8 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="book_appointment">Book Appointment</string>
     <string name="dr_pranoti_deshpande">Dr. Pranoti Deshpande</string>
     <string name="morning">Morning</string>
+    <string name="appointment_summary">Appointment Summary</string>
+    <string name="other_comments">Other\n</string>
     <string-array name="meeting_options">
         <item>One to One Meeting</item>
         <item>Group Meeting</item>

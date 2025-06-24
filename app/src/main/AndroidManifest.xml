@@ -175,16 +175,12 @@
         <activity
             android:name=".DashBoardActivity"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" >
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+        <activity android:name=".AppointmentsSummaryActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
 
-            <!--
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-            -->
-        </activity>
         <activity
             android:name=".ProfileActivity"
             android:exported="true"
@@ -236,6 +232,16 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".WebViewActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".MedicalMembersListActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".AddMedicalRecordActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity

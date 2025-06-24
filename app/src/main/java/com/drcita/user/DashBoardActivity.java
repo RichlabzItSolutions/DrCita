@@ -28,14 +28,13 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.drcita.user.Activity.VideoConsultationActivity;
 import com.drcita.user.adapter.CaregoryAdapter;
-import com.drcita.user.adapter.MainSliderAdapter;
 import com.drcita.user.adapter.NotificationAdapter;
 import com.drcita.user.adapter.dashbaord.hospital.HospitalAdapter;
 import com.drcita.user.adapter.dashbaord.specilization.SpecializationAdapter;
 import com.drcita.user.common.Constants;
-import com.drcita.user.common.CustomDailog;
 import com.drcita.user.common.ViewPagerAdapter;
 import com.drcita.user.databinding.ActivityDashBoardBinding;
 import com.drcita.user.models.GlobalRequest;
@@ -67,39 +66,32 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashBoardActivity extends LanguageBaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-
-
+public class DashBoardActivity extends LanguageBaseActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        View.OnClickListener {
     private ActivityDashBoardBinding activityDashBoardBinding;
-    private ArrayList<String> photosList = new ArrayList<>();
-    MainSliderAdapter mainSliderAdapter;
-    String name,profilestatus;
+    String  userName, stateId, cityId;
     int region;
     Boolean exit = false;
     ImageView image;
     private TextView nameView, navMobile;
     private String mobile, userId;
-    private CustomDailog progress;
-    private ArrayList<DataItem> dataItems;
+    private List<Specialization> dataItems;
     private ArrayList<com.drcita.user.models.notifications.DataItem> notificationList;
     private CaregoryAdapter caregoryAdapter;
     private NotificationAdapter notificationAdapter;
-    boolean isfromdental = false;
-    private AdResponse.Ad ad ;
+    private AdResponse.Ad ad;
 
     List<AdResponse.Ad> adResponse;
     Boolean doubleBackToExitPressedOnce = false;
 
     SpecializationAdapter specializationAdapter;
-    List<Specialization> specializationList;
 
     private List<Specialization> specializations;
-    private List<AdResponse.Ad> ads;
     private List<City> cities;
     private List<Providers> providers;
 
@@ -112,9 +104,13 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         boolean notification = getIntent().getBooleanExtra("notification", false);
 
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-        name = sp.getString(Constants.NAME, name);
-        mobile = sp.getString(Constants.MOBILE, mobile);
+
+        mobile = sp.getString(Constants.MOBILE_ID, mobile);
         userId = sp.getString(Constants.USER_ID, userId);
+        userName = sp.getString(Constants.User_Name, userName);
+        stateId = sp.getString(Constants.STATE_ID, "");
+        cityId = sp.getString(Constants.CITY_ID, "");
+
 
         setSupportActionBar(activityDashBoardBinding.layoutDashboard.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -131,13 +127,10 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         nameView = headerView.findViewById(R.id.navName);
         navMobile = headerView.findViewById(R.id.navMobile);
         image = headerView.findViewById(R.id.imageView);
+
         navMobile.setText(mobile);
 
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setLayoutManager(new LinearLayoutManager(DashBoardActivity.this, LinearLayoutManager.HORIZONTAL,false));
-        dataItems = new ArrayList<>();
-        caregoryAdapter = new CaregoryAdapter(DashBoardActivity.this, dataItems);
-        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setAdapter(caregoryAdapter);
-
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.catRVCategory.setLayoutManager(new LinearLayoutManager(DashBoardActivity.this, LinearLayoutManager.HORIZONTAL, false));
         activityDashBoardBinding.navView.setNavigationItemSelectedListener(this);
 
         // Create a MaterialShapeDrawable (required for FAB cradle)
@@ -153,7 +146,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                         .build());
         GradientDrawable gradientDrawable = new GradientDrawable(
                 GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[] { Color.parseColor("#9FC44A"), Color.parseColor("#55A447") }
+                new int[]{Color.parseColor("#9FC44A"), Color.parseColor("#55A447")}
         );
         gradientDrawable.setShape(GradientDrawable.RECTANGLE);
         gradientDrawable.setCornerRadii(new float[]{
@@ -168,6 +161,21 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         bottomAppBar.setBackgroundTintList(null);
 
         getDashBoardData();
+        if (userName != null) {
+            activityDashBoardBinding.layoutDashboard.tvUserName.setText(userName);
+            nameView.setText(userName);
+        }
+
+        else {
+            activityDashBoardBinding.layoutDashboard.tvUserName.setText("Welcome");
+            nameView.setText("Welcome");
+        }
+        if (mobile != null) {
+
+            activityDashBoardBinding.layoutDashboard.tvMobile.setText(mobile);
+        } else {
+            activityDashBoardBinding.layoutDashboard.tvMobile.setText("");
+        }
 
         activityDashBoardBinding.layoutDrawer.logoutNav.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.logoutTV.setOnClickListener(this);
@@ -187,8 +195,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         activityDashBoardBinding.layoutDrawer.medicalTV.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.changepasswordNav.setOnClickListener(this);
         activityDashBoardBinding.layoutDrawer.changepasswordTV.setOnClickListener(this);
-       /* activityDashBoardBinding.layoutDrawer.callNav.setOnClickListener(this);
-        activityDashBoardBinding.layoutDrawer.callTV.setOnClickListener(this);*/
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.profileLayout.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
             intent.putExtra("specailization", 0);
@@ -197,13 +203,12 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookadentalappotimentlayout.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), HospitalsListActivity.class);
             intent.putExtra("specailization", 14);
-            intent.putExtra(Constants.isfromdental,true);
+            intent.putExtra(Constants.isfromdental, true);
             startActivity(intent);
         });
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.bookmrictscan.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(), VideoConsultationActivity.class);
-
-            intent.putExtra("type","2");
+            intent.putExtra("type", "2");
             startActivity(intent);
 
         });
@@ -222,20 +227,57 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
             activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
             activityDashBoardBinding.layoutDashboard.fab.getDrawable().setTint(getResources().getColor(R.color.white));
             activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
-           getSpecalists();
+            List<Object> itemList = new ArrayList<>();
+            itemList.addAll(specializations); // o
+            caregoryAdapter = new CaregoryAdapter(this, itemList);
+            activityDashBoardBinding.layoutDashboard.catRV.setAdapter(caregoryAdapter);
         });
-        activityDashBoardBinding.layoutDashboard.notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
-                activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
-                activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-                activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
-                activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
-                getNotifications();
-            }
+        activityDashBoardBinding.layoutDashboard.notification.setOnClickListener(view -> {
+            activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+            getNotifications();
         });
+
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.tvSpecilaizationAll.setOnClickListener(view -> {
+            activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.VISIBLE);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.fab.getDrawable().setTint(getResources().getColor(R.color.white));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+            // diplay hospital list
+            List<Object> itemList = new ArrayList<>();
+            itemList.addAll(specializations); // o
+            caregoryAdapter = new CaregoryAdapter(this, itemList);
+            activityDashBoardBinding.layoutDashboard.catRV.setAdapter(caregoryAdapter);
+        });
+
+        activityDashBoardBinding.layoutDashboard.dashboardmainlayout.tvViewAllHospitals.setOnClickListener(view -> {
+            activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.VISIBLE);
+            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
+            activityDashBoardBinding.layoutDashboard.fab.getDrawable().setTint(getResources().getColor(R.color.white));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+
+
+            // diplay hospital list
+            List<Object> itemList = new ArrayList<>();
+            itemList.addAll(providers); // o
+            caregoryAdapter = new CaregoryAdapter(this, itemList);
+            activityDashBoardBinding.layoutDashboard.catRV.setAdapter(caregoryAdapter);
+
+        });
+
+
 
         activityDashBoardBinding.layoutDashboard.fab.setOnClickListener(view -> {
             activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
@@ -252,33 +294,32 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setPageMargin(10);
 
         activityDashBoardBinding.layoutDashboard.catRV.setLayoutManager(new GridLayoutManager(this, 3));
-        dataItems = new ArrayList<>();
-        caregoryAdapter = new CaregoryAdapter(this, dataItems);
-        activityDashBoardBinding.layoutDashboard.catRV.setAdapter(caregoryAdapter);
+
 
         notificationList = new ArrayList<>();
         activityDashBoardBinding.layoutDashboard.notificationRV.setLayoutManager(new LinearLayoutManager(this));
         notificationAdapter = new NotificationAdapter(this, notificationList);
         activityDashBoardBinding.layoutDashboard.notificationRV.setAdapter(notificationAdapter);
 
-        if (notification){
+        if (notification) {
             activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
             activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
             activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
-           // activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+            // activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
         }
 
         autoSlide();
     }
+
     private void autoSlide() {
         final Handler handler = new Handler();
         Timer timer = new Timer();
         final Runnable runnable = () -> {
-            int currentPage=activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getCurrentItem();
+            int currentPage = activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getCurrentItem();
             //return to first page, if current page is last page
-            if (currentPage == activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getChildCount()-1) {
+            if (currentPage == activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.getChildCount() - 1) {
                 currentPage = -1;
             }
             activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setCurrentItem(++currentPage, true);
@@ -288,7 +329,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
             public void run() {
                 handler.post(runnable);
             }
-        },500,5000);
+        }, 500, 5000);
     }
 
     @Override
@@ -304,7 +345,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
 
         new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 1500);
     }
-
 
 
     @Override
@@ -330,8 +370,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 public void onResponse(@NonNull Call<AdResponse> call, @NonNull Response<AdResponse> response) {
                     if (response.isSuccessful()) {
                         dismissLoadingDialog();
-
-
 
 
                     } else {
@@ -366,7 +404,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 @Override
                 public void onResponse(@NonNull Call<GetProfileResponse> call, @NonNull Response<GetProfileResponse> response) {
                     if (response.isSuccessful()) {
-                       // dismissLoadingDialog();
+                        // dismissLoadingDialog();
                         getProfileResponse(Objects.requireNonNull(response.body()));
                     } else {
                         try {
@@ -374,13 +412,13 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                       // dismissLoadingDialog();
+                        // dismissLoadingDialog();
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<GetProfileResponse> call, @NonNull Throwable t) {
-                   // dismissLoadingDialog();
+                    // dismissLoadingDialog();
                     t.printStackTrace();
                     Toast.makeText(DashBoardActivity.this, "Server internal error try again", Toast.LENGTH_SHORT).show();
                 }
@@ -392,14 +430,14 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
 
     @SuppressLint("SetTextI18n")
     private void getProfileResponse(GetProfileResponse getProfileResponse) {
-        nameView.setText("Hi, " + getProfileResponse.getData().getName());
+        nameView.setText("Hi, " + userName);
 
 
-        if (getProfileResponse.getData().getPicture()!=null && !getProfileResponse.getData().getPicture().isEmpty()) {
+        if (getProfileResponse.getData().getPicture() != null && !getProfileResponse.getData().getPicture().isEmpty()) {
             Picasso.with(this).load(getProfileResponse.getData().getPicture()).into(image);
             image.setImageTintList(null);
             // image.setImageTintList(null);
-        }else {
+        } else {
             image.setImageDrawable(getDrawable(R.drawable.avtar));
         }
        /* if (!getProfileResponse.getData().getPicture().isEmpty()) {
@@ -443,23 +481,11 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
         activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
         activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
-         activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+        activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
         getNotifications();
     }
 
-   /* @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if (exit) {
-            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-            homeIntent.addCategory(Intent.CATEGORY_HOME);
-            homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(homeIntent);
-        } else {
-            Toast.makeText(getApplicationContext(), "Press Again To Exit", Toast.LENGTH_LONG).show();
-            exit = true;
-        }
-    }*/
+
 
     @Override
     public void onClick(View view) {
@@ -473,7 +499,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
 
             case R.id.appoitmentsTV:
             case R.id.appoitmentsNav:
-                Intent intent2 = new Intent(getApplicationContext(), AppointmentsActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(), AppointmentsSummaryActivity.class);
                 startActivity(intent2);
                 break;
 
@@ -503,7 +529,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
 
             case R.id.medicalTV:
             case R.id.medicalNav:
-                Intent intent11 = new Intent(getApplicationContext(), MedicalRecordsActivity.class);
+                Intent intent11 = new Intent(getApplicationContext(), MedicalMembersListActivity.class);
                 startActivity(intent11);
                 break;
 
@@ -512,12 +538,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 Intent intent12 = new Intent(getApplicationContext(), ChangePasswordActivity.class);
                 startActivity(intent12);
                 break;
-           /* case R.id.callNav:
-            case R.id.callTV:
-                Intent intent13 = new Intent(getApplicationContext(), CallActivity.class);
-                startActivity(intent13);
-                break;*/
-
             case R.id.logoutNav:
             case R.id.logoutTV:
                 SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -544,13 +564,14 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         showLoadingDialog();
         if (Constants.haveInternet(getApplicationContext())) {
             HomeDataRequest globalRequest = new HomeDataRequest();
-            globalRequest.setStateId(24);
-            globalRequest.setCityId(14);
+            globalRequest.setStateId(Integer.parseInt(stateId));
+            globalRequest.setCityId(Integer.parseInt(cityId));
             ApiClient.getRestAPI().getHomedata(globalRequest).enqueue(new Callback<HomeResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<HomeResponse> call, @NonNull retrofit2.Response<HomeResponse> response) {
                     getHomeResponse(Objects.requireNonNull(response.body()));
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<HomeResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();
@@ -564,58 +585,58 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
 
     private void getHomeResponse(HomeResponse body) {
 
-        try{
-            specializations=body.getData().getSpecializations();
-            cities=body.getData().getCities();
-            providers=body.getData().getProviders();
-            adResponse=body.getData().getAds();
+        try {
+            if (body != null) {
+                specializations = body.getData().getSpecializations();
+                cities = body.getData().getCities();
+                providers = body.getData().getProviders();
+                adResponse = body.getData().getAds();
 
-            // adds
-            String[] images = new String[adResponse.size()];
 
-            for (int i = 0; i < adResponse.size(); i++) {
-                ad = adResponse.get(i);
-                images[i] = ad.getImage();
+
+                // adds
+                String[] images = new String[adResponse.size()];
+
+                for (int i = 0; i < adResponse.size(); i++) {
+                    ad = adResponse.get(i);
+                    images[i] = ad.getImage();
+                }
+                ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(DashBoardActivity.this, images, adResponse);
+                //Adding the Adapter to the ViewPager
+                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setAdapter(mViewPagerAdapter);
+
+                specializationAdapter = new SpecializationAdapter(this, specializations);
+                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setAdapter(specializationAdapter);
+                //providers
+                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setLayoutManager(
+                        new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                );
+
+                HospitalAdapter adapter = new HospitalAdapter(this, providers);
+                activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setAdapter(adapter);
+
+                citieslist = new ArrayList<>(cities.size());
+                for (City city : cities) {
+                    citieslist.add(city.getCityName());
+                }
+                activityDashBoardBinding.layoutDashboard.tvLocation.setOnClickListener(v ->
+                {
+                    showDropdownPopup(activityDashBoardBinding.layoutDashboard.tvLocation, citieslist);
+                });
+
+
+                List<Object> itemList = new ArrayList<>();
+                itemList.addAll(specializations); // o
+                caregoryAdapter = new CaregoryAdapter(this, itemList);
+                activityDashBoardBinding.layoutDashboard.catRV.setAdapter(caregoryAdapter);
+
             }
-            ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(DashBoardActivity.this, images,adResponse);
-            //Adding the Adapter to the ViewPager
-            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setAdapter(mViewPagerAdapter);
 
+            } catch(Exception exception){
+                exception.getMessage();
+            }
 
-
-            specializationAdapter = new SpecializationAdapter(this,specializations);
-            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvSpecailist.setAdapter(specializationAdapter);
-
-
-           //providers
-            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setLayoutManager(
-                    new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-            );
-
-
-            HospitalAdapter adapter = new HospitalAdapter(this, providers);
-            activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setAdapter(adapter);
-
-            citieslist =new ArrayList<>(cities.size());
-                 for(City city:cities)
-                 {
-                     citieslist.add(city.getCityName());
-                 }
-
-            activityDashBoardBinding.layoutDashboard.tvLocation.setOnClickListener(v ->
-            {
-                showDropdownPopup(activityDashBoardBinding.layoutDashboard.tvLocation, citieslist);
-            });
-
-
-//
-
-
-        }catch (Exception exception)
-        {
-            exception.getMessage();
-        }
 
     }
 
@@ -655,6 +676,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
                 public void onResponse(@NonNull Call<SpecalitiesResponse> call, @NonNull retrofit2.Response<SpecalitiesResponse> response) {
                     getSpecalistsResponse(Objects.requireNonNull(response.body()));
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<SpecalitiesResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();
@@ -695,7 +717,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         if (specalitiesResponse.getStatus().equals("success")) {
             dismissLoadingDialog();
             dataItems.clear();
-            dataItems.addAll(specalitiesResponse.getData());
+            dataItems.addAll(specializations);
             caregoryAdapter.notifyDataSetChanged();
         } else {
             Snackbar.make(findViewById(android.R.id.content), description, Snackbar.LENGTH_SHORT).show();
@@ -707,10 +729,9 @@ public class DashBoardActivity extends LanguageBaseActivity implements Navigatio
         String description = specalitiesResponse.getMessage();
         if (specalitiesResponse.getStatus().equals("success")) {
             dismissLoadingDialog();
-            if (specalitiesResponse.getData().isEmpty()){
+            if (specalitiesResponse.getData().isEmpty()) {
                 activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
             }
             notificationList.addAll(specalitiesResponse.getData());

@@ -1,21 +1,24 @@
 package com.drcita.user;
 
+import static android.view.View.GONE;
+
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
-import com.drcita.user.adapter.MedicalRecordsAdapter;
+import com.drcita.user.adapter.MedicalRecordAdapter;
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityMedicalRecordsBinding;
-import com.drcita.user.models.medicalrecords.DataItem;
 import com.drcita.user.models.medicalrecords.GetMedicalRecordsRequest;
 import com.drcita.user.models.medicalrecords.GetMedicalRecordsResponse;
+import com.drcita.user.models.medicalrecords.MedicalRecordData;
 import com.drcita.user.retrofit.ApiClient;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,10 +34,11 @@ import retrofit2.Callback;
 public class MedicalRecordsActivity extends LanguageBaseActivity {
 
     private ActivityMedicalRecordsBinding binding;
-    private MedicalRecordsAdapter medicalRecordsAdapter;
+    private MedicalRecordAdapter medicalRecordsAdapter;
     private String userId;
-    private List<DataItem> responses = new ArrayList<DataItem>();
+    private List<MedicalRecordData> responses = new ArrayList<MedicalRecordData>();
     private ProgressDialog progress;
+    private String subuserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,7 @@ public class MedicalRecordsActivity extends LanguageBaseActivity {
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setTitle("Medical Records");
-        binding.backMedicalrecords.setOnClickListener(new View.OnClickListener(){
+        binding.llBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 finish();
@@ -51,10 +55,23 @@ public class MedicalRecordsActivity extends LanguageBaseActivity {
         });
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         userId = sp.getString(Constants.USER_ID, userId);
+        if(getIntent()!=null)
+        {
+            subuserId = getIntent().getStringExtra("subuserId");
+        }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         binding.medicalrecordsRV.setLayoutManager(mLayoutManager);
-        medicalRecordsAdapter = new MedicalRecordsAdapter(this,responses);
-        binding.medicalrecordsRV.setAdapter(medicalRecordsAdapter);
+
+        binding.btnAddMember.setOnClickListener(view -> {
+
+            Intent intent = new Intent(MedicalRecordsActivity.this, AddMedicalRecordActivity.class);
+            intent.putExtra("subuserId", subuserId);
+            startActivity(intent);
+
+
+        });
+
+
         getUserMedicalRecords();
     }
 
@@ -62,13 +79,20 @@ public class MedicalRecordsActivity extends LanguageBaseActivity {
         showLoadingDialog();
         if (Constants.haveInternet(getApplicationContext())) {
             GetMedicalRecordsRequest getMedicalRecordsRequest = new GetMedicalRecordsRequest();
-            getMedicalRecordsRequest.setUserId(Integer.parseInt(userId));
+            getMedicalRecordsRequest.setSubUserId(Integer.parseInt(subuserId));
+            getMedicalRecordsRequest.setAppointmentId("");
             ApiClient.getRestAPI().getUserMedicalRecords(getMedicalRecordsRequest).enqueue(new Callback<GetMedicalRecordsResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<GetMedicalRecordsResponse> call, @NonNull retrofit2.Response<GetMedicalRecordsResponse> response) {
                     if (response.isSuccessful()) {
                         dismissLoadingDialog();
-                        getMedicalRecordsResponse(Objects.requireNonNull(response.body()));
+                        if(response.body()!=null) {
+
+                            getMedicalRecordsResponse(Objects.requireNonNull(response.body()));
+                        }
+                        else {
+                            dismissLoadingDialog();
+                        }
                     } else {
                         try {
                             Constants.displayError(response.errorBody().string(), getBaseContext());
@@ -92,18 +116,26 @@ public class MedicalRecordsActivity extends LanguageBaseActivity {
     private void getMedicalRecordsResponse(GetMedicalRecordsResponse getMedicalRecordsResponse) {
         dismissLoadingDialog();
         String description = getMedicalRecordsResponse.getMessage();
-        if (getMedicalRecordsResponse.getStatus().equals("success")) {
+        if (getMedicalRecordsResponse.isSuccess()) {
             dismissLoadingDialog();
-            List<com.drcita.user.models.medicalrecords.DataItem> dataItems = getMedicalRecordsResponse.getData();
+            List<MedicalRecordData> dataItems = getMedicalRecordsResponse.getData();
             if (getMedicalRecordsResponse.getData().isEmpty()){
                 binding.nodataimage.setVisibility(View.VISIBLE);
+                binding.medicalrecordsRV.setVisibility(GONE);
+                }
+            else {
+                binding.nodataimage.setVisibility(GONE);
+                binding.medicalrecordsRV.setVisibility(View.VISIBLE);
+
             }
             for (int i = 0; i < dataItems.size(); i++) {
                 responses.clear();
-                responses.addAll(getMedicalRecordsResponse.getData());
+                responses.addAll(dataItems);
+                medicalRecordsAdapter = new MedicalRecordAdapter(this,responses);
+                binding.medicalrecordsRV.setAdapter(medicalRecordsAdapter);
                 medicalRecordsAdapter.notifyDataSetChanged();
             }
-            //setRegion();
+//            //setRegion();
 
         } else {
             //setRegion();

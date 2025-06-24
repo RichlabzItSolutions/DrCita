@@ -17,7 +17,16 @@ public class AddNewMember {
     private String pastSurgeries;
     private String bloodGroupId;
     private int relationId;
+    private  int foodType;
     private List<Disease> diseases;
+
+    public int getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(int foodType) {
+        this.foodType = foodType;
+    }
 
     // Inner Disease class
     public static class Disease {
@@ -163,8 +172,7 @@ public class AddNewMember {
         this.diseases = diseases;
     }
 
-    public AddNewMember(int userId, String fullName, int gender, int age, String dob, String maritalStatus, String mobile, String email, String stateId, String cityId, String address, String pastSurgeries,
-                        String bloodGroupId, int relationId, List<Disease> diseases) {
+    public AddNewMember(int userId, String fullName, int gender, int age, String dob, String maritalStatus, String mobile, String email, String stateId, String cityId, String address, String pastSurgeries, String bloodGroupId, int relationId, int foodType, List<Disease> diseases) {
         this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
@@ -179,6 +187,29 @@ public class AddNewMember {
         this.pastSurgeries = pastSurgeries;
         this.bloodGroupId = bloodGroupId;
         this.relationId = relationId;
+        this.foodType = foodType;
         this.diseases = diseases;
+    }
+
+    @Override
+    public String toString() {
+        return "AddNewMember{" +
+                "userId=" + userId +
+                ", fullName='" + fullName + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", dob='" + dob + '\'' +
+                ", maritalStatus='" + maritalStatus + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", stateId='" + stateId + '\'' +
+                ", cityId='" + cityId + '\'' +
+                ", address='" + address + '\'' +
+                ", pastSurgeries='" + pastSurgeries + '\'' +
+                ", bloodGroupId='" + bloodGroupId + '\'' +
+                ", relationId=" + relationId +
+                ", foodType=" + foodType +
+                ", diseases=" + diseases +
+                '}';
     }
 }

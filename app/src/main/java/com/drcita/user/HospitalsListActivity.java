@@ -1,9 +1,9 @@
 package com.drcita.user;
-
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,8 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
-
 import com.drcita.user.adapter.HospitalsAdapter;
 import com.drcita.user.adapter.specilaization.DoctorAdapter;
 import com.drcita.user.common.Constants;
@@ -39,125 +37,127 @@ public class HospitalsListActivity extends LanguageBaseActivity {
     private HospitalsAdapter hospitalsAdapter;
     private DoctorAdapter doctorAdapter;
     private ActivityHospitalsListBinding activityHospitalsListBinding;
-    private List<NewProviderList> responses = new ArrayList<NewProviderList>();
+    private List<NewProviderList> responses = new ArrayList<>();
+    private List<DoctorModel> doctorModelList = new ArrayList<>();
 
-    private List<DoctorModel> doctorModelList=new ArrayList<>();
-    private int region;
-    int regionID;
+    private int regionID;
     private ProgressDialog progress;
-    private int specailization;
-    boolean isfromdental = false;
+    private int hospitalist;
+    private boolean isfromdental = false;
 
-    ArrayList<Integer> setcharges=new ArrayList<>();
-    ArrayList<Integer> providerlist=new ArrayList<>();
-    ArrayList<Integer> specailizations=new ArrayList<>();
+    private final ArrayList<Integer> setcharges = new ArrayList<>();
+    private final ArrayList<Integer> providerlist = new ArrayList<>();
+    private final ArrayList<Integer> hospitallist = new ArrayList<>();
+    private final ArrayList<Integer> specailizations = new ArrayList<>();
 
+    private String cityId;
+    private int specalization;
+
+    @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityHospitalsListBinding = DataBindingUtil.setContentView(this, R.layout.activity_hospitals_list);
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                specailization = 0;
-            } else {
-                specailization = extras.getInt("specailization");
-                isfromdental = extras.getBoolean(Constants.isfromdental);
-            }
-        } else {
+        activityHospitalsListBinding = DataBindingUtil.setContentView(this,
+                R.layout.activity_hospitals_list);
+
+        if (savedInstanceState == null && getIntent().getExtras() != null) {
+            hospitalist  = getIntent().getIntExtra("hospitalId", 0);
+            specalization  =getIntent().getIntExtra("specialization",0);
+            isfromdental = getIntent().getBooleanExtra(Constants.isfromdental, false);
         }
+
         setSupportActionBar(activityHospitalsListBinding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        displayHospitals();
-        getSupportActionBar().setTitle("Hospitals List");
 
-        // Read your extra
-        if (getIntent().hasExtra("specailization")) {
-            specailization = getIntent().getIntExtra("specailization", 0);
-        }
+        SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        cityId = sp.getString(Constants.CITY_ID, "");
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
-
-
-// Add two tabs manually
         tabLayout.addTab(tabLayout.newTab().setText("By Hospital"));
         tabLayout.addTab(tabLayout.newTab().setText("By Specialization"));
-// **Immediately select the second tab if your condition is true**
-        if (specailization > 0) {
+
+        if ( hospitalist> 0  || specalization>0) {
             TabLayout.Tab second = tabLayout.getTabAt(1);
             if (second != null) second.select();
-            providerlist.add(specailization);// hospitalId
-            displaySpecailizations();
+            activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
+            if(hospitalist>0) {  // for getting hospital list
+                hospitallist.add(hospitalist);
+            }
+            if(specalization>0)
+            providerlist.add(specalization);
 
+            displaySpecailizations();
         } else {
-            // otherwise default to first
+            TabLayout.Tab first = tabLayout.getTabAt(0);
+            if (first != null) first.select();
+
+            activityHospitalsListBinding.hospitalsRV.setVisibility(VISIBLE);
+            activityHospitalsListBinding.docterssRV.setVisibility(GONE);
             displayHospitals();
         }
-// Handle tab selection
+        activityHospitalsListBinding.llBack.setOnClickListener(view -> finish());
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                if (position == 0) {
+                if (tab.getPosition() == 0) {
                     displayHospitals();
-                    // Show By Hospital content
-                } else if (position == 1) {
-                    // Show By Specialization cont
-
+                } else if (tab.getPosition() == 1) {
+                    hospitalist = 0;
+                    specalization=0;
                     displaySpecailizations();
                 }
             }
-
-            @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
-
-
     }
 
     private void displaySpecailizations() {
-
         try {
-
+            activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
+            activityHospitalsListBinding.docterssRV.setVisibility(VISIBLE);
             getSpecializations();
-
-        }catch (Exception ex)
-        {
-            ex.getMessage();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
     }
-
     private void getSpecializations() {
         showLoadingDialog();
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         regionID = sp.getInt(Constants.REGION, regionID);
         if (Constants.haveInternet(getApplicationContext())) {
             DoctorSearchRequest request = new DoctorSearchRequest(
-                    14,
-                    "",
-                    providerlist,  // hospitalId
-                    new ArrayList<>(),  // specializationId
-                    new ArrayList<>(),  // specializationId
-                    new ArrayList<>(),  // consultationMode
-                    "",
-                    "",
-                    new ArrayList<>(),  // languageIds
-                    new DoctorSearchRequest.Experience("", ""),  // experience
-                    "",
-                    ""
+                    Integer.parseInt(cityId), "", hospitallist,
+                    new ArrayList<>(), providerlist, new ArrayList<>(), "", "",
+                    new ArrayList<>(), new DoctorSearchRequest.Experience("", ""), "", ""
             );
 
             ApiClient.getRestAPI().getDocterList(request).enqueue(new Callback<DocterModelResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<DocterModelResponse> call, @NonNull retrofit2.Response<DocterModelResponse> response) {
-                    if(response.body()!=null && response.body().getData().size()>0) {
-                        getSpecilaizationResponse(Objects.requireNonNull(response.body()));
+                    if (response.body() != null && !response.body().getData().isEmpty()) {
+                        if(response.code()==200) {
+                            activityHospitalsListBinding.tvNodata.setVisibility(GONE);
+                            activityHospitalsListBinding.docterssRV.setVisibility(VISIBLE);
+                            providerlist.clear();
+                            hospitallist.clear();
+                            getSpecilaizationResponse(response.body());
+                            dismissLoadingDialog();
+                        }
+                        else {
+                            Constants.displayError(response.errorBody().toString(),getBaseContext());
+                            activityHospitalsListBinding.tvNodata.setVisibility(VISIBLE);
+                            activityHospitalsListBinding.docterssRV.setVisibility(GONE);
+                            dismissLoadingDialog();
+                        }
+                    } else {
+                        activityHospitalsListBinding.tvNodata.setVisibility(VISIBLE);
+                        activityHospitalsListBinding.docterssRV.setVisibility(GONE);
+                        dismissLoadingDialog();
                     }
-
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<DocterModelResponse> call, @NonNull Throwable t) {
                     t.printStackTrace();
@@ -165,149 +165,115 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                 }
             });
         } else {
-            Constants.InternetSettings(HospitalsListActivity.this);
+            Constants.InternetSettings(this);
         }
-
     }
 
     private void displayHospitals() {
-        activityHospitalsListBinding.backHospitalsList.setOnClickListener(view -> finish());
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        activityHospitalsListBinding.hospitalsRV.setLayoutManager(mLayoutManager);
-        hospitalsAdapter = new HospitalsAdapter(this,responses, isfromdental);
-        activityHospitalsListBinding.hospitalsRV.setAdapter(hospitalsAdapter);
-        activityHospitalsListBinding.searcautoCompleteTextView.setThreshold(1);
+        try {
+            activityHospitalsListBinding.hospitalsRV.setVisibility(VISIBLE);
+            activityHospitalsListBinding.docterssRV.setVisibility(GONE);
+            activityHospitalsListBinding.backHospitalsList.setOnClickListener(view -> finish());
+            activityHospitalsListBinding.hospitalsRV.setLayoutManager(new LinearLayoutManager(this));
+            hospitalsAdapter = new HospitalsAdapter(this, responses, isfromdental);
+                activityHospitalsListBinding.hospitalsRV.setAdapter(hospitalsAdapter);
+                activityHospitalsListBinding.searcautoCompleteTextView.setHint("Search By Hospital Name");
+                activityHospitalsListBinding.searcautoCompleteTextView.setThreshold(1);
+                activityHospitalsListBinding.searcautoCompleteTextView.addTextChangedListener(new TextWatcher() {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-        activityHospitalsListBinding.searcautoCompleteTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-            }
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void afterTextChanged(Editable s) {
-                try {
-                    hospitalsAdapter.getFilter().filter(s.toString());
-                    hospitalsAdapter.notifyDataSetChanged();
-                }
-                catch (Exception ex)
-                {
-                    ex.getMessage();
-                }
-            }
-        });
+                    @SuppressLint("NotifyDataSetChanged")
+                    public void afterTextChanged(Editable s) {
+                        if(s.length()>0) {
+                            hospitalsAdapter.getFilter().filter(s.toString());
+                            hospitalsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
 
-
-        getHospitalsList();
+            getHospitalsList();
+        }catch (Exception ex)
+        {
+            ex.getMessage();
+        }
     }
 
     private void getHospitalsList() {
         showLoadingDialog();
         SharedPreferences sp = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
         regionID = sp.getInt(Constants.REGION, regionID);
-            if (Constants.haveInternet(getApplicationContext())) {
 
-                ProvidersRequestData providersRequestData=new ProvidersRequestData();
-                providersRequestData.setArea("");
-                providersRequestData.setCityId(14);
-                providersRequestData.setSearchStr("");
-                providersRequestData.setConsultationMode(setcharges);
-                providersRequestData.setSpecializationId(specailizations);
-                ApiClient.getRestAPI().getProviderResponse(providersRequestData).enqueue(new Callback<ProviderResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<ProviderResponse> call, @NonNull retrofit2.Response<ProviderResponse> response) {
-
-                        if(response.body().getData().size()>0) {
-                            getHospitalsListResponse(Objects.requireNonNull(response.body()));
-                        }
+        if (Constants.haveInternet(getApplicationContext())) {
+            ProvidersRequestData data = new ProvidersRequestData(Integer.parseInt(cityId), "", setcharges, specailizations,"");
+            ApiClient.getRestAPI().getProviderResponse(data).enqueue(new Callback<ProviderResponse>() {
+                public void onResponse(@NonNull Call<ProviderResponse> call, @NonNull retrofit2.Response<ProviderResponse> response) {
+                    if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
+                        getHospitalsListResponse(response.body());
+                        activityHospitalsListBinding.tvNodata.setVisibility(GONE);
+                        activityHospitalsListBinding.hospitalsRV.setVisibility(VISIBLE);
+                    } else {
+                        activityHospitalsListBinding.tvNodata.setVisibility(VISIBLE);
+                        activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
                     }
-                    @Override
-                    public void onFailure(@NonNull Call<ProviderResponse> call, @NonNull Throwable t) {
-                        t.printStackTrace();
-                        dismissLoadingDialog();
-                    }
-                });
-            } else {
-                Constants.InternetSettings(HospitalsListActivity.this);
-            }
+                    dismissLoadingDialog();
+                }
 
-
+                public void onFailure(@NonNull Call<ProviderResponse> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                    dismissLoadingDialog();
+                }
+            });
+        } else {
+            Constants.InternetSettings(this);
+        }
     }
-    private void getSpecilaizationResponse(DocterModelResponse hospitalsResponse) {
-        dismissLoadingDialog();
 
-
-        String description = hospitalsResponse.getMessage();
-        if (hospitalsResponse.isSuccess()) {
-            List<DoctorModel> dataItems = hospitalsResponse.getData();
-
-            if (dataItems == null || dataItems.isEmpty()) {
-                activityHospitalsListBinding.nodataimage.setVisibility(View.VISIBLE);
-            } else {
-                activityHospitalsListBinding.nodataimage.setVisibility(View.GONE);
-
-                // Clear and update the list once
+    private void getSpecilaizationResponse(DocterModelResponse response) {
+        try {
+            dismissLoadingDialog();
+            if (response.isSuccess()) {
                 doctorModelList.clear();
-                doctorModelList.addAll(dataItems);
-                activityHospitalsListBinding.backHospitalsList.setOnClickListener(view -> finish());
-                LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-                activityHospitalsListBinding.hospitalsRV.setLayoutManager(mLayoutManager);
-                doctorAdapter = new DoctorAdapter(this,doctorModelList);
-                activityHospitalsListBinding.hospitalsRV.setAdapter(doctorAdapter);
+                doctorModelList.addAll(response.getData());
+                activityHospitalsListBinding.nodataimage.setVisibility(doctorModelList.isEmpty() ? VISIBLE : GONE);
+                activityHospitalsListBinding.docterssRV.setLayoutManager(new LinearLayoutManager(this));
+                doctorAdapter = new DoctorAdapter(this, doctorModelList);
+                activityHospitalsListBinding.docterssRV.setAdapter(doctorAdapter);
+                activityHospitalsListBinding.searcautoCompleteTextView.setHint("Search By Doctor Name or Specialization");
                 activityHospitalsListBinding.searcautoCompleteTextView.setThreshold(1);
-
                 activityHospitalsListBinding.searcautoCompleteTextView.addTextChangedListener(new TextWatcher() {
-                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                     }
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
                     @SuppressLint("NotifyDataSetChanged")
-                    @Override
                     public void afterTextChanged(Editable s) {
-                        try {
-                            doctorAdapter.getFilter().filter(s.toString());
-                            doctorAdapter.notifyDataSetChanged();
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.getMessage();
-                        }
+                        doctorAdapter.getFilter().filter(s.toString());
+                        doctorAdapter.notifyDataSetChanged();
                     }
                 });
-                doctorAdapter.notifyDataSetChanged();
-            }
-
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), description, Snackbar.LENGTH_SHORT).show();
-        }
-    }
-    private void getHospitalsListResponse(ProviderResponse hospitalsResponse) {
-        dismissLoadingDialog();
-        String description = hospitalsResponse.getMessage();
-        if (hospitalsResponse.isSuccess()) {
-            List<NewProviderList> dataItems = hospitalsResponse.getData();
-
-            if (dataItems == null || dataItems.isEmpty()) {
-                activityHospitalsListBinding.nodataimage.setVisibility(View.VISIBLE);
             } else {
-                activityHospitalsListBinding.nodataimage.setVisibility(View.GONE);
-
-                // Clear and update the list once
-                responses.clear();
-                responses.addAll(dataItems);
-                hospitalsAdapter.notifyDataSetChanged();
+                Snackbar.make(findViewById(android.R.id.content), response.getMessage(), Snackbar.LENGTH_SHORT).show();
             }
-
-        } else {
-            Snackbar.make(findViewById(android.R.id.content), description, Snackbar.LENGTH_SHORT).show();
+        }catch (Exception ex)
+        {
+            ex.getMessage();
         }
     }
 
-
+    private void getHospitalsListResponse(ProviderResponse response) {
+        dismissLoadingDialog();
+        if (response.isSuccess()) {
+            responses.clear();
+            responses.addAll(response.getData());
+            activityHospitalsListBinding.nodataimage.setVisibility(responses.isEmpty() ? VISIBLE : GONE);
+            hospitalsAdapter.notifyDataSetChanged();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), response.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -36,6 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
+                    android:id="@+id/tv_Title"
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/jakarthasemibold"
                     android:text="Doctor Appointment"
@@ -63,11 +64,13 @@
             android:layout_margin="3dp"
             android:background="@color/white"
             app:cardCornerRadius="8dp"
+
             app:cardElevation="4dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -113,7 +116,6 @@
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             android:fontFamily="@font/jakarthabold"
-                            android:text="₹99999"
                             android:textStyle="bold"
                             android:textColor="#000000"
                             android:textSize="12sp" />
@@ -126,6 +128,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
+                        android:layout_marginBottom="2dp"
                         android:paddingStart="8dp">
 
                         <LinearLayout
@@ -137,7 +140,6 @@
                                 android:id="@+id/tvDoctorName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Dr. Pranoti Deshpande"
                                 android:layout_weight="1"
                                 android:textColor="@android:color/black"
                                 android:textStyle="bold"
@@ -163,7 +165,6 @@
                             android:id="@+id/tvSpecialization"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="DERMATOLOGY"
                             android:fontFamily="@font/jakartharegular"
                             android:textColor="@color/green"
                             android:textSize="14sp" />
@@ -181,7 +182,6 @@
                                 android:layout_height="wrap_content"
                                 android:drawableStart="@drawable/hospitalicon"
                                 android:drawablePadding="5dp"
-                                android:text="Continental Hospital"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp"
                                 android:fontFamily="@font/jakartharegular"/>
@@ -196,10 +196,9 @@
                             android:layout_marginTop="5dp"
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
-
                             android:fontFamily="@font/jakartharegular"
                             android:drawableStart="@drawable/ic_designation"
-                            android:text="MBBS, MD (Dermatology)"
+
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -209,7 +208,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:drawableStart="@drawable/ic_langaue"
-                            android:text="Telugu, Marathi, English"
                             android:drawablePadding="5dp"
                             android:fontFamily="@font/jakartharegular"
                             android:textColor="@color/black"
@@ -238,7 +236,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-
                 android:gravity="center_vertical">
 
                 <TextView
@@ -254,11 +251,10 @@
 
 
                 <TextView
-
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Booking For"
+                    android:text="@string/appointment_for"
                     android:layout_gravity="center"
                     android:padding="12dp"
                     android:gravity="center"
@@ -270,6 +266,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:id="@+id/ll_addmemeber"
                     android:orientation="horizontal">
 
@@ -277,7 +275,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#65AB48"
-                        android:text="ADD"
+                        android:text="Add"
                         android:drawablePadding="4dp"
                         android:focusable="true"
                         android:clickable="true"
@@ -289,7 +287,6 @@
                         android:layout_height="12dp"
                         android:layout_marginStart="5dp"
                         android:src="@drawable/add"
-
                         android:contentDescription="Add"
                         android:background="?attr/selectableItemBackgroundBorderless" />
                 </LinearLayout>
@@ -323,7 +320,8 @@
                     <Spinner
                         android:layout_width="match_parent"
                         android:id="@+id/bookingForSpinner"
-                        android:padding="5dp"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
                         android:background="@android:color/transparent"
                         android:layout_height="match_parent" />
 
@@ -448,7 +446,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="false"
@@ -460,13 +457,14 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:padding="5dp"
+                    android:layout_margin="0.5dp"
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <!-- Title -->
                     <TextView
-                        android:text="Appointment Summary"
+                        android:text="@string/appointment_summary"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#000"
@@ -474,12 +472,12 @@
                         android:layout_height="wrap_content"/>
 
                     <!-- Divider -->
-                    <View
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#CCCCCC"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/blackdotteddash"/>
 
                     <!-- Summary rows -->
                     <LinearLayout
@@ -547,7 +545,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
                             android:textColor="@color/black"
-                            android:text="Consultation fees:"/>
+                            android:text="Consultation Fee:"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -555,14 +553,15 @@
                             android:textSize="15sp"
                             android:fontFamily="@font/jakartharegular"
                             android:textColor="@color/black"
-                            android:id="@+id/tv_consultationfees"
-                            android:text="08:00 AM"/>
+                            android:id="@+id/tv_consultationfees" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:id="@+id/ll_coupon"
+                        android:visibility="gone"
                         android:paddingVertical="4dp">
                         <LinearLayout
                             android:layout_width="0dp"
@@ -582,7 +581,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textStyle="bold"
-
                                 android:textSize="10sp"
                                 android:textColor="#65AB48"
                                 android:fontFamily="@font/jakarthasemibold"
@@ -618,14 +616,13 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:id="@+id/tv_systemcharges"
-                            android:text="₹999"/>
+                            android:id="@+id/tv_systemcharges" />
                     </LinearLayout>
                     <!-- Divider -->
-                    <View
+                    <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#CCCCCC" />
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/blackdotteddash"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -637,7 +634,7 @@
                             android:layout_weight="1"
                             android:layout_width="0dp"
                             android:textStyle="bold"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:textColor="@color/black"
                             android:layout_height="wrap_content"
                             android:text=" Total Payable:"/>
@@ -646,8 +643,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:text="₹999"/>
+                            android:textSize="16sp"
+                            android:id="@+id/tv_totalamount" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

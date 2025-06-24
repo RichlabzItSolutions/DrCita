@@ -1,53 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F1F0F6"
-    tools:context=".MedicalRecordsActivity">
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#F1F0F6"
+        tools:context=".MedicalRecordsActivity">
 
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <!-- Toolbar -->
+        <LinearLayout
+            android:id="@+id/ll_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/purple_200">
+            android:orientation="vertical"
+            android:background="@drawable/bg_toolbar_gradient">
 
-            <LinearLayout
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:background="@android:color/transparent">
 
-                <ImageView
-                    android:id="@+id/back_medicalrecords"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_arrow_left" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginStart="-50dp"
-                    android:fontFamily="@font/roboto_bold"
-                    android:text="@string/medicalrecords"
-                    android:textColor="@color/white"
-                    android:textSize="18sp">
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:padding="8dp">
 
-                </TextView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:id="@+id/ll_back"
+                        android:clickable="true"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-            </LinearLayout>
+                        <ImageView
+                            android:id="@+id/back_hospitalsList"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_left"
+                            android:layout_marginEnd="8dp" />
 
-        </androidx.appcompat.widget.Toolbar>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medical Records"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/jakarthabold"
+                            android:gravity="center_vertical" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end"
+                        android:visibility="gone"
+                        android:paddingEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="View Members"
+                            android:textSize="18sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/jakarthabold" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="20dp"
+                            android:layout_marginStart="8dp"
+                            android:src="@drawable/viewmember" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/medicalrecordsRV"
             android:layout_width="match_parent"
+            android:layout_below="@+id/ll_toolbar"
+            android:padding="16dp"
             android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -58,8 +99,18 @@
             android:gravity="center"
             android:src="@drawable/ic_nodata_"
             android:visibility="gone"/>
+        <!-- Add New Member Button -->
+        <Button
+            android:id="@+id/btnAddMember"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="16dp"
+            android:text="Add Medical Record"
+            android:backgroundTint="#5BA429"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </layout>

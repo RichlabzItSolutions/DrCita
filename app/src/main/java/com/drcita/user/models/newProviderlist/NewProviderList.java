@@ -8,6 +8,15 @@ public class NewProviderList {
     private String picture;
     private int consultationMode;
     private String hospitalType;
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     // Getters and setters
     public int getProviderId() { return providerId; }

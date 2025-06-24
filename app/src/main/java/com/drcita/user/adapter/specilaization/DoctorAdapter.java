@@ -1,6 +1,7 @@
 package com.drcita.user.adapter.specilaization;
 
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
@@ -27,15 +28,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.drcita.user.DoctorAppointmentActivity;
-import com.drcita.user.DoctorsListActivity;
-import com.drcita.user.HospitalsListActivity;
 import com.drcita.user.R;
-import com.drcita.user.common.Constants;
-import com.drcita.user.models.newProviderlist.NewProviderList;
 import com.drcita.user.models.specilization.DoctorModel;
 import com.drcita.user.models.specilization.ProviderModel;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +60,19 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         DoctorModel doctor = doctorList.get(position);
 
         holder.tvName.setText(doctor.getDoctorName());
-        holder.tvHospitalCount.setText(doctor.getProviderCount() + "+");
+        int count = doctor.providerCount - 1;
+        if (count > 0) {
+            holder.tvHospitalCount.setVisibility(VISIBLE);
+            holder.tvHospitalCount.setText("+" + count);
+        } else {
+            holder.tvHospitalCount.setVisibility(GONE);
+        }
+
         holder.tvExperience.setText(doctor.getExperience() + " Years Exp.");
         holder.tvRating.setText("Rating: " + doctor.getRating());
         holder.tvSpecialization.setText(TextUtils.join(", ", doctor.getSpecializations()));
         holder.tvLanguages.setText(TextUtils.join(", ", doctor.getLanguages()));
+        holder.tvdesegnation.setText(TextUtils.join(", ", doctor.getQualifications()));
 
         Glide.with(context)
                 .load(doctor.getPicture())
@@ -78,6 +81,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         if (!doctor.getProviders().isEmpty()) {
             ProviderModel provider = doctor.getProviders().get(0);
+            holder.tvHospitalName.setText(provider.getHospitalName());
 
             boolean isAvailable = provider.getMorningAvailable() == 1 ||
                     provider.getAfternoonAvailable() == 1 ||
@@ -103,20 +107,26 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
                     provider.getEveningAvailable() == 1 ? R.color.green : R.color.gray));
 
             holder.tvonlinefees.setText("₹" + provider.getOnlineFee());
+            holder.tvonlinefeeson.setText("₹" + provider.getOnlineFee());
             holder.tvofflinefees.setText("₹" + provider.getOfflineFee());
 
             // Handle consultation mode
             switch (provider.getConsultationMode()) {
                 case 1: // Only Online
-                    holder.btnOnline.setVisibility(VISIBLE);
+                    holder.buttonContaineron.setVisibility(VISIBLE);
+                    holder.buttonContainer.setVisibility(GONE);
                     holder.btnOffline.setVisibility(GONE);
                     holder.buttonContainer.setGravity(Gravity.END);
                     break;
                 case 2: // Only Offline
-                    holder.btnOnline.setVisibility(GONE);
+                    holder.btnOnline.setVisibility(INVISIBLE);
                     holder.btnOffline.setVisibility(VISIBLE);
+                    holder.buttonContaineron.setVisibility(GONE);
+                    holder.buttonContainer.setVisibility(VISIBLE);
                     break;
                 case 3: // Both
+                    holder.buttonContaineron.setVisibility(GONE);
+                    holder.buttonContainer.setVisibility(VISIBLE);
                     holder.btnOnline.setVisibility(VISIBLE);
                     holder.btnOffline.setVisibility(VISIBLE);
                     holder.buttonContainer.setGravity(Gravity.NO_GRAVITY);
@@ -130,9 +140,23 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         holder.btnOnline.setOnClickListener(view -> {
             Intent intent = new Intent(context, DoctorAppointmentActivity.class);
             intent.putExtra("docterId", String.valueOf(doctor.doctorId));
-            intent.putExtra("providerId",String.valueOf(doctor.getProviders().get(0).providerId));
-            intent.putExtra("paymentype","Online");
-            intent.putExtra("amount",String.valueOf(doctor.providers.get(0).onlineFee));
+            intent.putExtra("providerId", String.valueOf(doctor.getProviders().get(0).providerId));
+            intent.putExtra("paymentype", "Online");
+            intent.putExtra("amount", String.valueOf(doctor.providers.get(0).onlineFee));
+            intent.putExtra("slotdate", "");
+            intent.putExtra("isresechedule", "0");
+            context.startActivity(intent);
+        });
+
+        // Button click inside onBindViewHolder
+        holder.btnOnlineon.setOnClickListener(view -> {
+            Intent intent = new Intent(context, DoctorAppointmentActivity.class);
+            intent.putExtra("docterId", String.valueOf(doctor.doctorId));
+            intent.putExtra("providerId", String.valueOf(doctor.getProviders().get(0).providerId));
+            intent.putExtra("paymentype", "Online");
+            intent.putExtra("amount", String.valueOf(doctor.providers.get(0).onlineFee));
+            intent.putExtra("slotdate", "");
+            intent.putExtra("isresechedule", "0");
             context.startActivity(intent);
         });
 
@@ -140,15 +164,18 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         holder.btnOffline.setOnClickListener(view -> {
             Intent intent = new Intent(context, DoctorAppointmentActivity.class);
             intent.putExtra("docterId", String.valueOf(doctor.doctorId));
-            intent.putExtra("providerId",String.valueOf(doctor.getProviders().get(0).providerId));
-            intent.putExtra("paymentype","offline");
-            intent.putExtra("amount",String.valueOf(doctor.providers.get(0).offlineFee));
+            intent.putExtra("providerId", String.valueOf(doctor.getProviders().get(0).providerId));
+            intent.putExtra("paymentype", "Offline");
+            intent.putExtra("amount", String.valueOf(doctor.providers.get(0).offlineFee));
+            intent.putExtra("slotdate", "");
+            intent.putExtra("isresechedule", "0");
             context.startActivity(intent);
         });
+
         holder.tvHospitalCount.setOnClickListener(v -> {
             int pos = holder.getAdapterPosition();
             if (pos != RecyclerView.NO_POSITION && doctorList.get(pos) != null) {
-                showSingleHospitalDialog(context, doctorList.get(pos).getProviders());
+                showSingleHospitalDialog(context, doctorList.get(pos).getProviders(), pos);
             }
         });
     }
@@ -202,11 +229,15 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         }
     };
 
+    public void clearAllData() {
+        doctorList.clear();
+    }
+
     static class DoctorViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvExperience, tvRating, tvSpecialization, tvLanguages,
-                tvAvailability, tvMorning, tvAfternoon, tvEvening,
-                tvonlinefees, tvofflinefees, tvHospitalCount;
-        LinearLayout btnOnline, btnOffline, ll_time,buttonContainer;
+                tvAvailability, tvMorning, tvAfternoon, tvEvening, tvHospitalName,
+                tvonlinefees, tvofflinefees, tvHospitalCount, tvonlinefeeson, tvdesegnation;
+        LinearLayout btnOnline, btnOnlineon, btnOffline, ll_time, buttonContainer, buttonContaineron;
         ImageView imgDoctor;
 
         public DoctorViewHolder(@NonNull View itemView) {
@@ -219,35 +250,35 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
             tvLanguages = itemView.findViewById(R.id.tvlanguage);
             tvAvailability = itemView.findViewById(R.id.tvAvailability);
             btnOnline = itemView.findViewById(R.id.ll_onlineconsult);
-            buttonContainer=itemView.findViewById(R.id.buttonContainer);
+            btnOnlineon = itemView.findViewById(R.id.ll_onlineconsulton);
+            buttonContainer = itemView.findViewById(R.id.buttonContainer);
+            buttonContaineron = itemView.findViewById(R.id.buttonContaineron);
             btnOffline = itemView.findViewById(R.id.ll_bookhospital);
             ll_time = itemView.findViewById(R.id.llTimings);
             tvMorning = itemView.findViewById(R.id.tvMorning);
             tvAfternoon = itemView.findViewById(R.id.tvAfternoon);
             tvEvening = itemView.findViewById(R.id.tvEvening);
             tvonlinefees = itemView.findViewById(R.id.tvonlinefees);
+            tvonlinefeeson = itemView.findViewById(R.id.tvonlinefeeson);
             tvofflinefees = itemView.findViewById(R.id.tvofflinefees);
             tvHospitalCount = itemView.findViewById(R.id.tvHospitalCount);
+            tvHospitalName = itemView.findViewById(R.id.tvHospitalName);
+            tvdesegnation = itemView.findViewById(R.id.tvdesegnation);
 
 
         }
 
     }
 
-    private void showSingleHospitalDialog(Context context, List<ProviderModel> providers) {
+    private void showSingleHospitalDialog(Context context, List<ProviderModel> providers, int doctorPosition) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_single_select_hospital, null);
         RecyclerView recyclerView = view.findViewById(R.id.rvHospitalList);
 
-        List<String> hospitalNames = new ArrayList<>();
-        for (ProviderModel provider : providers) {
-            hospitalNames.add(provider.getHospitalName());
-        }
+        final ProviderModel[] selectedProvider = {null};
 
-        // Create adapter with click listener
-        SingleSelectHospitalAdapter adapter = new SingleSelectHospitalAdapter(hospitalNames, hospitalName -> {
-            // Handle the selected hospital (this is triggered on radio click)
-            Toast.makeText(context, "Selected: " + hospitalName, Toast.LENGTH_SHORT).show();
+        SingleSelectHospitalAdapter adapter = new SingleSelectHospitalAdapter(providers, provider -> {
+            selectedProvider[0] = provider;  // store selected provider
         });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -255,10 +286,14 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         builder.setView(view)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    String selectedHospital = adapter.getSelectedHospital();
-                    if (selectedHospital != null) {
-                        // Do something with the selected hospital
-                        Toast.makeText(context, "Final selection: " + selectedHospital, Toast.LENGTH_SHORT).show();
+                    if (selectedProvider[0] != null) {
+                        DoctorModel doctor = doctorList.get(doctorPosition);
+                        List<ProviderModel> providerList = doctor.getProviders();
+
+                        providerList.remove(selectedProvider[0]);
+                        providerList.add(0, selectedProvider[0]);
+
+                        notifyItemChanged(doctorPosition);
                     } else {
                         Toast.makeText(context, "No hospital selected", Toast.LENGTH_SHORT).show();
                     }
@@ -266,5 +301,6 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
                 .setNegativeButton("Cancel", null)
                 .show();
     }
+
 }
 

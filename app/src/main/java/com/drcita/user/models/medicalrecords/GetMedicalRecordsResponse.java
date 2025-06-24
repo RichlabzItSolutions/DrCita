@@ -3,31 +3,40 @@ package com.drcita.user.models.medicalrecords;
 import java.util.List;
 
 public class GetMedicalRecordsResponse{
-	private List<DataItem> data;
-	private String message;
-	private String status;
+		private boolean success;
+		private String message;
+		private List<MedicalRecordData>  data;
 
-	public void setData(List<DataItem> data){
-		this.data = data;
+	public boolean isSuccess() {
+		return success;
 	}
 
-	public List<DataItem> getData(){
-		return data;
+	public void setSuccess(boolean success) {
+		this.success = success;
 	}
 
-	public void setMessage(String message){
-		this.message = message;
-	}
-
-	public String getMessage(){
+	public String getMessage() {
 		return message;
 	}
 
-	public void setStatus(String status){
-		this.status = status;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
-	public String getStatus(){
-		return status;
+	public List<MedicalRecordData> getData() {
+		return data;
+	}
+
+	public void setData(List<MedicalRecordData> data) {
+		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "GetMedicalRecordsResponse{" +
+				"success=" + success +
+				", message='" + message + '\'' +
+				", data=" + data +
+				'}';
 	}
 }

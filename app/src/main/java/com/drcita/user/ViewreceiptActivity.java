@@ -1,5 +1,8 @@
 package com.drcita.user;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -15,28 +18,21 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
-
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityViewreceiptBinding;
-import com.drcita.user.models.appointment.AppointmentData;
 import com.drcita.user.models.systemcharges.SystemchargesResponse;
 import com.drcita.user.models.viewreceipt.AppointmentDetails;
 import com.drcita.user.models.viewreceipt.ViewreceiptRequest;
 import com.drcita.user.models.viewreceipt.ViewreceiptResponse;
 import com.drcita.user.retrofit.ApiClient;
-import com.google.android.material.snackbar.Snackbar;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
-import org.parceler.Parcels;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -211,13 +207,21 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
         AppointmentDetails dataItems = viewreceiptResponse.getData();
 
          binding.patientname.setText(dataItems.getAppointment().getPatientName());
-         binding.orderid.setText("Appointment Id :"+dataItems.getAppointment().getAppointmentId() );
+         binding.orderid.setText("Appointment # : "+dataItems.getAppointment().getAppointmentId() );
          binding.doctornamereceipt.setText(dataItems.getAppointment().getDoctorName());
          binding.receiptfee.setText(String.valueOf("₹"+dataItems.getAppointment().getConsultationFee()));
-         binding.coupon.setText(String.valueOf(dataItems.getAppointment().getCouponDiscount()));
 
-         binding.tvAppointmentdate.setText("Appointment Date : " +dataItems.getAppointment().getSlotDate() +"\nAppointment Time :" +dataItems.getAppointment().getSlotTime());
-            binding.slotdatereceipt.setText("Issued On:" + dataItems.getAppointment().getBookedOn());
+         if(dataItems.getAppointment().getCouponDiscount()>0){
+             binding.llConsultation.setVisibility(VISIBLE);
+            binding.coupon.setText(String.valueOf(dataItems.getAppointment().getCouponDiscount()));
+        }
+         else {
+             binding.llConsultation.setVisibility(GONE);
+
+         }
+
+         binding.tvAppointmentdate.setText("Appointment Date : " +dataItems.getAppointment().getSlotDate() +"\nAppointment Time : " +dataItems.getAppointment().getSlotTime());
+            binding.slotdatereceipt.setText("Issued On: " + dataItems.getAppointment().getBookedOn());
             binding.receiptcharges.setText("₹"+dataItems.getAppointment().getTotalAmount());
             providerNumber = dataItems.getAppointment().getProviderMobile();
 
@@ -227,12 +231,27 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
                 binding.doctorinfotitle.setText(getString(R.string.doctorinfo));
                 binding.receiptdoctorspecailazation.setText(dataItems.getAppointment().getSpecialisation());
                 binding.doctorspecalization.setText(dataItems.getAppointment().getSpecialisation());
-                binding.phonenumberreceipt.setText("Provider Number "+dataItems.getAppointment().getProviderMobile());
-
-
+                binding.phonenumberreceipt.setText("Hospital No "+dataItems.getAppointment().getProviderMobile());
             binding.doctorlocation.setText(dataItems.getAppointment().getRegion());
+            binding.patientslot.setText(dataItems.getAppointment().getPatientMobile());
+            if(dataItems.getAppointment().getAppointmentMode().equals("1"))
+            {
+                binding.patientnumber.setText("Online Consultation");
+            }
+            else {
+                binding.patientnumber.setText("In-Person Consultation");
 
-            binding.patientslot.setText(getString(R.string.number)+": " + dataItems.getAppointment().getAppointmentId());
+
+            }
+
+//            if(Integer.parseInt(dataItems.getAppointment().get())>0)
+//            {
+//                binding.llConsultation.setVisibility(VISIBLE);
+//            }
+//            else {
+//                binding.llConsultation.setVisibility(GONE);
+//            }
+
 
         }
 
@@ -251,7 +270,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
         contentValues.put(MediaStore.Files.FileColumns.DATE_TAKEN, System.currentTimeMillis());
         Uri fileUri = getContentResolver().insert(externalUri, contentValues);
         try {
-            binding.bottomBtnLayout.setVisibility(View.GONE);
+            binding.bottomBtnLayout.setVisibility(GONE);
             View v1 = binding.baseLayout;
             v1.setDrawingCacheEnabled(true);
             Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
@@ -306,7 +325,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
             startActivity(Intent.createChooser(share, "Share Image"));
             //TODO share screenshot
         }
-        binding.bottomBtnLayout.setVisibility(View.VISIBLE);
+        binding.bottomBtnLayout.setVisibility(VISIBLE);
 //        } catch (Throwable e) {
 //            // Several error may come out with file handling or DOM
 //            e.printStackTrace();

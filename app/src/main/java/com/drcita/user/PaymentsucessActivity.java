@@ -40,7 +40,6 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
                  payment = extras.getInt("payment");
 
             }
-        } else {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy"); // or "dd-MM-yyyy"
         date = sdf.format(new Date());
@@ -52,21 +51,18 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        binding.tvDetails.setText("Appointment ID #"+doctorData.getAppointmentId()+"\nSlot time      :"+ doctorData.getSlotTime());
+        binding.tvDetails.setText("Appointment ID #"+doctorData.getAppointmentNum()+"\nSlot time      : "+ doctorData.getSlotTime());
 
         format = new SimpleDateFormat("dd-MM-yyyy");
         String date1 = format.format(newDate);
         if (position==2) {
-            binding.viewreceiptBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), ViewreceiptActivity.class);
-                    intent.putExtra("id", doctorData.getAppointmentId());
-                    intent.putExtra("doctorData1", Parcels.wrap(doctorData));
-                    intent.putExtra("position",2);
-                     intent.putExtra("payment",payment);
-                    startActivity(intent);
-                }
+            binding.viewreceiptBtn.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(), ViewreceiptActivity.class);
+                intent.putExtra("id", doctorData.getAppointmentId());
+                intent.putExtra("doctorData1", Parcels.wrap(doctorData));
+                intent.putExtra("position",2);
+                 intent.putExtra("payment",payment);
+                startActivity(intent);
             });
         }else {
             binding.viewreceiptBtn.setOnClickListener(view -> {
@@ -78,6 +74,15 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
                 startActivity(intent);
             });
         }
+       binding.btnBackHome.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               startActivity(intent);
+               finish();
+           }
+       });
     }
 
    @Override
@@ -86,5 +91,6 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
         Intent intent = new Intent(getApplicationContext(), DashBoardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 }

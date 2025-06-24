@@ -9,81 +9,83 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drcita.user.R;
+import com.drcita.user.models.specilization.ProviderModel;
 
 import java.util.List;
 
-/**
- * RecyclerView adapter that lets the user pick ONE hospital name.
- */
-public class SingleSelectHospitalAdapter
-        extends RecyclerView.Adapter<SingleSelectHospitalAdapter.ViewHolder> {
+public class SingleSelectHospitalAdapter extends RecyclerView.Adapter<SingleSelectHospitalAdapter.ViewHolder> {
 
-    private final List<String> hospitalList;
-    private int selectedPosition = -1;              // keeps currently‑selected row
-    private final OnSingleHospitalSelected listener;
+    private final List<ProviderModel> providers;
+    private int selectedPosition = -1;
+    private final OnSingleProviderSelected listener;
 
-    public SingleSelectHospitalAdapter(List<String> hospitalList,
-                                       OnSingleHospitalSelected listener) {
-        this.hospitalList = hospitalList;
-        this.listener     = listener;
-        setHasStableIds(true);                      // smoother updates when rows refresh
+    public interface OnSingleProviderSelected {
+        void onProviderSelected(ProviderModel provider);
     }
 
-    // Expose currently‑selected name to caller
-    public String getSelectedHospital() {
-        return (selectedPosition != -1) ? hospitalList.get(selectedPosition) : null;
+    public SingleSelectHospitalAdapter(List<ProviderModel> providers, OnSingleProviderSelected listener) {
+        this.providers = providers;
+        this.listener = listener;
+        setHasStableIds(true);
+
+        if (!providers.isEmpty()) {
+            selectedPosition = 0;
+            listener.onProviderSelected(providers.get(0));
+        }
     }
 
-    // ---------- VIEW‑HOLDER ----------
+    public ProviderModel getSelectedProvider() {
+        return selectedPosition != -1 ? providers.get(selectedPosition) : null;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final RadioButton rbHospital;
+        RadioButton rbHospital;
 
         ViewHolder(View itemView) {
             super(itemView);
             rbHospital = itemView.findViewById(R.id.rbHospital);
         }
 
-        void bind(String hospitalName, boolean isChecked) {
-            rbHospital.setText(hospitalName);
+        void bind(String name, boolean isChecked) {
+            rbHospital.setText(name);
             rbHospital.setChecked(isChecked);
         }
     }
 
-    // ---------- ADAPTER OVERRIDES ----------
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_single_select_hospital, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_single_select_hospital, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        boolean isChecked = (position == selectedPosition);
-        holder.bind(hospitalList.get(position), isChecked);
+        ProviderModel provider = providers.get(position);
+        boolean isChecked = position == selectedPosition;
+
+        String name = provider.getHospitalName() + " (" + provider.getArea() + ")";
+        holder.bind(name, isChecked);
 
         holder.rbHospital.setOnClickListener(v -> {
             int previous = selectedPosition;
             selectedPosition = holder.getAdapterPosition();
-            // refresh only the two affected rows
+
             if (previous != -1) notifyItemChanged(previous);
             notifyItemChanged(selectedPosition);
 
             if (listener != null)
-                listener.onHospitalSelected(hospitalList.get(selectedPosition));
+                listener.onProviderSelected(providers.get(selectedPosition));
         });
     }
 
     @Override
-    public int getItemCount() { return hospitalList.size(); }
+    public int getItemCount() {
+        return providers.size();
+    }
 
-    // stable IDs improve checkbox/radiobutton behaviour on fast scroll
     @Override
-    public long getItemId(int position) { return position; }
-
-    // ---------- CALLBACK ----------
-    public interface OnSingleHospitalSelected {
-        void onHospitalSelected(String hospitalName);
+    public long getItemId(int position) {
+        return position;
     }
 }

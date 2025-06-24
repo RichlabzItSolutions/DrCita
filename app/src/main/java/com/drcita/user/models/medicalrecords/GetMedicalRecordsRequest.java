@@ -1,13 +1,23 @@
 package com.drcita.user.models.medicalrecords;
 
 public class GetMedicalRecordsRequest {
-    private int userId;
+    private int subUserId;
+    private String appointmentId;
 
-    public void setUserId(int userId){
-        this.userId = userId;
+
+    public int getSubUserId() {
+        return subUserId;
     }
 
-    public int getUserId(){
-        return userId;
+    public void setSubUserId(int subUserId) {
+        this.subUserId = subUserId;
+
+
+    }
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

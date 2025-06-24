@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/tvDocName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Document 1"
+    android:textColor="#2196F3"
+    android:textStyle="bold"
+    android:layout_margin="8dp"
+    android:background="@drawable/bg_doc_chip"
+    android:padding="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

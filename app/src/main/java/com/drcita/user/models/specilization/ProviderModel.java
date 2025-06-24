@@ -4,12 +4,32 @@ public class ProviderModel {
     public int doctorId;
     public int providerId;
     public String hospitalName;
+    public String area;
     public int onlineFee;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     public int offlineFee;
     public int consultationMode;
     public int morningAvailable;
     public int afternoonAvailable;
     public int eveningAvailable;
+
+    public int priority;
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
 
     public int getDoctorId() {
         return doctorId;

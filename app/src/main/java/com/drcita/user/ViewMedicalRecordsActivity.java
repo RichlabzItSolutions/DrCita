@@ -52,12 +52,7 @@ public class ViewMedicalRecordsActivity extends LanguageBaseActivity {
             }
         } else {
         }
-        binding.backviewmedicalrecords.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        binding.backviewmedicalrecords.setOnClickListener(view -> finish());
         binding.addmedicalRecordsRV.setLayoutManager(new GridLayoutManager(this, 3));
         photosAdapter = new PhotosAdapter(this, photosItems);
         binding.addmedicalRecordsRV.setAdapter(photosAdapter);
