@@ -1,4 +1,4 @@
-package com.drcita.user.adapter.dashbaord.specilization;
+package com.drcita.user.adapter;
 
 
 import android.content.Context;
@@ -15,22 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.drcita.user.Activity.SpecializationActivity;
 import com.drcita.user.HospitalsListActivity;
 import com.drcita.user.R;
 import com.drcita.user.models.dashboard.specilization.Specialization;
-import com.drcita.user.models.home.Providers;
 
 import java.util.List;
 
-public class SpecializationAdapter extends RecyclerView.Adapter<SpecializationAdapter.SpecializationViewHolder> {
+public class CategoriWiseSpecializationAdapter extends RecyclerView.Adapter<CategoriWiseSpecializationAdapter.SpecializationViewHolder> {
 
     private List<Specialization> specializationList;
 
     private int itemWidth;
     private Context context;
 
-    public SpecializationAdapter(Context context, List<Specialization> list) {
+    public CategoriWiseSpecializationAdapter(Context context, List<Specialization> list) {
         this.specializationList = list;
        this. context=context;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -58,11 +56,9 @@ public class SpecializationAdapter extends RecyclerView.Adapter<SpecializationAd
 
         holder.ll_specilaization.setOnClickListener(view -> {
             Specialization dataItem = specializationList.get(position);
-            Intent intent = new Intent(context, SpecializationActivity.class);
+            Intent intent = new Intent(context, HospitalsListActivity.class);
             intent.putExtra("hospitalId", 0);
             intent.putExtra("specialization",dataItem.getId());
-
-            intent.putExtra("position",position);
             context.startActivity(intent);
 
 

@@ -185,6 +185,10 @@
             android:name=".ProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
+        <activity android:name=".Activity.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="true"
@@ -267,6 +271,11 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
+        <activity
+            android:name=".Activity.SpecializationActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true" >
@@ -280,6 +289,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".filter.DoctorFilterBottomSheet"
+            android:theme="@style/Theme.App.BottomDialog"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".Activity.TermsWebViewActivity"
+            android:exported="false"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher_round" />

@@ -1,5 +1,7 @@
 package com.drcita.user.retrofit;
 
+import androidx.activity.result.ActivityResultCallerKt;
+
 import com.drcita.user.models.GlobalRequest;
 import com.drcita.user.models.GlobalResponse;
 import com.drcita.user.models.ads.AdResponse;
@@ -19,6 +21,9 @@ import com.drcita.user.models.appointmentbookingsummary.CancelRequest;
 import com.drcita.user.models.cities.CityRequestData;
 import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.contact.ContactRequest;
+import com.drcita.user.models.departments.DepartmentResponse;
+import com.drcita.user.models.departments.SpecializationRequest;
+import com.drcita.user.models.departments.SpecializationResponse;
 import com.drcita.user.models.doctorDetails.DoctorRequest;
 import com.drcita.user.models.doctorDetails.DoctorResponse;
 import com.drcita.user.models.doctors.DoctorsListResponse;
@@ -31,6 +36,8 @@ import com.drcita.user.models.forgotpassword.ForgotPasswordRequest;
 import com.drcita.user.models.forgotpassword.ForgotPasswordResponse;
 import com.drcita.user.models.home.HomeDataRequest;
 import com.drcita.user.models.home.HomeResponse;
+import com.drcita.user.models.home.SearchRequest;
+import com.drcita.user.models.home.SearchResponse;
 import com.drcita.user.models.hospitalreviews.HospitalReviewRequest;
 import com.drcita.user.models.hospitalreviews.HospitalReviewResponse;
 import com.drcita.user.models.hospitals.HospitalsRequest;
@@ -330,7 +337,14 @@ public interface ApiInterface {
             @Part List<MultipartBody.Part> images,
             @Part List<MultipartBody.Part> pdfs
     );
+    @POST("user/searchHomePage")
+    Call<SearchResponse> searchHomePage(@Body SearchRequest searhRequest);
 
+    @GET("user/fetchDepartments")
+    Call<DepartmentResponse> getDepartments();
+
+    @POST("user/fetchSpecializations")
+    Call<SpecializationResponse> getSpecoilizationByDepartment(@Body SpecializationRequest request);
 
 
 }

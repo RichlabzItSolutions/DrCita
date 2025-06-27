@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +16,7 @@ import com.drcita.user.adapter.HospitalsAdapter;
 import com.drcita.user.adapter.specilaization.DoctorAdapter;
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityHospitalsListBinding;
+import com.drcita.user.filter.DoctorFilterBottomSheet;
 import com.drcita.user.models.newProviderlist.NewProviderList;
 import com.drcita.user.models.newProviderlist.ProviderResponse;
 import com.drcita.user.models.newProviderlist.ProvidersRequestData;
@@ -24,9 +26,13 @@ import com.drcita.user.models.specilization.DoctorSearchRequest;
 import com.drcita.user.retrofit.ApiClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -48,10 +54,18 @@ public class HospitalsListActivity extends LanguageBaseActivity {
     private final ArrayList<Integer> setcharges = new ArrayList<>();
     private final ArrayList<Integer> providerlist = new ArrayList<>();
     private final ArrayList<Integer> hospitallist = new ArrayList<>();
+
+    private final ArrayList<Integer> docterlist = new ArrayList<>();
     private final ArrayList<Integer> specailizations = new ArrayList<>();
 
     private String cityId;
-    private int specalization;
+    private int specalization,doctorId;
+    private static final int FILTER_REQUEST_CODE = 101;
+
+    private int selectedTabPosition = 0;
+    private String gender="";
+    private String experience="";
+    private String minExperience,maxExperience;
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -63,6 +77,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         if (savedInstanceState == null && getIntent().getExtras() != null) {
             hospitalist  = getIntent().getIntExtra("hospitalId", 0);
             specalization  =getIntent().getIntExtra("specialization",0);
+            doctorId=getIntent().getIntExtra("doctorId",0);
             isfromdental = getIntent().getBooleanExtra(Constants.isfromdental, false);
         }
 
@@ -76,7 +91,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         tabLayout.addTab(tabLayout.newTab().setText("By Hospital"));
         tabLayout.addTab(tabLayout.newTab().setText("By Specialization"));
 
-        if ( hospitalist> 0  || specalization>0) {
+        if ( hospitalist> 0  || specalization>0 || doctorId>0) {
             TabLayout.Tab second = tabLayout.getTabAt(1);
             if (second != null) second.select();
             activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
@@ -85,7 +100,10 @@ public class HospitalsListActivity extends LanguageBaseActivity {
             }
             if(specalization>0)
             providerlist.add(specalization);
-
+           if(doctorId>0)
+           {
+               docterlist.add(doctorId);
+           }
             displaySpecailizations();
         } else {
             TabLayout.Tab first = tabLayout.getTabAt(0);
@@ -100,6 +118,8 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
+                selectedTabPosition = tab.getPosition();
                 if (tab.getPosition() == 0) {
                     displayHospitals();
                 } else if (tab.getPosition() == 1) {
@@ -111,8 +131,13 @@ public class HospitalsListActivity extends LanguageBaseActivity {
             public void onTabUnselected(TabLayout.Tab tab) {}
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-    }
+        activityHospitalsListBinding.ivFilter.setOnClickListener(view -> {
+            Intent intent = new Intent(HospitalsListActivity.this, DoctorFilterBottomSheet.class);
+            startActivityForResult(intent, FILTER_REQUEST_CODE); // only this
+            overridePendingTransition(R.anim.slide_in_bottom, R.anim.no_anim);
+        });
 
+    }
     private void displaySpecailizations() {
         try {
             activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
@@ -129,8 +154,8 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         if (Constants.haveInternet(getApplicationContext())) {
             DoctorSearchRequest request = new DoctorSearchRequest(
                     Integer.parseInt(cityId), "", hospitallist,
-                    new ArrayList<>(), providerlist, new ArrayList<>(), "", "",
-                    new ArrayList<>(), new DoctorSearchRequest.Experience("", ""), "", ""
+                    docterlist, providerlist, new ArrayList<>(), "", gender,
+                    new ArrayList<>(), new DoctorSearchRequest.Experience(minExperience, maxExperience), "", ""
             );
 
             ApiClient.getRestAPI().getDocterList(request).enqueue(new Callback<DocterModelResponse>() {
@@ -276,4 +301,88 @@ public class HospitalsListActivity extends LanguageBaseActivity {
             Snackbar.make(findViewById(android.R.id.content), response.getMessage(), Snackbar.LENGTH_SHORT).show();
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == FILTER_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            String filterJson = data.getStringExtra("filters");
+
+            Type type = new TypeToken<Map<String, List<String>>>() {}.getType();
+            Map<String, List<String>> selectedFilters = new Gson().fromJson(filterJson, type);
+
+            if (selectedTabPosition == 0) {
+                // 👇 Tab 0: By Hospital
+                applyHospitalFilters(selectedFilters);
+            } else if (selectedTabPosition == 1) {
+                // 👇 Tab 1: By Specialization
+                applyDoctorFilters(selectedFilters);
+            }
+        }
+    }
+    private void applyHospitalFilters(Map<String, List<String>> filters) {
+        setcharges.clear();
+        specailizations.clear();
+
+        if (filters.containsKey("consultation")) {
+            List<String> consultation = filters.get("consultation");
+            // Handle consultation filter logic (if needed)
+        }
+
+        if (filters.containsKey("specialization")) {
+            for (String id : filters.get("specialization")) {
+                specailizations.add(Integer.parseInt(id));
+            }
+        }
+
+        if (filters.containsKey("set_charge")) {
+            for (String id : filters.get("set_charge")) {
+                setcharges.add(Integer.parseInt(id));
+            }
+        }
+
+        displayHospitals(); // reload
+    }
+
+    private void applyDoctorFilters(Map<String, List<String>> filters) {
+        providerlist.clear();
+        hospitallist.clear();
+        docterlist.clear();
+
+        if (filters.containsKey("specialization")) {
+            for (String id : filters.get("specialization")) {
+                providerlist.add(Integer.parseInt(id));
+            }
+        }
+
+        if (filters.containsKey("hospital")) {
+            for (String id : filters.get("hospital")) {
+                hospitallist.add(Integer.parseInt(id));
+            }
+        }
+
+        if (filters.containsKey("doctor")) {
+            for (String id : filters.get("doctor")) {
+                docterlist.add(Integer.parseInt(id));
+            }
+        }
+        if(filters.containsKey("gender"))
+        {
+            for (String id : filters.get("gender")) {
+                gender=id;
+            }
+        }
+        if (filters.containsKey("experience")) {
+            String range = filters.get("experience").get(0); // e.g., "3-12"
+            if (range.contains("-")) {
+                String[] parts = range.split("-");
+               minExperience = parts[0];
+               maxExperience = parts[1];
+
+                experience = String.valueOf(new DoctorSearchRequest.Experience(minExperience, maxExperience));
+            }
+        }
+        displaySpecailizations(); // reload
+    }
+
 }

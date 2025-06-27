@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:id="@+id/cardCategoryTab"
+        android:layout_height="wrap_content"
+
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/txtCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Specialization"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#333333" />
+
+        <TextView
+            android:id="@+id/txtCountBadge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/badge_circle_green"
+            android:gravity="center"
+            android:text="3"
+            android:textSize="11sp"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            android:layout_marginEnd="2dp"/>
+    </RelativeLayout>
+

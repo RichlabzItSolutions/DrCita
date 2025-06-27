@@ -248,11 +248,12 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="write_message">Write your message</string>
     <string name="remove">Remove</string>
     <string name="toggle_mic">Toggle mic</string>
-    <string name="book_appointment">Book Appointment</string>
-    <string name="dr_pranoti_deshpande">Dr. Pranoti Deshpande</string>
-    <string name="morning">Morning</string>
-    <string name="appointment_summary">Appointment Summary</string>
-    <string name="other_comments">Other\n</string>
+    <string name="book_appointment" translatable="false">Book Appointment</string>
+    <string name="dr_pranoti_deshpande" translatable="false">Dr. Pranoti Deshpande</string>
+    <string name="morning" translatable="false">Morning</string>
+    <string name="appointment_summary" translatable="false">Appointment Summary</string>
+    <string name="other_comments" translatable="false">Other\n</string>
+    <string name="no_doctors_available" translatable="false">No Doctors Available</string>
     <string-array name="meeting_options">
         <item>One to One Meeting</item>
         <item>Group Meeting</item>

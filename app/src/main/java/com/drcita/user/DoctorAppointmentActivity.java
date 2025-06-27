@@ -428,7 +428,12 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
             }
 
         }, year, month, day);
+// Set minimum date to today
+        datePickerDialog.getDatePicker().setMinDate(today.getTimeInMillis());
 
+// Set maximum date to 15 days from today
+        today.add(Calendar.DAY_OF_MONTH, 15);
+        datePickerDialog.getDatePicker().setMaxDate(today.getTimeInMillis());
         datePickerDialog.show();
     }
 

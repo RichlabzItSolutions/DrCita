@@ -61,6 +61,30 @@
                 android:drawableStart="@drawable/mobile"
                 android:padding="12dp"
                 android:background="@drawable/edit_text_background" />
+            <LinearLayout
+                android:id="@+id/termsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:gravity="start|center_vertical">
+
+                <CheckBox
+                    android:id="@+id/checkboxTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/green" />
+
+                <TextView
+                    android:id="@+id/txtTermsLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I agree to the Terms &amp; Conditions"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/roboto"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnLogin"

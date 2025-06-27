@@ -29,6 +29,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.drcita.user.Activity.SearchActivity;
 import com.drcita.user.Activity.VideoConsultationActivity;
 import com.drcita.user.adapter.CaregoryAdapter;
 import com.drcita.user.adapter.NotificationAdapter;
@@ -48,7 +49,6 @@ import com.drcita.user.models.home.Providers;
 import com.drcita.user.models.notifications.NotificationResponse;
 import com.drcita.user.models.profile.GetProfileRequest;
 import com.drcita.user.models.profile.GetProfileResponse;
-import com.drcita.user.models.specalities.DataItem;
 import com.drcita.user.models.specalities.SpecalitiesResponse;
 import com.drcita.user.retrofit.ApiClient;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -277,8 +277,17 @@ public class DashBoardActivity extends LanguageBaseActivity implements
 
         });
 
+    activityDashBoardBinding.layoutDashboard.etSearch.setOnClickListener(view -> {
+        Intent intent = new Intent(DashBoardActivity.this, SearchActivity.class);
+        startActivity(intent);
 
+    });
 
+        activityDashBoardBinding.layoutDashboard.searchBar.setOnClickListener(view -> {
+            Intent intent = new Intent(DashBoardActivity.this, SearchActivity.class);
+            startActivity(intent);
+
+        });
         activityDashBoardBinding.layoutDashboard.fab.setOnClickListener(view -> {
             activityDashBoardBinding.layoutDashboard.nodataimage.setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);

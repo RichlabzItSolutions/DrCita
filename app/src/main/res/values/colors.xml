@@ -32,5 +32,7 @@
     <color name="dashboardtextcolor">#1C1B1F</color>
     <color name="green">#62AA48</color>
     <color name="gray">#A0A0A0</color>
+    <color name="green_primary">#4CAF50</color>
+    <color name="lightGray">#F5F5F5</color>
 
 </resources>

@@ -1,5 +1,8 @@
 package com.drcita.user.adapter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -80,23 +83,26 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
 
         holder.statusOnline.setText(item.isOnline() ? "Online" : "Offline");
         boolean showButtons = Constants.isMoreThanTwoHoursLeft(item.getSlotDate(), item.getSlotTime());
-        holder.btnCancel.setVisibility(showButtons ? View.VISIBLE : View.GONE);
-        holder.btnReschedule.setVisibility(showButtons ? View.VISIBLE : View.GONE);
+        boolean showReschdule = Constants.isRescheduleEnable(item.getSlotDate(), item.getSlotTime());
+        holder.btnCancel.setVisibility(showButtons ? VISIBLE : GONE);
+        holder.btnReschedule.setVisibility(showReschdule ? VISIBLE : GONE);
         // Set status color and visibility of buttons
         switch (item.getAppointmentStatus()) {
             case 3: // Completed
                 holder.appointmentStatus.setTextColor(Color.parseColor("#4CAF50"));
-                holder.btnCancel.setVisibility(View.GONE);
-                holder.btnReschedule.setVisibility(View.GONE);
+                holder.btnCancel.setVisibility(GONE);
+                holder.btnReschedule.setVisibility(GONE);
+                holder.view_recipt.setVisibility(VISIBLE);
                 break;
             case 4: // Cancelled
                 holder.appointmentStatus.setTextColor(Color.RED);
-                holder.btnCancel.setVisibility(View.GONE);
-                holder.btnReschedule.setVisibility(View.GONE);
+                holder.btnCancel.setVisibility(GONE);
+                holder.btnReschedule.setVisibility(GONE);
+                holder.view_recipt.setVisibility(GONE);
                 break;
             default: // New, Confirmed, etc.
                 holder.appointmentStatus.setTextColor(Color.parseColor("#FF9900"));
-
+                holder.viewreceiptBtn.setVisibility(VISIBLE);
                 break;
         }
 
@@ -173,9 +179,9 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String selected = parent.getItemAtPosition(position).toString();
                     if (selected.equalsIgnoreCase("other")) {
-                        etOther.setVisibility(View.VISIBLE);
+                        etOther.setVisibility(VISIBLE);
                     } else {
-                        etOther.setVisibility(View.GONE);
+                        etOther.setVisibility(GONE);
                     }
                 }
 
@@ -258,6 +264,7 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
         TextView btnCancel;
         ImageView doctorImage;
         LinearLayout viewreceiptBtn;
+        ImageView view_recipt;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -276,6 +283,7 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
             appointment=itemView.findViewById(R.id.appointment);
             viewreceiptBtn=itemView.findViewById(R.id.viewreceiptBtn);
             tvamount=itemView.findViewById(R.id.tv_paidamount);
+            view_recipt=itemView.findViewById(R.id.view_recipt);
             callReasonApI();
         }
 

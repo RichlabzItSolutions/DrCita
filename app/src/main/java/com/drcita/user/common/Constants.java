@@ -152,4 +152,30 @@ public class Constants {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean isRescheduleEnable(String slotDate, String slotTime) {
+        try {
+            // Combine slotDate and slotTime to one datetime string
+            String input = slotDate + " " + slotTime;
+            SimpleDateFormat sdf = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+            }
+            Date appointmentTime = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                appointmentTime = sdf.parse(input);
+            }
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+            Date twoHoursFromNow = calendar.getTime();
+
+            return appointmentTime != null && appointmentTime.after(twoHoursFromNow);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        } catch (java.text.ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

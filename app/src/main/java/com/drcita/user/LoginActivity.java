@@ -8,17 +8,22 @@ import androidx.databinding.DataBindingUtil;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputFilter;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.drcita.user.Activity.NewVerifyOtpActivity;
+import com.drcita.user.Activity.TermsWebViewActivity;
 import com.drcita.user.common.Constants;
 import com.drcita.user.common.PreferenceUtil;
 import com.drcita.user.databinding.ActivityLoginBinding;
@@ -74,6 +79,35 @@ public class LoginActivity extends LanguageBaseActivity {
             validations(strMobile);
         });
 
+        activityLoginBinding.txtTermsLink.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, TermsWebViewActivity.class);
+            startActivity(intent);
+        });
+
+        String fullText = "I agree to the Terms & Conditions";
+        SpannableString spannable = new SpannableString(fullText);
+
+// Apply black to entire text first (for safety)
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.BLACK),
+                0,
+                fullText.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+// Then apply green only to "Terms & Conditions"
+        int start = fullText.indexOf("Terms");
+        int end = fullText.length();
+
+        spannable.setSpan(
+                new ForegroundColorSpan(Color.parseColor("#4C61CC")),  // Your green/blue color
+                start,
+                end,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        );
+
+// Finally, set the styled text
+        activityLoginBinding.txtTermsLink.setText(spannable);
 
 
     }
@@ -92,6 +126,11 @@ public class LoginActivity extends LanguageBaseActivity {
             activityLoginBinding.edtMobile.setError(getString( R.string.not_valid_mobile_number));
             return;
         }
+
+      else if (!activityLoginBinding. checkboxTerms.isChecked()) {
+                Toast.makeText(this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
         else {
             callApi();
