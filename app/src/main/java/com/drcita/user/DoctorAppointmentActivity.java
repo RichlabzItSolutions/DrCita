@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,12 +27,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
+import com.drcita.user.Activity.CoupnsActivity;
+import com.drcita.user.adapter.coupon.CouponAdapter;
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.DocterBookingBinding;
 import com.drcita.user.models.appointment.AppointmentResponse;
@@ -42,6 +44,11 @@ import com.drcita.user.models.appointment.DoctorData;
 import com.drcita.user.models.appointment.ResechudleAppointmentRequest;
 import com.drcita.user.models.appointment.TimeSlot;
 import com.drcita.user.models.appointment.singleAppointmentRequest;
+import com.drcita.user.models.coupns.ApplyCouponResponse;
+import com.drcita.user.models.coupns.CouponApplyRequest;
+import com.drcita.user.models.coupns.CouponModel;
+import com.drcita.user.models.coupns.CouponRequest;
+import com.drcita.user.models.coupns.CouponResponse;
 import com.drcita.user.models.profile.AddNewMember;
 import com.drcita.user.models.profile.CheckUserRequest;
 import com.drcita.user.models.profile.CheckUserResponse;
@@ -52,6 +59,8 @@ import com.drcita.user.models.userprofile.UserRequestData;
 import com.drcita.user.models.userprofile.UsersResponse;
 import com.drcita.user.retrofit.ApiClient;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.parceler.Parcels;
 
@@ -80,6 +89,16 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
     private boolean isSummary = false;
     String selectedDate = null;
     private int profilestatus;
+    CouponAdapter  couponAdapter;
+
+
+    private CouponAdapter adapter;
+    private List<CouponModel> couponList = new ArrayList<>();
+    private int currentPosition = 0;
+    private Handler autoScrollHandler = new Handler();
+    private int systemcharge;
+    private int couponAmount=0;
+    private int couponId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +112,6 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
                 amount = getIntent().getStringExtra("amount");
                 slotdate = getIntent().getStringExtra("slotdate");
                 isresechedule = getIntent().getStringExtra("isresechedule");
-
                 paymenttype = getIntent().getStringExtra("paymentype");
                 docterBookingBinding.tvMode.setText(paymenttype);
                 docterBookingBinding.tvamount.setText("₹" + amount);
@@ -124,7 +142,6 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
         });
         docterBookingBinding.dateTextView.setOnClickListener(v -> showDatePicker());
         getUserProfile();
-
         if (isresechedule.equals("0")) { // for  new appointment booking only
             docterBookingBinding.llAddmemeber.setVisibility(VISIBLE);
             docterBookingBinding.tvTitle.setText("Doctor Appointment");
@@ -146,6 +163,11 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
             getRescheduleApi();
             docterBookingBinding.tvamount.setVisibility(GONE);
             docterBookingBinding.btnPayNow.setText("Reshedule");
+
+            // hide the coupon code section
+            docterBookingBinding.sectionCoupon.setVisibility(GONE);
+            docterBookingBinding.rvCoupons.setVisibility(GONE);
+
 
         }
         docterBookingBinding.btnContinue.setOnClickListener(view -> {
@@ -170,8 +192,85 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
 
            }
         });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+         docterBookingBinding.rvCoupons.setLayoutManager(layoutManager);
+         adapter = new CouponAdapter(this, couponList);
+        docterBookingBinding.rvCoupons.setAdapter(adapter);
+        fetchCouponsFromApi();
+        docterBookingBinding.tvApplycode.setOnClickListener(view -> showApplyCouponDialog());
+
+        docterBookingBinding.tvSpecilaizationAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(DoctorAppointmentActivity.this, CoupnsActivity.class);
+                startActivity(i);
+            }
+        });
+        docterBookingBinding.ivClearCoupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearAppliedCoupon();
+            }
+        });
+
 
     }
+
+    private void clearAppliedCoupon() {
+        docterBookingBinding.tvCoupon.setText("");
+        docterBookingBinding.tvApplycode.setText("Apply Coupon");
+        totalamount = Integer.parseInt(amount) + systemcharge;
+        docterBookingBinding.tvTotalamount.setText("₹" + String.valueOf(totalamount));
+        docterBookingBinding.ivClearCoupon.setVisibility(View.GONE);
+        Toast.makeText(this, "Coupon removed", Toast.LENGTH_SHORT).show();
+    }
+    private void setupAutoSlide() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (adapter != null && adapter.getItemCount() > 0) {
+                    currentPosition = (currentPosition + 1) % adapter.getItemCount();
+                   docterBookingBinding.rvCoupons.smoothScrollToPosition(currentPosition);
+                    autoScrollHandler.postDelayed(this, 4000); // 4 sec interval
+                }
+            }
+        };
+        autoScrollHandler.postDelayed(runnable, 4000);
+    }
+    private void fetchCouponsFromApi() {
+        try {
+            showLoadingDialog();
+            if (Constants.haveInternet(getApplicationContext())) {
+                CouponRequest request=new CouponRequest();
+                request.setAppointmentMode(2);
+                ApiClient.getRestAPI().getCoupons(request).enqueue(new Callback<CouponResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<CouponResponse> call, @NonNull retrofit2.Response<CouponResponse> response) {
+                        dismissLoadingDialog();
+                        if (response.body() != null && response.body().getData() != null) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                 couponList = response.body().getData();
+                                couponAdapter = new CouponAdapter(DoctorAppointmentActivity.this, couponList);
+                                docterBookingBinding.rvCoupons.setAdapter(couponAdapter);
+                                 setupAutoSlide(); // Start auto-slide
+                       }
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<CouponResponse> call, @NonNull Throwable t) {
+                        t.printStackTrace();
+                        dismissLoadingDialog();
+                    }
+                });
+            } else {
+                Constants.InternetSettings(DoctorAppointmentActivity.this);
+            }
+        } catch (Exception ignored) {
+        }
+
+    }
+
+
 
     private void RescheduledApI() {
         try {
@@ -295,7 +394,7 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
 
             if (Constants.haveInternet(getApplicationContext())) {
                 BookAppointmentRequest bookAppointmentRequest = new BookAppointmentRequest(Integer.parseInt(docterId), Integer.parseInt(providerId), docterBookingBinding.dateTextView.getText().toString(), stotTime, Integer.parseInt(userId), Integer.parseInt(subuserId), appointmentMode, "1",// 1-> docter ,2->Scan
-                        Integer.parseInt(amount), 0, 0, Integer.parseInt(docterBookingBinding.tvSystemcharges.getText().toString()), totalamount, "dggdgdg2222"
+                        Integer.parseInt(amount), couponId, couponAmount, Integer.parseInt(docterBookingBinding.tvSystemcharges.getText().toString()), totalamount, "dggdgdg2222"
 
 
                 );
@@ -512,21 +611,13 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
             docterBookingBinding.tvlanguage.setText(TextUtils.join(", ", data.getLanguages()));
             docterBookingBinding.tvTotalslot.setText("Total Slots \n" + data.getSlots().getTotalSlots());
             docterBookingBinding.tvAvailableslots.setText("Available Slots \n" + data.getSlots().getAvailableSlots());
-
-            if (data.getCoupon() > 0) {
-                docterBookingBinding.llCoupon.setVisibility(VISIBLE);
-
-            } else {
-                docterBookingBinding.llCoupon.setVisibility(GONE);
-            }
-
+            docterBookingBinding.llCoupon.setVisibility(VISIBLE);
             docterBookingBinding.tvSystemcharges.setText(String.valueOf(data.getSystemCharges()));
-            totalamount = Integer.parseInt(amount) + data.getSystemCharges() - data.getCoupon();
+            systemcharge=data.getSystemCharges();
+            totalamount = Integer.parseInt(amount) + systemcharge - data.getCoupon();
             docterBookingBinding.tvTotalamount.setText("₹" + String.valueOf(totalamount));
             docterBookingBinding.tvCoupon.setText(String.valueOf(data.getCoupon()));
-
             Glide.with(this).load(data.getPicture()).placeholder(R.drawable.docter_img).into(docterBookingBinding.imgDoctor);
-
             docterBookingBinding.morningLayout.removeAllViews();
             docterBookingBinding.afternoonLayout.removeAllViews();
             docterBookingBinding.eveningLayout.removeAllViews();
@@ -848,5 +939,97 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
             this.isAvailable = isAvailable;
         }
     }
+    private void showApplyCouponDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.dialog_apply_coupon, null);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        EditText etCouponCode = view.findViewById(R.id.etCouponCode);
+        Button btnCancel = view.findViewById(R.id.btnCancel);
+        Button btnApply = view.findViewById(R.id.btnApply);
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnApply.setOnClickListener(v -> {
+            String couponCode = etCouponCode.getText().toString().trim();
+            if (!couponCode.isEmpty()) {
+                applyEnteredCoupon(couponCode);
+                dialog.dismiss();
+            } else {
+                Toast.makeText(this, "Please enter a valid coupon code", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    private void applyEnteredCoupon(String couponCode) {
+        try{
+            if (Constants.haveInternet(getApplicationContext())) {
+                CouponApplyRequest request = new CouponApplyRequest(
+                        couponCode,
+                        Integer.parseInt(amount),
+                        Integer.parseInt(userId),
+                        Integer.parseInt(providerId),
+                        appointmentMode,
+                        1
+                );
+
+                                ApiClient.getRestAPI().applyCoupon(request).enqueue(new Callback<ApplyCouponResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ApplyCouponResponse> call, @NonNull retrofit2.Response<ApplyCouponResponse> response) {
+                        dismissLoadingDialog();
+                        if (response.body() != null && response.body().getData() != null) {
+                            couponAmount=response.body().getData().getDiscount();
+                            docterBookingBinding.tvApplycode.setText("Applied Coupon Code : "+couponCode);
+                            docterBookingBinding.tvCoupon.setText("-"+(String.valueOf(response.body().getData().getDiscount())));
+                            totalamount = Integer.parseInt(amount) + systemcharge - response.body().getData().getDiscount();
+                            docterBookingBinding.tvTotalamount.setText("₹" + String.valueOf(totalamount));
+                           docterBookingBinding.ivClearCoupon.setVisibility(VISIBLE);
+                            couponId=response.body().getData().getCouponId();
+                        } else {
+                            dismissLoadingDialog();
+                            if (response.errorBody() != null) {
+                                try {
+
+
+//                                    String errorJson = response.errorBody().string(); // ✅ this is the actual raw JSON
+//                                    JsonObject jsonObject = JsonParser.parseString(errorJson).getAsJsonObject();
+//
+//                                    if (jsonObject.has("errors")) {
+//                                        String errorMessage = jsonObject.get("errors").getAsString();
+//                                        Toast.makeText(DoctorAppointmentActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+//                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(DoctorAppointmentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ApplyCouponResponse> call, @NonNull Throwable t) {
+                        t.printStackTrace();
+                        dismissLoadingDialog();
+                    }
+                });
+            }
+
+        }catch (Exception exception)
+        {
+
+        }
+
+    }
+
 }
 

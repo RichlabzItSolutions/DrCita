@@ -300,6 +300,7 @@ public class ProfileActivity extends LanguageBaseActivity implements AdapterView
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (exit) {
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);

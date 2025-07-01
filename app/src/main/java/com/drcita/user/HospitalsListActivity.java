@@ -382,6 +382,16 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                 experience = String.valueOf(new DoctorSearchRequest.Experience(minExperience, maxExperience));
             }
         }
+
+        if(filters.containsKey("city"))
+
+            for (String id : filters.get("city")) {
+                    cityId = id;
+            }
+
+
+
+
         displaySpecailizations(); // reload
     }
 

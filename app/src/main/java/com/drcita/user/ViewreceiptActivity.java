@@ -213,7 +213,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
 
          if(dataItems.getAppointment().getCouponDiscount()>0){
              binding.llConsultation.setVisibility(VISIBLE);
-            binding.coupon.setText(String.valueOf(dataItems.getAppointment().getCouponDiscount()));
+            binding.coupon.setText(String.valueOf("-"+dataItems.getAppointment().getCouponDiscount()));
         }
          else {
              binding.llConsultation.setVisibility(GONE);

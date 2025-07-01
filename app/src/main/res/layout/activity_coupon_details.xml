@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@drawable/bg_toolbar_gradient"
+                android:titleTextColor="@android:color/white"
+                android:elevation="4dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_back"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:focusable="true"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:id="@+id/back_hospitalsList"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/ic_arrow_left" />
+
+                    <TextView
+                        android:id="@+id/tv_Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:fontFamily="@font/jakarthasemibold"
+                        android:text="Offers"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:gravity="start" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <!-- Scrollable content inside Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:background="@color/white">
+
+                        <!-- Image with overlay -->
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/ivCouponImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="200dp"
+                                android:scaleType="centerCrop"
+                                />
+
+                            <!-- Overlay content at bottom -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:orientation="vertical"
+                                android:background="@android:color/transparent"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:id="@+id/tvCouponTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:text="GET RS.100 OFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tvCouponSubtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="On Doctor Consultation"
+                                    android:textColor="#666"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/tvCouponCode"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:padding="8dp"
+                                    android:text="DC100"
+                                    android:textColor="@android:color/white"
+                                    android:textStyle="bold"
+                                    android:background="@drawable/bg_green_chip" />
+
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <!-- Terms & Conditions Title -->
+                        <TextView
+                            android:id="@+id/tvTermsTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Terms &amp; Conditions"
+                            android:textColor="@color/blue"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <!-- Terms List -->
+                        <LinearLayout
+                            android:id="@+id/layoutTerms"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginTop="8dp" />
+
+                        <!-- No Data Image -->
+                        <ImageView
+                            android:id="@+id/nodataimage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:visibility="gone"
+                            android:src="@drawable/ic_nodata_"
+                            android:scaleType="fitCenter" />
+                    </LinearLayout>
+                </ScrollView>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

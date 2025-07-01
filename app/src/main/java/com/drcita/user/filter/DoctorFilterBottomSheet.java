@@ -1,4 +1,5 @@
 package com.drcita.user.filter;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,11 +8,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -19,18 +21,24 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.drcita.user.R;
 import com.drcita.user.adapter.search.CategoryTabAdapter;
 import com.drcita.user.adapter.search.FilterOptionAdapter;
 import com.drcita.user.common.Constants;
+import com.drcita.user.models.cities.CityRequestData;
+import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.dashboard.specilization.Specialization;
 import com.drcita.user.models.departments.SpecializationRequest;
 import com.drcita.user.models.departments.SpecializationResponse;
 import com.drcita.user.models.fliter.FilterCategoryModel;
 import com.drcita.user.models.fliter.FilterOption;
+import com.drcita.user.models.states.StateRequest;
+import com.drcita.user.models.states.StateResponse;
 import com.drcita.user.retrofit.ApiClient;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +63,10 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
     private FilterCategoryModel currentCategory;
 
     private SharedPreferences sharedPreferences;
-    AppCompatButton btnClear,btnApply;
+    AppCompatButton btnClear, btnApply;
+    private List<StateResponse.State> stateList;
+    private static final String PREF_SELECTED_STATE_ID = "selected_state_id";
+    private String stateId="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +81,28 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
         ivClose = findViewById(R.id.ivClose);
         edtSearch = findViewById(R.id.etSearch);
         btnClear = findViewById(R.id.btnClear);
-        btnApply=findViewById(R.id.btnApply);
+        btnApply = findViewById(R.id.btnApply);
         btnApply.setOnClickListener(view -> applyFilters());
 
 
         sharedPreferences = getSharedPreferences("filter_prefs", Context.MODE_PRIVATE);
-       // clearAllSelections(); // ✅ Clear selections before loading filters
+        // clearAllSelections(); // ✅ Clear selections before loading filters
         ivClose.setOnClickListener(v -> finish());
 
         setupRecyclerViews();
         loadFilterCategories();
 
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (optionAdapter != null) {
                     optionAdapter.filter(s.toString());
                 }
@@ -101,6 +119,13 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
     private void setupRecyclerViews() {
         categoryTabAdapter = new CategoryTabAdapter(this, categoryList, selectedCategory -> {
             currentCategory = selectedCategory;
+            if ("city".equalsIgnoreCase(selectedCategory.getCategoryId())) {
+                String selectedStateId = sharedPreferences.getString("selected_state_id", null);
+                if (selectedStateId == null || selectedStateId.isEmpty()) {
+                    Toast.makeText(this, "Please select a state first.", Toast.LENGTH_SHORT).show();
+                    return; // ❌ block city tab
+                }
+            }
             txtTitle.setText("Filter By : " + selectedCategory.getCategoryName());
             loadFilterOptions(selectedCategory);
         });
@@ -114,6 +139,7 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
 
         rvFilterOptions.setLayoutManager(new LinearLayoutManager(this));
     }
+
 
     private void loadFilterCategories() {
         categoryList.clear();
@@ -168,13 +194,22 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
                     if (optionList.isEmpty()) {
                         optionList.add(new FilterOption("experience_range", "Experience Range", false));
                     }
-
                     break;
                 case "specialization":
                     loadOptionsFromApi(category);
                     return;
                 case "state":
+                    loadStatesFromAPI(category);
+                    return;
                 case "city":
+                    String selectedStateId = sharedPreferences.getString("selected_state_id", null);
+                    if (selectedStateId == null || selectedStateId.isEmpty()) {
+                        Toast.makeText(this, "Please select a state first", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    stateId=selectedStateId;
+                    int stated = Integer.parseInt(selectedStateId);
+                    loadCitiesFromAPI(category);
                     return;
             }
 
@@ -188,18 +223,136 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
 
         updateSelectedCount(category, optionList);
 
-        optionAdapter = new FilterOptionAdapter(this, optionList, sharedPreferences,isSingleChoice(key), count -> {
+        optionAdapter = new FilterOptionAdapter(this, optionList, sharedPreferences, isSingleChoice(key), count -> {
             category.setSelectedCount(count);
             categoryTabAdapter.notifyDataSetChanged();
-        }, key );
+        }, key, stateId -> {
+            // ✅ Reload city list when new state selected
+
+        });
 
         rvFilterOptions.setAdapter(optionAdapter);
     }
 
+    private void loadStatesFromAPI(FilterCategoryModel category) {
+        if (!Constants.haveInternet(getApplicationContext())) {
+            Constants.haveInternet(DoctorFilterBottomSheet.this); // show no internet toast
+            return;
+        }
+
+        StateRequest request = new StateRequest();
+        request.setCountryId(76);
+
+        ApiClient.getRestAPI().getStates(request).enqueue(new Callback<StateResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<StateResponse> call, @NonNull Response<StateResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    List<StateResponse.State> states = response.body().getData();
+                    List<FilterOption> options = new ArrayList<>();
+                    for (StateResponse.State state : states) {
+                        options.add(new FilterOption(String.valueOf(state.getId()), state.getStateName(), false));
+                    }
+
+                    optionMap.put(category.getCategoryId(), options);
+                    updateSelectedCount(category, options);
+
+                    optionAdapter = new FilterOptionAdapter(DoctorFilterBottomSheet.this, options, sharedPreferences, isSingleChoice(category.getCategoryId()), count -> {
+                        category.setSelectedCount(count);
+                        categoryTabAdapter.notifyDataSetChanged();
+                    }, category.getCategoryId(),
+                            sid -> {
+                                stateId=sid;
+                                Toast.makeText(DoctorFilterBottomSheet.this, "State ID: " + stateId, Toast.LENGTH_SHORT).show();
+                               // loadCitiesFromAPI(new FilterCategoryModel("City", "city", false), stateId);
+                            }
+                    );
+
+                    rvFilterOptions.setAdapter(optionAdapter);
+                    optionAdapter.notifyDataSetChanged();
+                } else {
+                    try {
+                        if (response.errorBody() != null)
+                            Constants.displayError(response.errorBody().string(), getBaseContext());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StateResponse> call, @NonNull Throwable t) {
+                Toast.makeText(DoctorFilterBottomSheet.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadCitiesFromAPI(FilterCategoryModel category) {
+        if (!Constants.haveInternet(getApplicationContext())) {
+            Constants.haveInternet(DoctorFilterBottomSheet.this); // show no internet toast
+            return;
+        }
+
+        ApiClient.getRestAPI().getCities(new CityRequestData(Integer.parseInt(stateId))).enqueue(new Callback<CityResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CityResponse> call, @NonNull Response<CityResponse> response) {
+                if (response.code() == 204) {
+                    // No Content
+                    Toast.makeText(DoctorFilterBottomSheet.this, "No cities available for the selected state.", Toast.LENGTH_SHORT).show();
+                    optionMap.put("city", new ArrayList<>()); // Clear city options
+                    rvFilterOptions.setAdapter(null); // Optionally clear city list UI
+                    return;
+                }
+
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    List<CityResponse.City> cities = response.body().getData();
+                    List<FilterOption> cityOptions = new ArrayList<>();
+                    for (CityResponse.City city : cities) {
+                        cityOptions.add(new FilterOption(String.valueOf(city.getId()), city.getCityName(), false));
+                    }
+
+                    optionMap.put("city", cityOptions);
+                    updateSelectedCount(category, cityOptions);
+
+                    optionAdapter = new FilterOptionAdapter(
+                            DoctorFilterBottomSheet.this,
+                            cityOptions,
+                            sharedPreferences,
+                            isSingleChoice("city"),
+                            count -> {
+                                category.setSelectedCount(count);
+                                categoryTabAdapter.notifyDataSetChanged();
+                            },
+                            "city",
+                            stateId -> {
+
+                            }
+                    );
+
+                    rvFilterOptions.setAdapter(optionAdapter);
+                    optionAdapter.notifyDataSetChanged();
+                } else {
+                    try {
+                        if (response.errorBody() != null)
+                            Constants.displayError(response.errorBody().string(), getBaseContext());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(DoctorFilterBottomSheet.this, "Failed to load cities", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CityResponse> call, @NonNull Throwable t) {
+                Toast.makeText(DoctorFilterBottomSheet.this, "Failed to load cities", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     private void loadOptionsFromApi(FilterCategoryModel category) {
         String key = category.getCategoryId();
-        if (!Constants.haveInternet(this)) return;
-
+        if (key.equals(""))
+            if (!Constants.haveInternet(this)) return;
         SpecializationRequest request = new SpecializationRequest("");
         ApiClient.getRestAPI().getSpecoilizationByDepartment(request).enqueue(new Callback<SpecializationResponse>() {
             @Override
@@ -220,10 +373,13 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
                     optionMap.put(key, specializationOptions);
                     updateSelectedCount(category, specializationOptions);
 
-                    optionAdapter = new FilterOptionAdapter(DoctorFilterBottomSheet.this, specializationOptions, sharedPreferences, isSingleChoice(key), count ->  {
+                    optionAdapter = new FilterOptionAdapter(DoctorFilterBottomSheet.this, specializationOptions, sharedPreferences, isSingleChoice(key), count -> {
                         category.setSelectedCount(count);
                         categoryTabAdapter.notifyDataSetChanged();
-                    }, key );
+                    }, key, stateId -> {
+
+                    }
+                    );
 
                     rvFilterOptions.setAdapter(optionAdapter);
                     optionAdapter.notifyDataSetChanged();
@@ -247,14 +403,9 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
     }
 
     private boolean isSingleChoice(String key) {
-        return key.equals("gender") || key.equals("consultation") ;
+        return key.equals("gender") || key.equals("consultation") || key.equals("state") || key.equals("city");
     }
 
-    private void showExperienceInputs() {
-        // Handle experience input UI here
-
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -286,38 +437,6 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
             optionAdapter.notifyDataSetChanged();
         }
     }
-//
-//    private void applyFilters() {
-//        Map<String, List<String>> selectedFilters = new HashMap<>();
-//
-//        for (Map.Entry<String, List<FilterOption>> entry : optionMap.entrySet()) {
-//            String categoryId = entry.getKey();
-//            List<String> selectedValues = new ArrayList<>();
-//
-//            for (FilterOption option : entry.getValue()) {
-//                if (option.isSelected()) {
-//                    selectedValues.add(option.getId()); // or option.getLabel() if you want labels
-//                }
-//            }
-//
-//            if (!selectedValues.isEmpty()) {
-//                selectedFilters.put(categoryId, selectedValues);
-//            }
-//
-//        }
-//
-//        // Log selected filters (for debugging)
-//        for (Map.Entry<String, List<String>> entry : selectedFilters.entrySet()) {
-//            Log.d("FILTER", entry.getKey() + ": " + entry.getValue());
-//        }
-//
-//        // Send result back to calling activity
-//        Intent resultIntent = new Intent();
-//        resultIntent.putExtra("filters", new Gson().toJson(selectedFilters));
-//        setResult(RESULT_OK, resultIntent); // Notify parent activity of success
-//
-//        finish(); // Close the filter screen
-//    }
 
     private void applyFilters() {
         Map<String, List<String>> selectedFilters = new HashMap<>();

@@ -21,6 +21,12 @@ import com.drcita.user.models.appointmentbookingsummary.CancelRequest;
 import com.drcita.user.models.cities.CityRequestData;
 import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.contact.ContactRequest;
+import com.drcita.user.models.coupns.ApplyCouponResponse;
+import com.drcita.user.models.coupns.CouponApplyRequest;
+import com.drcita.user.models.coupns.CouponDetailRequest;
+import com.drcita.user.models.coupns.CouponDetailsResponse;
+import com.drcita.user.models.coupns.CouponRequest;
+import com.drcita.user.models.coupns.CouponResponse;
 import com.drcita.user.models.departments.DepartmentResponse;
 import com.drcita.user.models.departments.SpecializationRequest;
 import com.drcita.user.models.departments.SpecializationResponse;
@@ -345,6 +351,16 @@ public interface ApiInterface {
 
     @POST("user/fetchSpecializations")
     Call<SpecializationResponse> getSpecoilizationByDepartment(@Body SpecializationRequest request);
+
+    @POST("user/fetchCouponsNew")
+    Call<CouponResponse> getCoupons(@Body CouponRequest request);
+
+    @POST("user/applyCoupon")
+    Call<ApplyCouponResponse> applyCoupon(@Body CouponApplyRequest request);
+
+    @POST("user/fetchCouponDetails")
+    Call<CouponDetailsResponse> getCouponDetails(@Body CouponDetailRequest request);
+
 
 
 }

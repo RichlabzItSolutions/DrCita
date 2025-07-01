@@ -70,7 +70,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
     }
     @Override
     public int getItemCount() {
-        return mFilteredList.size();
+        return mFilteredList != null ? mFilteredList.size() : 0;
     }
 
     @Override

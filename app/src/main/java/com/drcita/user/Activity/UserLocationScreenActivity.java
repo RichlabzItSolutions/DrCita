@@ -208,7 +208,6 @@ public class UserLocationScreenActivity  extends LanguageBaseActivity {
                         if (response.body() != null)
                             if (response.isSuccessful() && response.body() != null) {
                                 stateList = response.body().getData();
-
                                 for (StateResponse.State state : stateList) {
                                     stateNames.add(state.getStateName());
                                 }
@@ -246,8 +245,7 @@ public class UserLocationScreenActivity  extends LanguageBaseActivity {
 
         if (Constants.haveInternet(getApplicationContext())) {
             showLoadingDialog();
-            CityRequestData otpRequest = new CityRequestData();
-            otpRequest.setStateId(stateId);
+            CityRequestData otpRequest = new CityRequestData(stateId);
 
             ApiClient.getRestAPI().getCities(otpRequest).enqueue(new Callback<CityResponse>() {
                 @Override

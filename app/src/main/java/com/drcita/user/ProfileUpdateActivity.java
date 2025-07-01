@@ -960,8 +960,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
         if (Constants.haveInternet(getApplicationContext())) {
             showLoadingDialog();
 
-            CityRequestData otpRequest = new CityRequestData();
-            otpRequest.setStateId(stateId);
+            CityRequestData otpRequest = new CityRequestData(stateId);
 
             ApiClient.getRestAPI().getCities(otpRequest).enqueue(new Callback<CityResponse>() {
                 @Override

@@ -29,7 +29,7 @@
                 android:id="@+id/txtLoginTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textSize="26sp"
                 android:fontFamily="@font/jakarthabold"
                 android:textStyle="bold"
@@ -247,6 +247,7 @@
 
                         <ImageView
                             android:id="@+id/iv_show_password_old"
+                            android:contentDescription="TODO"
                             android:src="@drawable/ic_password_off"
                             android:layout_marginRight="10dp"
                             android:layout_width="20dp"

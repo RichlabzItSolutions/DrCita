@@ -11,6 +11,10 @@ public class CityRequestData {
         this.stateId = stateId;
     }
 
+    public CityRequestData(int stateId) {
+        this.stateId = stateId;
+    }
+
     @Override
     public String toString() {
         return "CityRequestData{" +

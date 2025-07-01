@@ -254,6 +254,7 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="appointment_summary" translatable="false">Appointment Summary</string>
     <string name="other_comments" translatable="false">Other\n</string>
     <string name="no_doctors_available" translatable="false">No Doctors Available</string>
+    <string name="login">Login</string>
     <string-array name="meeting_options">
         <item>One to One Meeting</item>
         <item>Group Meeting</item>

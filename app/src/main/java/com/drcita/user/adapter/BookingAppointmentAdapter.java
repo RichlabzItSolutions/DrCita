@@ -80,8 +80,7 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
         holder.appointment.setText(String.valueOf(item.getAppointmentNum()));
         holder.tvamount.setText("Paid Amount : ₹"+item.getPaidAmount());
 
-
-        holder.statusOnline.setText(item.isOnline() ? "Online" : "Offline");
+        holder.statusOnline.setText(item.isOnline() ? "Offline" : "Online");
         boolean showButtons = Constants.isMoreThanTwoHoursLeft(item.getSlotDate(), item.getSlotTime());
         boolean showReschdule = Constants.isRescheduleEnable(item.getSlotDate(), item.getSlotTime());
         holder.btnCancel.setVisibility(showButtons ? VISIBLE : GONE);

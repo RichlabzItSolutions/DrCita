@@ -75,7 +75,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements
         View.OnClickListener {
     private ActivityDashBoardBinding activityDashBoardBinding;
     String  userName, stateId, cityId;
-    int region;
     Boolean exit = false;
     ImageView image;
     private TextView nameView, navMobile;

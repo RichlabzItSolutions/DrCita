@@ -14,7 +14,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.drcita.user.models.signup.SignupResponse;
+import com.drcita.user.models.signup.SignupResponseDeserializer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -107,26 +113,29 @@ public class Constants {
         Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 
-    public static void displayError(String msg, Context context){
-        String string;
-        string = msg;
-        try {
-            SignupResponse signupResponse = new Gson().fromJson(string, SignupResponse.class);
-            List<String> errors = signupResponse.getErrors();
-            if (errors != null && errors.size() > 0) {
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < errors.size(); i++) {
-                    builder.append(errors.get(i));
-                    if (i < errors.size() - 1) {
-                        builder.append("\n");
-                    }
-                }
-                Toast.makeText(context, builder.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }catch (Exception e){
-            Toast.makeText(context, "Server error", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    public static void displayError(String msg, Context context) {
+//        try {
+//            Gson gson = new GsonBuilder()
+//                    .registerTypeAdapter(SignupResponse.class, new SignupResponseDeserializer())
+//                    .create();
+//            SignupResponse signupResponse = gson.fromJson(msg, SignupResponse.class);
+//            List<String> errors = signupResponse.getErrors();
+//            if (errors != null && !errors.isEmpty()) {
+//                StringBuilder builder = new StringBuilder();
+//                for (int i = 0; i < errors.size(); i++) {
+//                    builder.append(errors.get(i));
+//                    if (i < errors.size() - 1) builder.append("\n");
+//                }
+//                Toast.makeText(context, builder.toString(), Toast.LENGTH_SHORT).show();
+//            }
+//            else {
+//                Toast.makeText(context, "Server error", Toast.LENGTH_SHORT).show();
+//            }
+//        } catch (Exception e) {
+//            Toast.makeText(context, "Server error", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
     public static boolean isMoreThanTwoHoursLeft(String slotDate, String slotTime) {
         try {
             // Combine slotDate and slotTime to one datetime string
@@ -178,4 +187,37 @@ public class Constants {
             throw new RuntimeException(e);
         }
     }
+
+    public static void displayError(String msg, Context context) {
+        try {
+            Log.e("ERROR_JSON", msg); // log the error response
+
+            JsonObject jsonObject = JsonParser.parseString(msg).getAsJsonObject();
+
+            if (jsonObject.has("errors")) {
+                JsonElement errorsElement = jsonObject.get("errors");
+
+                String errorMessage;
+                if (errorsElement.isJsonArray()) {
+                    JsonArray errorsArray = errorsElement.getAsJsonArray();
+                    StringBuilder builder = new StringBuilder();
+                    for (JsonElement element : errorsArray) {
+                        builder.append(element.getAsString()).append("\n");
+                    }
+                    errorMessage = builder.toString().trim();
+                } else {
+                    errorMessage = errorsElement.getAsString();
+                }
+
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(context, "Unexpected error occurred", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Server error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

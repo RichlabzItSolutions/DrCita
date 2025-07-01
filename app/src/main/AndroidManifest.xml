@@ -180,6 +180,13 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
 
+        <activity android:name=".Activity.CoupnsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+        <activity android:name=".Activity.CouponDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+
 
         <activity
             android:name=".ProfileActivity"

@@ -39,10 +39,13 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final OnSelectionChangedListener selectionChangedListener;
     private final String categoryKey;
 
+    private final OnStateSelectedListener stateSelectedListener;
+
     public FilterOptionAdapter(Context context, List<FilterOption> optionList,
                                SharedPreferences sharedPreferences, boolean isSingleChoice,
                                OnSelectionChangedListener selectionChangedListener,
-                               String categoryKey) {
+                               String categoryKey,
+                               OnStateSelectedListener stateSelectedListener) {
         this.context = context;
         this.fullOptionList = new ArrayList<>(optionList);
         this.filteredList = new ArrayList<>(optionList);
@@ -50,11 +53,11 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.isSingleChoice = isSingleChoice;
         this.selectionChangedListener = selectionChangedListener;
         this.categoryKey = categoryKey;
+        this.stateSelectedListener = stateSelectedListener;
         this.PREF_KEY = "filter_" + categoryKey;
         loadSelectionsFromPrefs();
         notifySelectionChanged();
     }
-
     @Override
     public int getItemViewType(int position) {
         FilterOption option = filteredList.get(position);
@@ -137,6 +140,43 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 for (int i = 0; i < fullOptionList.size(); i++) {
                     fullOptionList.get(i).setSelected(i == fullOptionList.indexOf(filteredList.get(position)));
                 }
+//                // ✅ Save selected state ID if category is "state"
+//                if ("state".equalsIgnoreCase(categoryKey)) {
+//                    String selectedStateId = filteredList.get(position).getId();
+//                    sharedPreferences.edit().putString("selected_state_id", selectedStateId).apply();
+//                }
+//                saveSelectionsToPrefs();
+//                notifySelectionChanged();
+//                notifyDataSetChanged();
+
+                // ✅ Save the selected stateId immediately
+//                if ("state".equalsIgnoreCase(categoryKey)) {
+//                    String selectedStateId = filteredList.get(position).getId();
+//                    sharedPreferences.edit().putString("selected_state_id", selectedStateId).apply();
+//                }
+                // ✅ ADD THIS BLOCK HERE
+                if ("state".equalsIgnoreCase(categoryKey)) {
+                    FilterOption selectedOption = filteredList.get(position);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("selected_state_id", selectedOption.getId());
+
+                    // 👇 Clear city selections
+                    List<FilterOption> cityOptions = new ArrayList<>();
+                    for (FilterOption optionItem : fullOptionList) {
+                        if ("city".equalsIgnoreCase(categoryKey)) {
+                            editor.remove("filter_city_" + optionItem.getId());
+                        }
+                    }
+
+                    editor.apply();
+                    // 🔔 Trigger callback to load cities
+                    if (stateSelectedListener != null) {
+                        stateSelectedListener.onStateSelected(selectedOption.getId());
+                    }
+                }
+
+
+
                 saveSelectionsToPrefs();
                 notifySelectionChanged();
                 notifyDataSetChanged();
@@ -181,7 +221,6 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         };
     }
-
     private void saveSelectionsToPrefs() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -197,10 +236,56 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 editor.putString(key + "_min", option.getMin());
                 editor.putString(key + "_max", option.getMax());
             }
+
+            // Save selected state ID and clear city
+            if ("state".equalsIgnoreCase(categoryKey) && option.isSelected()) {
+                editor.putString("selected_state_id", option.getId());
+
+                // Clear all saved city entries
+                for (String prefKey : sharedPreferences.getAll().keySet()) {
+                    if (prefKey.startsWith("filter_city_") || prefKey.equals("selected_city_id")) {
+                        editor.remove(prefKey);
+                    }
+                }
+            }
+
+            // ✅ Save selected city ID
+            if ("city".equalsIgnoreCase(categoryKey) && option.isSelected()) {
+                editor.putString("selected_city_id", option.getId());
+            }
         }
 
         editor.apply();
     }
+
+//    private void saveSelectionsToPrefs() {
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        if (isSingleChoice) {
+//            editor.putInt(PREF_KEY + "_selected_position", selectedRadioPosition);
+//        }
+//
+//        for (FilterOption option : fullOptionList) {
+//            String key = PREF_KEY + "_" + option.getId();
+//            editor.putBoolean(key, option.isSelected());
+//
+//            if ("experience_range".equalsIgnoreCase(option.getId())) {
+//                editor.putString(key + "_min", option.getMin());
+//                editor.putString(key + "_max", option.getMax());
+//            }
+//            // ✅ Save selected state ID explicitly if this is the state category
+//            if ("state".equalsIgnoreCase(categoryKey) && option.isSelected()) {
+//                editor.putString("selected_state_id", option.getId());
+//            }
+//
+//            // 👇 Clear city selections
+//            if ("city".equalsIgnoreCase(categoryKey)) {
+//                editor.putString("filter_city_" + option.getId());
+//            }
+//        }
+//
+//        editor.apply();
+//    }
 
     private void loadSelectionsFromPrefs() {
         if (isSingleChoice) {
@@ -222,6 +307,7 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 option.setMin(sharedPreferences.getString(key + "_min", ""));
                 option.setMax(sharedPreferences.getString(key + "_max", ""));
             }
+
         }
     }
 
@@ -261,9 +347,11 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             etMin = itemView.findViewById(R.id.etMin);
             etMax = itemView.findViewById(R.id.etMax);
-            sliderExperience = itemView.findViewById(R.id.sliderExperience); // 👈 this line is missing in your code
+            sliderExperience = itemView.findViewById(R.id.sliderExperience);
         }
     }
 
-
+    public interface OnStateSelectedListener {
+        void onStateSelected(String stateId);
+    }
 }
