@@ -261,9 +261,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/jakartharegular"
+                android:fontFamily="@font/jakarthabold"
                 android:gravity="end"
                 android:text="Pending"
+                android:textStyle="bold"
                 android:textColor="#FF9800"
                 android:textSize="13sp" />
         </LinearLayout>

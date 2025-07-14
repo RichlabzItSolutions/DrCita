@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,17 +32,14 @@ public class CategoriWiseSpecializationAdapter extends RecyclerView.Adapter<Cate
     public CategoriWiseSpecializationAdapter(Context context, List<Specialization> list) {
         this.specializationList = list;
        this. context=context;
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int screenWidth = displayMetrics.widthPixels;
-        itemWidth = screenWidth / 5;  // force 5 items fit
+
 
     }
 
     @NonNull
     @Override
     public SpecializationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_specialization, parent, false);
-        view.getLayoutParams().width = itemWidth;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_wise_specialization, parent, false);
         return new SpecializationViewHolder(view);
     }
 
@@ -73,7 +71,7 @@ public class CategoriWiseSpecializationAdapter extends RecyclerView.Adapter<Cate
     public static class SpecializationViewHolder extends RecyclerView.ViewHolder {
         ImageView imgSpecialization;
         TextView tvSpecialization;
-        LinearLayout ll_specilaization;
+        CardView ll_specilaization;
         public SpecializationViewHolder(@NonNull View itemView) {
             super(itemView);
             imgSpecialization = itemView.findViewById(R.id.imgSpecialization);

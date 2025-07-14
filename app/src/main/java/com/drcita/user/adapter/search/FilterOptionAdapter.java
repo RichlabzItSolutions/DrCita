@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.drcita.user.R;
 import com.drcita.user.models.fliter.FilterOption;
-import com.drcita.user.utitlities.SimpleTextWatcher;
 import com.google.android.material.slider.RangeSlider;
 
 import java.util.ArrayList;
@@ -29,6 +28,10 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void onSelectionChanged(int selectedCount);
     }
 
+    public interface OnStateSelectedListener {
+        void onStateSelected(String stateId);
+    }
+
     private final Context context;
     private final List<FilterOption> fullOptionList;
     private List<FilterOption> filteredList;
@@ -38,7 +41,6 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final String PREF_KEY;
     private final OnSelectionChangedListener selectionChangedListener;
     private final String categoryKey;
-
     private final OnStateSelectedListener stateSelectedListener;
 
     public FilterOptionAdapter(Context context, List<FilterOption> optionList,
@@ -58,6 +60,7 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         loadSelectionsFromPrefs();
         notifySelectionChanged();
     }
+
     @Override
     public int getItemViewType(int position) {
         FilterOption option = filteredList.get(position);
@@ -82,50 +85,42 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new CheckboxViewHolder(view);
         }
     }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         FilterOption option = filteredList.get(position);
 
         if (holder instanceof RangeViewHolder) {
             RangeViewHolder vh = (RangeViewHolder) holder;
-
             float minVal = 0;
             float maxVal = 50;
 
             try {
                 minVal = Float.parseFloat(option.getMin());
                 maxVal = Float.parseFloat(option.getMax());
-            } catch (NumberFormatException e) {
-                minVal = 0;
-                maxVal = 50;
-            }
+            } catch (NumberFormatException ignored) {}
 
-            // Prepopulate slider and EditTexts
             vh.sliderExperience.setValues(minVal, maxVal);
             vh.etMin.setText(String.valueOf(Math.round(minVal)));
             vh.etMax.setText(String.valueOf(Math.round(maxVal)));
 
-            // Slider listener
             vh.sliderExperience.addOnChangeListener((slider, value, fromUser) -> {
                 List<Float> values = slider.getValues();
                 String min = String.valueOf(Math.round(values.get(0)));
                 String max = String.valueOf(Math.round(values.get(1)));
-
                 vh.etMin.setText(min);
                 vh.etMax.setText(max);
-
                 option.setMin(min);
                 option.setMax(max);
                 saveSelectionsToPrefs();
             });
-        }
 
-        else if (holder instanceof CheckboxViewHolder) {
+        } else if (holder instanceof CheckboxViewHolder) {
             CheckboxViewHolder vh = (CheckboxViewHolder) holder;
-            vh.checkBox.setOnCheckedChangeListener(null); // detach listener
+            vh.checkBox.setOnCheckedChangeListener(null);
             vh.checkBox.setText(option.getLabel());
-            vh.checkBox.setChecked(option.isSelected()); // bind state
-            vh.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> { // reattach
+            vh.checkBox.setChecked(option.isSelected());
+            vh.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 option.setSelected(isChecked);
                 saveSelectionsToPrefs();
                 notifySelectionChanged();
@@ -140,42 +135,22 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 for (int i = 0; i < fullOptionList.size(); i++) {
                     fullOptionList.get(i).setSelected(i == fullOptionList.indexOf(filteredList.get(position)));
                 }
-//                // ✅ Save selected state ID if category is "state"
-//                if ("state".equalsIgnoreCase(categoryKey)) {
-//                    String selectedStateId = filteredList.get(position).getId();
-//                    sharedPreferences.edit().putString("selected_state_id", selectedStateId).apply();
-//                }
-//                saveSelectionsToPrefs();
-//                notifySelectionChanged();
-//                notifyDataSetChanged();
 
-                // ✅ Save the selected stateId immediately
-//                if ("state".equalsIgnoreCase(categoryKey)) {
-//                    String selectedStateId = filteredList.get(position).getId();
-//                    sharedPreferences.edit().putString("selected_state_id", selectedStateId).apply();
-//                }
-                // ✅ ADD THIS BLOCK HERE
+                // Handle State filter selection
                 if ("state".equalsIgnoreCase(categoryKey)) {
                     FilterOption selectedOption = filteredList.get(position);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("selected_state_id", selectedOption.getId());
-
-                    // 👇 Clear city selections
-                    List<FilterOption> cityOptions = new ArrayList<>();
-                    for (FilterOption optionItem : fullOptionList) {
-                        if ("city".equalsIgnoreCase(categoryKey)) {
-                            editor.remove("filter_city_" + optionItem.getId());
+                    for (String prefKey : sharedPreferences.getAll().keySet()) {
+                        if (prefKey.startsWith("filter_city_") || prefKey.equals("selected_city_id")) {
+                            editor.remove(prefKey);
                         }
                     }
-
                     editor.apply();
-                    // 🔔 Trigger callback to load cities
                     if (stateSelectedListener != null) {
                         stateSelectedListener.onStateSelected(selectedOption.getId());
                     }
                 }
-
-
 
                 saveSelectionsToPrefs();
                 notifySelectionChanged();
@@ -221,6 +196,7 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         };
     }
+
     private void saveSelectionsToPrefs() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -237,11 +213,9 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 editor.putString(key + "_max", option.getMax());
             }
 
-            // Save selected state ID and clear city
+            // State/City save
             if ("state".equalsIgnoreCase(categoryKey) && option.isSelected()) {
                 editor.putString("selected_state_id", option.getId());
-
-                // Clear all saved city entries
                 for (String prefKey : sharedPreferences.getAll().keySet()) {
                     if (prefKey.startsWith("filter_city_") || prefKey.equals("selected_city_id")) {
                         editor.remove(prefKey);
@@ -249,43 +223,22 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
 
-            // ✅ Save selected city ID
             if ("city".equalsIgnoreCase(categoryKey) && option.isSelected()) {
                 editor.putString("selected_city_id", option.getId());
+            }
+
+            // ✅ Save selected consultation mode
+            if ("consultation".equalsIgnoreCase(categoryKey)) {
+                if (option.isSelected()) {
+                    editor.putBoolean("consultation_mode_" + option.getId(), true);
+                } else {
+                    editor.remove("consultation_mode_" + option.getId());
+                }
             }
         }
 
         editor.apply();
     }
-
-//    private void saveSelectionsToPrefs() {
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//
-//        if (isSingleChoice) {
-//            editor.putInt(PREF_KEY + "_selected_position", selectedRadioPosition);
-//        }
-//
-//        for (FilterOption option : fullOptionList) {
-//            String key = PREF_KEY + "_" + option.getId();
-//            editor.putBoolean(key, option.isSelected());
-//
-//            if ("experience_range".equalsIgnoreCase(option.getId())) {
-//                editor.putString(key + "_min", option.getMin());
-//                editor.putString(key + "_max", option.getMax());
-//            }
-//            // ✅ Save selected state ID explicitly if this is the state category
-//            if ("state".equalsIgnoreCase(categoryKey) && option.isSelected()) {
-//                editor.putString("selected_state_id", option.getId());
-//            }
-//
-//            // 👇 Clear city selections
-//            if ("city".equalsIgnoreCase(categoryKey)) {
-//                editor.putString("filter_city_" + option.getId());
-//            }
-//        }
-//
-//        editor.apply();
-//    }
 
     private void loadSelectionsFromPrefs() {
         if (isSingleChoice) {
@@ -302,12 +255,15 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 option.setSelected(sharedPreferences.getBoolean(key, false));
             }
 
-
             if ("experience_range".equalsIgnoreCase(option.getId())) {
                 option.setMin(sharedPreferences.getString(key + "_min", ""));
                 option.setMax(sharedPreferences.getString(key + "_max", ""));
             }
 
+            // ✅ Load consultation mode
+            if ("consultation".equalsIgnoreCase(categoryKey)) {
+                option.setSelected(sharedPreferences.getBoolean("consultation_mode_" + option.getId(), false));
+            }
         }
     }
 
@@ -349,9 +305,5 @@ public class FilterOptionAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             etMax = itemView.findViewById(R.id.etMax);
             sliderExperience = itemView.findViewById(R.id.sliderExperience);
         }
-    }
-
-    public interface OnStateSelectedListener {
-        void onStateSelected(String stateId);
     }
 }

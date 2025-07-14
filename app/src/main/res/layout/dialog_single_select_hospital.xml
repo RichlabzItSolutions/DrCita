@@ -18,6 +18,33 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHospitalList"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            android:background="@color/red"
+            android:textAllCaps="false" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:text="OK"
+            android:textColor="@color/white"
+            android:background="@color/green"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+</LinearLayout>

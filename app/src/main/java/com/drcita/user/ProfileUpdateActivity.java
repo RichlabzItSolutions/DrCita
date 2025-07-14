@@ -7,8 +7,8 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.drcita.user.Activity.UserLocationScreenActivity;
 import com.drcita.user.adapter.DiseaseAdapter;
 import com.drcita.user.common.Constants;
 import com.drcita.user.databinding.ActivityNewProfileBinding;
@@ -31,7 +32,6 @@ import com.drcita.user.models.profile.Disease;
 import com.drcita.user.models.profile.DiseaseResponse;
 import com.drcita.user.models.profile.DiseaseStatus;
 import com.drcita.user.models.profile.GetProfileRequest;
-import com.drcita.user.models.profile.ProfileData;
 import com.drcita.user.models.profile.ProfileResponse;
 import com.drcita.user.models.profile.RelationResponse;
 import com.drcita.user.models.profile.UpdateMemberRequest;
@@ -92,7 +92,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
         // setupDisease();
         setupBloodGroup();
         setUpPreviousSurgeryStatus();
-        setupFoodPreference();
+
         activityNewvprofileBinding.llBack.setOnClickListener(view -> finish());
 
         activityNewvprofileBinding.btnUpdateProfile.setOnClickListener(view -> submitDataToServer());
@@ -103,6 +103,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
         });
         if (getIntent().hasExtra("from")) {
             from = getIntent().getStringExtra("from");
+            assert from != null;
             if (from.equals("profile")) {
                      subuserId = getIntent().getStringExtra("subuserId");
                  membersProfile(subuserId);
@@ -112,8 +113,6 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                 activityNewvprofileBinding.llMemberdetailswhom.setVisibility(VISIBLE);
                 activityNewvprofileBinding.tvTitle.setText("Member Details");
                 activityNewvprofileBinding.tvMemberheader.setText("Profile Details");
-//                activityNewvprofileBinding.tvMemberheader.setPaintFlags(activityNewvprofileBinding.tvMemberheader.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
             }
         } else {
             activityNewvprofileBinding.tvTitle.setText("My Profile");
@@ -186,7 +185,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                 disease.setSelection(disease.getStatus());
             }
             activityNewvprofileBinding.rvDiseases.setLayoutManager(new GridLayoutManager(this, 1));
-            adapter = new DiseaseAdapter(apiDiseases);
+            adapter = new DiseaseAdapter(this, apiDiseases);
             activityNewvprofileBinding.rvDiseases.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -281,7 +280,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                 disease.setSelection(disease.getStatus());
             }
             activityNewvprofileBinding.rvDiseases.setLayoutManager(new GridLayoutManager(this, 1));
-            adapter = new DiseaseAdapter(apiDiseases);
+            adapter = new DiseaseAdapter(this, apiDiseases);
             activityNewvprofileBinding.rvDiseases.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -301,33 +300,61 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
             if (selectedBloodGroupIndex != -1) {
                 activityNewvprofileBinding.spbloodgroup.setSelection(selectedBloodGroupIndex + 1);
             }
+            int savedFoodTypeId=profile.getData().getProfile().getFoodType();
+            setupFoodPreference(savedFoodTypeId);
 
         } catch (Exception ex) {
             ex.printStackTrace(); // Log the error
         }
     }
-
-
-    private void setupFoodPreference() {
+    private void setupFoodPreference(int savedFoodTypeId) {
         try {
-
-            // Set default selection
-            activityNewvprofileBinding.foodGroup.check(R.id.rbNonVeg);
+            // Dynamically check saved or default preference
+            if (savedFoodTypeId == 1) {
+                activityNewvprofileBinding.foodGroup.check(R.id.rbVeg);
+            } else {
+                activityNewvprofileBinding.foodGroup.check(R.id.rbNonVeg);
+            }
 
             // Listener for selection change
             activityNewvprofileBinding.foodGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 if (checkedId == R.id.rbVeg) {
                     foodtypeId = 1;
+                    // You can save to SharedPreferences here if needed
                 } else if (checkedId == R.id.rbNonVeg) {
                     foodtypeId = 2;
-                    // Toast.makeText(this, "Non-Veg selected", Toast.LENGTH_SHORT).show();
+                    // You can save to SharedPreferences here if needed
                 }
+
+                // Optional: log, Toast, callback, or update ViewModel here
+                Log.d("FoodPref", "Selected: " + foodtypeId);
             });
         } catch (Exception ex) {
-            ex.getMessage();
+            ex.printStackTrace(); // Better for debugging than just ex.getMessage()
         }
-
     }
+
+
+//    private void setupFoodPreference() {
+//        try {
+//
+//            // Set default selection
+//            activityNewvprofileBinding.foodGroup.check(R.id.rbNonVeg);
+//
+//            // Listener for selection change
+//            activityNewvprofileBinding.foodGroup.setOnCheckedChangeListener((group, checkedId) -> {
+//                if (checkedId == R.id.rbVeg) {
+//                    foodtypeId = 1;
+//                } else if (checkedId == R.id.rbNonVeg) {
+//                    foodtypeId = 2;
+//                    // Toast.makeText(this, "Non-Veg selected", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        } catch (Exception ex) {
+//            ex.getMessage();
+//        }
+//
+//    }
 
     private void setUpPreviousSurgeryStatus() {
         try {
@@ -642,7 +669,7 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
     private void getDiseaseResponse(DiseaseResponse body) {
         try {
 
-            adapter = new DiseaseAdapter(body.getData());
+            adapter = new DiseaseAdapter(this,body.getData());
             activityNewvprofileBinding.rvDiseases.setAdapter(adapter);
         } catch (Exception ex) {
             ex.getMessage();
@@ -984,12 +1011,20 @@ public class ProfileUpdateActivity extends LanguageBaseActivity {
                             }
                         }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(ProfileUpdateActivity.this, R.layout.spinner_item, cityNames);
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(ProfileUpdateActivity.this,
+                                R.layout.spinner_item, cityNames);
                         adapter.setDropDownViewResource(R.layout.spinner_item);
                         activityNewvprofileBinding.spinnerCitys.setAdapter(adapter);
 
                         // Set previously selected city
                         activityNewvprofileBinding.spinnerCitys.setSelection(selectedIndex);
+                    }
+                    else {
+                        cityNames.clear();
+                        cityNames.add("Select City");
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(ProfileUpdateActivity.this, R.layout.spinner_item, cityNames);
+                        adapter.setDropDownViewResource(R.layout.spinner_item);
+                        activityNewvprofileBinding.spinnerCitys.setAdapter(adapter);
                     }
                 }
 

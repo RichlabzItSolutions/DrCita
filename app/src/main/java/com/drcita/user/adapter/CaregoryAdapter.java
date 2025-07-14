@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.drcita.user.Activity.SpecializationActivity;
 import com.drcita.user.CategoriesListActivity;
 import com.drcita.user.DashBoardActivity;
 import com.drcita.user.HospitalsListActivity;
@@ -53,9 +54,12 @@ public class CaregoryAdapter extends RecyclerView.Adapter<CaregoryAdapter.ViewHo
             imageUrl = s.getImage();
             // Click to open HospitalsListActivity with specialization
             holder.binding.getRoot().setOnClickListener(view -> {
-                Intent intent = new Intent(context, HospitalsListActivity.class);
+                Intent intent = new Intent(context, SpecializationActivity.class);
                 intent.putExtra("hospitalId", 0);
                 intent.putExtra("specialization", s.getId());
+
+                intent.putExtra("position",position);
+                context.startActivity(intent);
                 context.startActivity(intent);
             });
 

@@ -101,7 +101,6 @@
                     android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hyderabad"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     android:drawableEnd="@drawable/downarrow"
@@ -122,12 +121,13 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:padding="12dp"
-                android:clickable="true"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="14dp"
                 android:orientation="horizontal"
                 android:background="@drawable/bg_search"
                 android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintTop_toBottomOf="@id/topBar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
@@ -140,20 +140,15 @@
                     android:tint="#999999"
                     tools:ignore="UseAppTint" />
 
-                <EditText
-                    android:id="@+id/etSearch"
+                <TextView
+                    android:id="@+id/tvSearchPlaceholder"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Find your suitable doctor"
-                    android:background="@android:color/transparent"
-                    android:inputType="text"
-                    android:enabled="false"
-                    android:clickable="true"
-                    android:textColor="#000000"
-                    android:textColorHint="#999999"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="14sp" />
+                    android:text="Find your suitable doctor"
+                    android:textColor="#999999"
+                    android:textSize="14sp"
+                    android:paddingHorizontal="8dp" />
 
                 <View
                     android:layout_width="1dp"
@@ -163,13 +158,14 @@
 
                 <ImageView
                     android:id="@+id/ivFilter"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:src="@drawable/filter"
                     android:contentDescription="Filter Icon"
                     android:tint="#1C1B1F"
                     tools:ignore="UseAppTint" />
             </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -265,6 +261,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:backgroundTint="@color/white"
+                android:tint="@color/green"
                 android:src="@drawable/ic_stethoscope_line"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -281,6 +278,7 @@
                 android:backgroundTint="@color/white"
                 android:src="@drawable/ic_building_line"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:tint="@color/green"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 tools:ignore="MissingConstraints" />
 

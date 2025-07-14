@@ -1,13 +1,27 @@
 package com.drcita.user.filter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,13 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.drcita.user.HospitalsListActivity;
 import com.drcita.user.R;
 import com.drcita.user.adapter.search.CategoryTabAdapter;
 import com.drcita.user.adapter.search.FilterOptionAdapter;
@@ -36,13 +53,28 @@ import com.drcita.user.models.fliter.FilterOption;
 import com.drcita.user.models.states.StateRequest;
 import com.drcita.user.models.states.StateResponse;
 import com.drcita.user.retrofit.ApiClient;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.StringTokenizer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +83,7 @@ import retrofit2.Response;
 public class DoctorFilterBottomSheet extends AppCompatActivity {
 
     private RecyclerView rvCategoryTabs, rvFilterOptions;
-    private TextView txtTitle;
+    private TextView txtTitle,etlocation;
     private ImageView ivClose;
     private EditText edtSearch;
     private CategoryTabAdapter categoryTabAdapter;
@@ -67,11 +99,18 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
     private List<StateResponse.State> stateList;
     private static final String PREF_SELECTED_STATE_ID = "selected_state_id";
     private String stateId="";
+    private String to_Latitude;
+    private String to_Longitude;
+    FusedLocationProviderClient mFusedLocationClient;
+    int PERMISSION_ID = 44;
+    Geocoder geocoder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_filter_bottom_sheet);
+        Places.initialize(DoctorFilterBottomSheet.this, getResources().getString(R.string.mapkey));
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setGravity(Gravity.BOTTOM);
 
@@ -80,8 +119,10 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
         txtTitle = findViewById(R.id.tvFilterTitle);
         ivClose = findViewById(R.id.ivClose);
         edtSearch = findViewById(R.id.etSearch);
+        etlocation = findViewById(R.id.etlocation);
         btnClear = findViewById(R.id.btnClear);
         btnApply = findViewById(R.id.btnApply);
+
         btnApply.setOnClickListener(view -> applyFilters());
 
 
@@ -168,40 +209,60 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
 
             switch (key) {
                 case "gender":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(GONE);
                     optionList.add(new FilterOption("1", "Male", false));
                     optionList.add(new FilterOption("2", "Female", false));
                     optionList.add(new FilterOption("3", "Other", false));
                     break;
 
                 case "consultation":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(GONE);
                     optionList.add(new FilterOption("1", "Online", false));
                     optionList.add(new FilterOption("2", "In-Person", false));
                     optionList.add(new FilterOption("3", "Both", false));
                     break;
 
                 case "availability":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(GONE);
                     optionList.add(new FilterOption("1", "Morning", true));
                     optionList.add(new FilterOption("2", "Afternoon", false));
                     optionList.add(new FilterOption("3", "Evening", false));
                     break;
 
                 case "language":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(GONE);
                     optionList.add(new FilterOption("1", "English", true));
                     optionList.add(new FilterOption("2", "Telugu", false));
                     optionList.add(new FilterOption("3", "Hindi", false));
                     break;
                 case "experience":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(GONE);
                     if (optionList.isEmpty()) {
                         optionList.add(new FilterOption("experience_range", "Experience Range", false));
                     }
                     break;
                 case "specialization":
+                    rvFilterOptions.setVisibility(VISIBLE);
+                    edtSearch.setVisibility(VISIBLE);
+                    etlocation.setVisibility(GONE);
                     loadOptionsFromApi(category);
                     return;
                 case "state":
+                    rvFilterOptions.setVisibility(VISIBLE);
                     loadStatesFromAPI(category);
                     return;
                 case "city":
+                    rvFilterOptions.setVisibility(VISIBLE);
                     String selectedStateId = sharedPreferences.getString("selected_state_id", null);
                     if (selectedStateId == null || selectedStateId.isEmpty()) {
                         Toast.makeText(this, "Please select a state first", Toast.LENGTH_SHORT).show();
@@ -210,6 +271,22 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
                     stateId=selectedStateId;
                     int stated = Integer.parseInt(selectedStateId);
                     loadCitiesFromAPI(category);
+                    return;
+                case "location":
+                    edtSearch.setVisibility(GONE);
+                    etlocation.setVisibility(VISIBLE);
+                    rvFilterOptions.setVisibility(GONE);
+
+                    if (checkPermissions()) {
+                        requestNewLocationData();
+                        etlocation.setOnClickListener(view -> {
+                            List<Place.Field> fieldList= Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,Place.Field.NAME);
+                            Intent intent=new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,fieldList).build(DoctorFilterBottomSheet.this);
+                            startActivityForResult(intent,100);
+                        });
+                    } else {
+                        requestPermissions();
+                    }
                     return;
             }
 
@@ -327,7 +404,6 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
 
                             }
                     );
-
                     rvFilterOptions.setAdapter(optionAdapter);
                     optionAdapter.notifyDataSetChanged();
                 } else {
@@ -406,7 +482,6 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
         return key.equals("gender") || key.equals("consultation") || key.equals("state") || key.equals("city");
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -432,10 +507,17 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
         for (FilterCategoryModel category : categoryList) {
             category.setSelectedCount(0);
         }
+        // clear latitude and longtude
+        to_Latitude="";
+        to_Longitude="";
+
 
         if (optionAdapter != null) {
             optionAdapter.notifyDataSetChanged();
         }
+        editor.remove("gender");
+        editor.remove("experience");
+        applyFilters();
     }
 
     private void applyFilters() {
@@ -443,12 +525,12 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
 
         for (Map.Entry<String, List<FilterOption>> entry : optionMap.entrySet()) {
             String categoryId = entry.getKey();
+            List<FilterOption> options = entry.getValue();
             List<String> selectedValues = new ArrayList<>();
 
-            // Handle experience range separately
-            if (categoryId.equals("experience")) {
-                List<FilterOption> experienceOptions = entry.getValue();
-                for (FilterOption option : experienceOptions) {
+            if ("experience".equalsIgnoreCase(categoryId)) {
+                // Handle experience range like "2-10"
+                for (FilterOption option : options) {
                     if ("experience_range".equalsIgnoreCase(option.getId())) {
                         String min = option.getMin();
                         String max = option.getMax();
@@ -457,30 +539,135 @@ public class DoctorFilterBottomSheet extends AppCompatActivity {
                         }
                     }
                 }
-            } else {
-                // Normal selected checkboxes/radio buttons
-                for (FilterOption option : entry.getValue()) {
+            } else if ("consultation".equalsIgnoreCase(categoryId)) {
+                // ✅ Handle consultation mode selection
+                for (FilterOption option : options) {
                     if (option.isSelected()) {
-                        selectedValues.add(option.getId()); // or option.getLabel()
+                        selectedValues.add(option.getId()); // e.g., "1" for Online, "2" for Offline
+                    }
+                }
+            } else {
+                // ✅ Handle other filters like specialization, gender, etc.
+                for (FilterOption option : options) {
+                    if (option.isSelected()) {
+                        selectedValues.add(option.getId());
                     }
                 }
             }
 
+            // ✅ Add to map if there's a valid selection
             if (!selectedValues.isEmpty()) {
                 selectedFilters.put(categoryId, selectedValues);
             }
         }
 
-        // Debug log
+        // Debug: Print all selected filters
         for (Map.Entry<String, List<String>> entry : selectedFilters.entrySet()) {
-            Log.d("FILTER", entry.getKey() + ": " + entry.getValue());
+            Log.d("FILTER_APPLIED", entry.getKey() + " = " + entry.getValue());
         }
 
-        // Pass back to calling activity
+        // Prepare result intent
         Intent resultIntent = new Intent();
         resultIntent.putExtra("filters", new Gson().toJson(selectedFilters));
+        resultIntent.putExtra("latitude", to_Latitude != null ? to_Latitude : "");
+        resultIntent.putExtra("longitude", to_Longitude != null ? to_Longitude : "");
+
         setResult(RESULT_OK, resultIntent);
         finish();
     }
 
+
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    }
+    private final LocationCallback mLocationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+        }
+    };
+
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(Objects.requireNonNull(this), Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(Objects.requireNonNull(this), new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==100 && resultCode== Activity.RESULT_OK)
+        {
+            Place place= Autocomplete.getPlaceFromIntent(data);
+            etlocation.setText(place.getAddress());
+            to_Latitude= String.valueOf(place.getLatLng().latitude);
+            to_Longitude= String.valueOf(place.getLatLng().longitude);
+
+        }
+        else if(resultCode== AutocompleteActivity.RESULT_ERROR)
+        {
+            Status status=Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(this,status.getStatusMessage(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
+                    Location location = task.getResult();
+                    if (location == null) {
+                        requestNewLocationData();
+                    } else {
+                        List<Address> addresses;
+                        geocoder = new Geocoder(this, Locale.getDefault());
+                        try {
+                            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        } else {
+            requestPermissions();
+        }
+    }
+
+    // If everything is alright then
+    @Override
+    public void
+    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            }
+        }
+    }
 }
+
+

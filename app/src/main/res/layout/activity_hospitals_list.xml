@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 style="@style/CustomTabLayout"
                 android:background="@android:color/transparent"
+                app:tabIndicatorHeight="4dp"
                 app:tabTextColor="@android:color/white"
                 app:tabTextAppearance="@style/TabTextStyle"
                 app:tabSelectedTextColor="@color/white"

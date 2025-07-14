@@ -2,6 +2,7 @@ package com.drcita.user;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import androidx.annotation.NonNull;
+import androidx.collection.ArraySet;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.annotation.SuppressLint;
@@ -65,7 +66,9 @@ public class HospitalsListActivity extends LanguageBaseActivity {
     private int selectedTabPosition = 0;
     private String gender="";
     private String experience="";
+    String tolatitude="",tolongitude="";
     private String minExperience,maxExperience;
+    private ArrayList<Integer> consultationModes=new ArrayList<>();
 
     @SuppressLint("SuspiciousIndentation")
     @Override
@@ -104,6 +107,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
            {
                docterlist.add(doctorId);
            }
+            selectedTabPosition=1;
             displaySpecailizations();
         } else {
             TabLayout.Tab first = tabLayout.getTabAt(0);
@@ -154,8 +158,9 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         if (Constants.haveInternet(getApplicationContext())) {
             DoctorSearchRequest request = new DoctorSearchRequest(
                     Integer.parseInt(cityId), "", hospitallist,
-                    docterlist, providerlist, new ArrayList<>(), "", gender,
-                    new ArrayList<>(), new DoctorSearchRequest.Experience(minExperience, maxExperience), "", ""
+                    docterlist, providerlist, consultationModes, "", gender,
+                    new ArrayList<>(), new DoctorSearchRequest.Experience(minExperience, maxExperience), "", "",
+                    tolatitude,tolongitude
             );
 
             ApiClient.getRestAPI().getDocterList(request).enqueue(new Callback<DocterModelResponse>() {
@@ -173,6 +178,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                         else {
                             Constants.displayError(response.errorBody().toString(),getBaseContext());
                             activityHospitalsListBinding.tvNodata.setVisibility(VISIBLE);
+                            activityHospitalsListBinding.tvNodata.setText("No Docters Found !!");
                             activityHospitalsListBinding.docterssRV.setVisibility(GONE);
                             dismissLoadingDialog();
                         }
@@ -213,10 +219,11 @@ public class HospitalsListActivity extends LanguageBaseActivity {
 
                     @SuppressLint("NotifyDataSetChanged")
                     public void afterTextChanged(Editable s) {
-                        if(s.length()>0) {
+
                             hospitalsAdapter.getFilter().filter(s.toString());
                             hospitalsAdapter.notifyDataSetChanged();
-                        }
+
+
                     }
                 });
 
@@ -233,7 +240,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
         regionID = sp.getInt(Constants.REGION, regionID);
 
         if (Constants.haveInternet(getApplicationContext())) {
-            ProvidersRequestData data = new ProvidersRequestData(Integer.parseInt(cityId), "", setcharges, specailizations,"");
+            ProvidersRequestData data = new ProvidersRequestData(Integer.parseInt(cityId), "", setcharges, specailizations,"",tolatitude,tolongitude);
             ApiClient.getRestAPI().getProviderResponse(data).enqueue(new Callback<ProviderResponse>() {
                 public void onResponse(@NonNull Call<ProviderResponse> call, @NonNull retrofit2.Response<ProviderResponse> response) {
                     if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
@@ -242,6 +249,7 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                         activityHospitalsListBinding.hospitalsRV.setVisibility(VISIBLE);
                     } else {
                         activityHospitalsListBinding.tvNodata.setVisibility(VISIBLE);
+                        activityHospitalsListBinding.tvNodata.setText("No Hospitals Found !!");
                         activityHospitalsListBinding.hospitalsRV.setVisibility(GONE);
                     }
                     dismissLoadingDialog();
@@ -310,23 +318,32 @@ public class HospitalsListActivity extends LanguageBaseActivity {
 
             Type type = new TypeToken<Map<String, List<String>>>() {}.getType();
             Map<String, List<String>> selectedFilters = new Gson().fromJson(filterJson, type);
-
+        // 2) Get the latitude & longitude extras
+            String lat = data.getStringExtra("latitude");
+            String lng = data.getStringExtra("longitude");
             if (selectedTabPosition == 0) {
                 // 👇 Tab 0: By Hospital
-                applyHospitalFilters(selectedFilters);
+                applyHospitalFilters(selectedFilters,lat,lng);
             } else if (selectedTabPosition == 1) {
                 // 👇 Tab 1: By Specialization
-                applyDoctorFilters(selectedFilters);
+                applyDoctorFilters(selectedFilters,lat,lng);
             }
         }
     }
-    private void applyHospitalFilters(Map<String, List<String>> filters) {
+    private void applyHospitalFilters(Map<String, List<String>> filters, String lat, String lng) {
         setcharges.clear();
         specailizations.clear();
+        consultationModes.clear();
 
         if (filters.containsKey("consultation")) {
             List<String> consultation = filters.get("consultation");
-            // Handle consultation filter logic (if needed)
+            for (String mode : consultation) {
+                try {
+                    consultationModes.add(Integer.parseInt(mode)); // ✅ Parse each mode
+                } catch (NumberFormatException e) {
+                    e.printStackTrace(); // Optionally handle invalid input
+                }
+            }
         }
 
         if (filters.containsKey("specialization")) {
@@ -340,15 +357,37 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                 setcharges.add(Integer.parseInt(id));
             }
         }
+        if((lat!=null) || (lng!=null)) {
+            tolatitude = lat ;
+            tolongitude = lng;
+        }
+        else
+        {
+            tolatitude="";
+            tolongitude="";
+        }
 
         displayHospitals(); // reload
     }
 
-    private void applyDoctorFilters(Map<String, List<String>> filters) {
+    private void applyDoctorFilters(Map<String, List<String>> filters, String latitude,
+                                    String longitude) {
         providerlist.clear();
         hospitallist.clear();
         docterlist.clear();
-
+        minExperience="";
+        maxExperience="";
+        consultationModes.clear();
+        if (filters.containsKey("consultation")) {
+            List<String> consultation = filters.get("consultation");
+            for (String mode : consultation) {
+                try {
+                    consultationModes.add(Integer.parseInt(mode)); // ✅ Parse each mode
+                } catch (NumberFormatException e) {
+                    e.printStackTrace(); // Optionally handle invalid input
+                }
+            }
+        }
         if (filters.containsKey("specialization")) {
             for (String id : filters.get("specialization")) {
                 providerlist.add(Integer.parseInt(id));
@@ -366,31 +405,41 @@ public class HospitalsListActivity extends LanguageBaseActivity {
                 docterlist.add(Integer.parseInt(id));
             }
         }
-        if(filters.containsKey("gender"))
-        {
+        if (filters.containsKey("gender")) {
             for (String id : filters.get("gender")) {
-                gender=id;
+                gender = id;
             }
         }
         if (filters.containsKey("experience")) {
             String range = filters.get("experience").get(0); // e.g., "3-12"
             if (range.contains("-")) {
                 String[] parts = range.split("-");
-               minExperience = parts[0];
-               maxExperience = parts[1];
+                minExperience = parts[0];
+                maxExperience = parts[1];
 
                 experience = String.valueOf(new DoctorSearchRequest.Experience(minExperience, maxExperience));
             }
+            else
+            {
+                minExperience="";
+                maxExperience="";
+            }
         }
 
-        if(filters.containsKey("city"))
+        if (filters.containsKey("city"))
 
             for (String id : filters.get("city")) {
-                    cityId = id;
+                cityId = id;
             }
-
-
-
+        if((latitude!=null) || (longitude!=null)) {
+            tolatitude = latitude ;
+            tolongitude = longitude;
+        }
+        else
+        {
+            tolatitude="";
+            tolongitude="";
+        }
 
         displaySpecailizations(); // reload
     }

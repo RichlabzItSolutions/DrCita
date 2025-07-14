@@ -235,103 +235,110 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center_vertical">
 
-                <TextView
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Appointment Date"
-                    android:padding="12dp"
-                    android:fontFamily="@font/jakarthabold"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
-
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/appointment_for"
-                    android:layout_gravity="center"
-                    android:padding="12dp"
-                    android:gravity="center"
-                    android:fontFamily="@font/jakarthabold"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                <!-- Appointment Date Column -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:id="@+id/ll_addmemeber"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#65AB48"
-                        android:text="Add"
-                        android:drawablePadding="4dp"
-                        android:focusable="true"
-                        android:clickable="true"
-                        android:fontFamily="@font/jakartharegular"/>
+                        android:text="Appointment Date"
+                        android:fontFamily="@font/jakarthabold"
+                        android:textStyle="bold"
+                        android:textColor="@color/black" />
 
-                    <ImageView
-                        android:id="@+id/addButton"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/add"
-                        android:contentDescription="Add"
-                        android:background="?attr/selectableItemBackgroundBorderless" />
+                    <TextView
+                        android:id="@+id/dateTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="Select Date"
+                        android:padding="12dp"
+                        android:layout_marginTop="5dp"
+                        android:drawableEnd="@drawable/ic_baseline_calendar"
+                        android:background="@drawable/edittext_bg"
+                        android:textColor="#000000" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/dateTextView"
+                <!-- Appointment For Column with Add Member Button -->
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Select Date"
-                    android:padding="12dp"
-                    android:drawableEnd="@drawable/ic_baseline_calendar"
-                    android:background="@drawable/edittext_bg"
-                    android:textColor="#000000" />
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
 
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="5dp"
-                    android:background="@drawable/edittext_bg">
-                    <Spinner
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:id="@+id/bookingForSpinner"
-                        android:paddingStart="2dp"
-                        android:paddingEnd="2dp"
-                        android:background="@android:color/transparent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/spinner_" />
-                </FrameLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/appointment_for"
+                            android:fontFamily="@font/jakarthabold"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
 
+                        <!-- Add Member -->
+                        <LinearLayout
+                            android:id="@+id/ll_addmemeber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:clickable="true"
+                            android:focusable="true">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#65AB48"
+                                android:text="Add"
+                                android:textSize="15sp"
+                                android:drawablePadding="4dp"
+                                android:fontFamily="@font/jakartharegular"
+                                android:paddingEnd="4dp" />
 
+                            <ImageView
+                                android:id="@+id/addButton"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginTop="2dp"
+                                android:src="@drawable/add"
+                                android:contentDescription="Add"
+                                android:background="?attr/selectableItemBackgroundBorderless" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Spinner -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/edittext_bg">
+
+                        <Spinner
+                            android:id="@+id/bookingForSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingStart="2dp"
+                            android:paddingEnd="2dp"
+                            android:background="@android:color/transparent" />
+
+                        <ImageView
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/spinner_" />
+                    </FrameLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Slot Info -->
@@ -352,7 +359,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-
                         android:textAlignment="center"
                         android:textColor="#000000"
                         android:id="@+id/tv_totalslot"
@@ -360,7 +366,7 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:background="#CCCCCC" />
 
                     <TextView
@@ -428,6 +434,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 flexbox:alignItems="center"
+                flexbox:justifyContent="flex_start"
+                flexbox:flexWrap="wrap"
+                android:layout_marginTop="8dp" />
+
+
+            <com.google.android.flexbox.FlexboxLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                flexbox:alignItems="center"
+                android:visibility="invisible"
+                android:layout_marginBottom="50dp"
                 flexbox:justifyContent="flex_start"
                 flexbox:flexWrap="wrap"
                 android:layout_marginTop="8dp" />
@@ -559,7 +577,7 @@
                         android:orientation="horizontal"
                         android:visibility="gone"
                         android:paddingVertical="4dp"
-                        android:paddingHorizontal="8dp">
+                       >
 
                         <!-- Left side: Coupon info + close icon -->
                         <LinearLayout
@@ -769,7 +787,7 @@
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:text="Continue"
+        android:text="Continue Booking"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:textSize="16sp"

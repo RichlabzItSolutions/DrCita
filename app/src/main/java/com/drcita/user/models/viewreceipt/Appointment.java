@@ -20,6 +20,15 @@ public class Appointment {
         private String transactionId;
         private String bookedOn;
         private String appointmentMode;
+        private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public String getAppointmentMode() {
         return appointmentMode;

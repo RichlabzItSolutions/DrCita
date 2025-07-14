@@ -8,13 +8,18 @@ public class ProvidersRequestData {
     private List<Integer> specializationId;
     private List<Integer> consultationMode;
     private String area;
+    private String latitude;
+    private String longitude;
 
-    public ProvidersRequestData(int cityId, String searchStr, List<Integer> specializationId, List<Integer> consultationMode, String area) {
+    public ProvidersRequestData(int cityId, String searchStr, List<Integer> specializationId, List<Integer> consultationMode,
+                                String area, String latitude, String longitude) {
         this.cityId = cityId;
         this.searchStr = searchStr;
         this.specializationId = specializationId;
         this.consultationMode = consultationMode;
         this.area = area;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     // Getters and Setters

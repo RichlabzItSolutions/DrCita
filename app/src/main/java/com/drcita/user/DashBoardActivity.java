@@ -29,7 +29,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.drcita.user.Activity.ChangeMobileNumberActivity;
 import com.drcita.user.Activity.SearchActivity;
+import com.drcita.user.Activity.UserLocationScreenActivity;
 import com.drcita.user.Activity.VideoConsultationActivity;
 import com.drcita.user.adapter.CaregoryAdapter;
 import com.drcita.user.adapter.NotificationAdapter;
@@ -41,6 +43,8 @@ import com.drcita.user.databinding.ActivityDashBoardBinding;
 import com.drcita.user.models.GlobalRequest;
 import com.drcita.user.models.ads.AdResponse;
 import com.drcita.user.models.appointment.AppointmentRequest;
+import com.drcita.user.models.cities.CityRequestData;
+import com.drcita.user.models.cities.CityResponse;
 import com.drcita.user.models.dashboard.specilization.Specialization;
 import com.drcita.user.models.home.City;
 import com.drcita.user.models.home.HomeDataRequest;
@@ -94,7 +98,8 @@ public class DashBoardActivity extends LanguageBaseActivity implements
     private List<City> cities;
     private List<Providers> providers;
 
-    List<String> citieslist = Arrays.asList("");
+    List<String> citieslist = new ArrayList<>();
+    private List<CityResponse.City> cityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +163,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements
         BottomAppBar bottomAppBar = activityDashBoardBinding.layoutDashboard.bottomAppBar;
         bottomAppBar.setBackground(gradientDrawable);
         bottomAppBar.setBackgroundTintList(null);
-
+        fetchCities();
         getDashBoardData();
         if (userName != null) {
             activityDashBoardBinding.layoutDashboard.tvUserName.setText(userName);
@@ -276,7 +281,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements
 
         });
 
-    activityDashBoardBinding.layoutDashboard.etSearch.setOnClickListener(view -> {
+    activityDashBoardBinding.layoutDashboard.tvSearchPlaceholder.setOnClickListener(view -> {
         Intent intent = new Intent(DashBoardActivity.this, SearchActivity.class);
         startActivity(intent);
 
@@ -292,9 +297,9 @@ public class DashBoardActivity extends LanguageBaseActivity implements
             activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.VISIBLE);
-            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.green));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.green));
+            activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.green));
         });
 
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.viewPagerMain.setClipToPadding(false);
@@ -313,13 +318,50 @@ public class DashBoardActivity extends LanguageBaseActivity implements
             activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
             activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
-            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
+            activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.green));
+            activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.green));
             // activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
         }
 
         autoSlide();
     }
+    private void fetchCities() {
+        SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, MODE_PRIVATE);
+       String stateId=preferences.getString(Constants.STATE_ID,null);
+        // Save state and city IDs
+        if (Constants.haveInternet(getApplicationContext())) {
+            showLoadingDialog();
+            CityRequestData otpRequest = new CityRequestData(Integer.parseInt(stateId));
+
+            ApiClient.getRestAPI().getCities(otpRequest).enqueue(new Callback<CityResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<CityResponse> call, @NonNull Response<CityResponse> response) {
+                    dismissLoadingDialog();
+                    if (response.isSuccessful()) {
+                        if (response.isSuccessful() && response.body() != null) {
+
+                            cityList = response.body().getData();
+                            for (CityResponse.City city : cityList) {
+                                citieslist.add(city.getCityName());
+                            }
+                            activityDashBoardBinding.layoutDashboard.tvLocation.setText(citieslist.get(0));
+                            //showDropdownPopup(activityDashBoardBinding.layoutDashboard.tvLocation, citieslist);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<CityResponse> call, @NonNull Throwable t) {
+                    t.printStackTrace();
+                    Toast.makeText(DashBoardActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    dismissLoadingDialog();
+                }
+            });
+
+        } else {
+            Constants.haveInternet(DashBoardActivity.this);
+        }
+        }
 
     private void autoSlide() {
         final Handler handler = new Handler();
@@ -487,9 +529,9 @@ public class DashBoardActivity extends LanguageBaseActivity implements
         activityDashBoardBinding.layoutDashboard.catRV.setVisibility(View.GONE);
         activityDashBoardBinding.layoutDashboard.dashboardmainlayout.getRoot().setVisibility(View.GONE);
         activityDashBoardBinding.layoutDashboard.notificationRV.setVisibility(View.VISIBLE);
-        activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.purple_500));
-        activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.md_grey_1000));
-        activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.purple_500));
+        activityDashBoardBinding.layoutDashboard.specalist.getDrawable().setTint(getResources().getColor(R.color.green));
+        activityDashBoardBinding.layoutDashboard.notification.getDrawable().setTint(getResources().getColor(R.color.green));
+        activityDashBoardBinding.layoutDashboard.fab.getBackground().mutate().setTint(getResources().getColor(R.color.green));
         getNotifications();
     }
 
@@ -531,7 +573,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements
 
             case R.id.regionTV:
             case R.id.regionNav:
-                Intent intent10 = new Intent(getApplicationContext(), RegionActivity.class);
+                Intent intent10 = new Intent(getApplicationContext(), ChangeMobileNumberActivity.class);
                 startActivity(intent10);
                 break;
 
@@ -541,11 +583,11 @@ public class DashBoardActivity extends LanguageBaseActivity implements
                 startActivity(intent11);
                 break;
 
-            case R.id.changepasswordNav:
-            case R.id.changepasswordTV:
-                Intent intent12 = new Intent(getApplicationContext(), ChangePasswordActivity.class);
-                startActivity(intent12);
-                break;
+//            case R.id.changepasswordNav:
+//            case R.id.changepasswordTV:
+//                Intent intent12 = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+//                startActivity(intent12);
+//                break;
             case R.id.logoutNav:
             case R.id.logoutTV:
                 SharedPreferences preferences = getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -624,10 +666,6 @@ public class DashBoardActivity extends LanguageBaseActivity implements
                 HospitalAdapter adapter = new HospitalAdapter(this, providers);
                 activityDashBoardBinding.layoutDashboard.dashboardmainlayout.rvTophospital.setAdapter(adapter);
 
-                citieslist = new ArrayList<>(cities.size());
-                for (City city : cities) {
-                    citieslist.add(city.getCityName());
-                }
                 activityDashBoardBinding.layoutDashboard.tvLocation.setOnClickListener(v ->
                 {
                     showDropdownPopup(activityDashBoardBinding.layoutDashboard.tvLocation, citieslist);
@@ -649,6 +687,11 @@ public class DashBoardActivity extends LanguageBaseActivity implements
     }
 
     private void showDropdownPopup(final TextView anchorView, final List<String> items) {
+        // ✅ Set default value to the first item (optional)
+        if (anchorView.getText().toString().isEmpty() && items != null && !items.isEmpty()) {
+            anchorView.setText(items.get(0)); // You can customize the default position
+        }
+
         // Inflate the dropdown layout
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.dropdown_list, null);
@@ -663,7 +706,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements
 
         // Handle item click
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            anchorView.setText(items.get(position));
+            anchorView.setText(items.get(position)); // ✅ Update selected value
             popupWindow.dismiss();
         });
 
@@ -672,6 +715,7 @@ public class DashBoardActivity extends LanguageBaseActivity implements
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(anchorView, 0, 0);
     }
+
 
 
     private void getSpecalists() {

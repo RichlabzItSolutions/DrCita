@@ -15,6 +15,8 @@ public class DoctorSearchRequest {
     private Experience experience;
     private String availability;
     private String sort;
+    private String latitude;
+    private String longitude;
 
     public List<Integer> getDoctorId() {
         return doctorId;
@@ -27,11 +29,13 @@ public class DoctorSearchRequest {
     // Constructor
 
 
-    public DoctorSearchRequest(int cityId, String searchStr, List<Integer> hospitalId,
-                               List<Integer> doctorId, List<Integer> specializationId,
-                               List<Integer> consultationMode, String area, String gender,
+    public DoctorSearchRequest(int cityId, String searchStr, List<Integer> hospitalId, List<Integer> doctorId,
+                               List<Integer> specializationId, List<Integer> consultationMode,
+                               String area, String gender,
                                List<Integer> languageIds,
-                               Experience experience, String availability, String sort) {
+                               Experience experience,
+                               String availability,
+                               String sort, String latitude, String longitude) {
         this.cityId = cityId;
         this.searchStr = searchStr;
         this.hospitalId = hospitalId;
@@ -44,7 +48,11 @@ public class DoctorSearchRequest {
         this.experience = experience;
         this.availability = availability;
         this.sort = sort;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
+
+
 
     // Empty constructor
     public DoctorSearchRequest() {}

@@ -154,11 +154,13 @@ public class DoctorAppointmentActivity extends LanguageBaseActivity {
             docterBookingBinding.dateTextView.setText(selectedDate);
             docterBookingBinding.btnPayNow.setText("Pay Now");
             docterBookingBinding.tvamount.setVisibility(VISIBLE);
+            docterBookingBinding.bookingForSpinner.setEnabled(true);
             getDoctorDetails();
         } else if (isresechedule.equals("1")) { // for resechudling
             docterBookingBinding.llAddmemeber.setVisibility(GONE);
             docterBookingBinding.tvTitle.setText("Reshedule");
             docterBookingBinding.dateTextView.setText(slotdate);
+            docterBookingBinding.bookingForSpinner.setEnabled(false);
             selectedDate=slotdate;
             getRescheduleApi();
             docterBookingBinding.tvamount.setVisibility(GONE);

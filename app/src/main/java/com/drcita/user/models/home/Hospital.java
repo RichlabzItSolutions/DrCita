@@ -3,6 +3,15 @@ package com.drcita.user.models.home;
 public class Hospital{
     private int id;
     private String name;
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public int getId() {
         return id;
@@ -25,6 +34,7 @@ public class Hospital{
         return "Hospital{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", area='" + area + '\'' +
                 '}';
     }
 }

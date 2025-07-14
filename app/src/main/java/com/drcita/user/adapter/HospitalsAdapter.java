@@ -85,13 +85,13 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
                     ArrayList<NewProviderList> filteredList = new ArrayList<>();
                     for (NewProviderList receipt : dataItems) {
 
-                        if (receipt.getHospitalName().toLowerCase().startsWith(charString.toLowerCase()))
-                        {
+                        if (receipt.getHospitalName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(receipt);
-                        } else {
-                            filteredList.remove(receipt);
-
                         }
+//                        }else {
+//                            filteredList.remove(receipt);
+//
+//                        }
                     }
 
                     mFilteredList = filteredList;
@@ -116,7 +116,7 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
         ImageView rating;
         LinearLayout ratingedit;
         TextView hospitalname,ratingTV,ratingcount,time,location,free,txtSpecialization,tvaddress;
-        Button btnBook;
+        LinearLayout btnBook;
 
         public Viewholder(@NonNull View itemView) {
             super(itemView);
@@ -128,7 +128,6 @@ public class HospitalsAdapter extends RecyclerView.Adapter<HospitalsAdapter.View
             location = itemView.findViewById(R.id.location);
             ratingedit = itemView.findViewById(R.id.ratingedit);
             hospitallogo = itemView.findViewById(R.id.hospitallogo);
-            free = itemView.findViewById(R.id.free);
             btnBook=itemView.findViewById(R.id.btnBook);
             tvaddress=itemView.findViewById(R.id.txtLocation);
             txtSpecialization=itemView.findViewById(R.id.txtSpecialization);

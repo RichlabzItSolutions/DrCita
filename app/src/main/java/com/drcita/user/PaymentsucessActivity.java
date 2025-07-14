@@ -62,6 +62,7 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
                 intent.putExtra("doctorData1", Parcels.wrap(doctorData));
                 intent.putExtra("position",2);
                  intent.putExtra("payment",payment);
+                intent.putExtra("from",1);
                 startActivity(intent);
             });
         }else {
@@ -70,7 +71,7 @@ public class PaymentsucessActivity extends LanguageBaseActivity {
                 intent.putExtra("doctorData", Parcels.wrap(doctorData));
                 intent.putExtra("id", doctorData.getAppointmentId());
                 intent.putExtra("position",1);
-                // intent.putExtra("payment",payment);
+                 intent.putExtra("from",1);
                 startActivity(intent);
             });
         }

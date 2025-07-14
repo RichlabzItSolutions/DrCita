@@ -72,7 +72,7 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
 
         holder.doctorName.setText(item.getDoctorName());
         holder.speciality.setText(TextUtils.join(", ", item.getSpecializationName()));
-        holder.hospitalName.setText(item.getHospitalName());
+        holder.hospitalName.setText(item.getHospitalName()+"\n"+item.getArea());
         holder.multiSpeciality.setText(item.getHospitalType());
         holder.appointmentDate.setText(item.getSlotDate());
         holder.appointmentTime.setText(item.getSlotTime());
@@ -136,7 +136,7 @@ public class BookingAppointmentAdapter extends RecyclerView.Adapter<BookingAppoi
             intent.putExtra("id", item.getAppointmentId());
             intent.putExtra("position",2);
             intent.putExtra("payment",holder.statusOnline.getText().toString());
-            // intent.putExtra("payment",payment);
+             intent.putExtra("from",2);
            context.startActivity(intent);
         });
     }

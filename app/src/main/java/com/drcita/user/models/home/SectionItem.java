@@ -8,6 +8,16 @@ public class SectionItem {
     private String title;
     private String name;
     private int id;
+    private  String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     private boolean isPlaceholder;
     private String sectionType; // "hospital", "doctor", "specialist"
 
@@ -18,12 +28,13 @@ public class SectionItem {
     }
 
     // Constructor for item with ID and sectionType
-    public SectionItem(int type, String name, int id, String sectionType) {
+    public SectionItem(int type, String name, int id, String sectionType,String area) {
         this.type = type;
         this.name = name;
         this.id = id;
         this.sectionType = sectionType;
         this.isPlaceholder = false;
+        this.area=area;
     }
 
     // Constructor for "No data" placeholder

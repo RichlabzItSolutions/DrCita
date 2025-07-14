@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,10 +43,7 @@ public class SearchActivity extends LanguageBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         searchbinding = DataBindingUtil.setContentView(this, R.layout.activity_search);
-//        adapter = new SearchAdapter(itemList);
-//        searchbinding.search.setLayoutManager(new LinearLayoutManager(this));
-//        searchbinding.search.setAdapter(adapter);
-
+    searchbinding.ivMenu.setOnClickListener(view -> finish());
         searchbinding.search.setLayoutManager(new LinearLayoutManager(this));
          searchbinding.etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -132,7 +130,7 @@ public class SearchActivity extends LanguageBaseActivity {
             if (hasHospital) {
                 itemList.add(new SectionItem(SectionItem.TYPE_HEADER, "List of Hospitals"));
                 for (Hospital h : body.getData().getHospitals()) {
-                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, h.getName(), h.getId(), "hospital"));
+                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, h.getName(), h.getId(), "hospital",h.getArea()));
 
                 }
             }
@@ -146,7 +144,7 @@ public class SearchActivity extends LanguageBaseActivity {
                 itemList.add(new SectionItem(SectionItem.TYPE_HEADER, "List of Doctors"));
                 for (Doctor d : body.getData().getDoctors()) {
 
-                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, d.getName(), d.getId(), "doctor"));
+                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, d.getName(), d.getId(), "doctor",""));
                 }
             }
             else {
@@ -157,7 +155,7 @@ public class SearchActivity extends LanguageBaseActivity {
             if (hasSpecialist) {
                 itemList.add(new SectionItem(SectionItem.TYPE_HEADER, "List of Specialists"));
                 for (Specialist s : body.getData().getSpecialists()) {
-                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, s.getName(), s.getId(), "specialist"));
+                    itemList.add(new SectionItem(SectionItem.TYPE_ITEM, s.getName(), s.getId(), "specialist",""));
                 }
 
             }

@@ -61,6 +61,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
     private String providerNumber;
     private int systemchargesindollar;
     private int systemchargesinslsh;
+    private int from;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
                 id = extras.getInt("id");
                 position = extras.getInt("position");
                 payment = extras.getInt("payment",payment);
+                from=extras.getInt("from");
             }
         } else {
         }
@@ -232,7 +234,7 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
                 binding.receiptdoctorspecailazation.setText(dataItems.getAppointment().getSpecialisation());
                 binding.doctorspecalization.setText(dataItems.getAppointment().getSpecialisation());
                 binding.phonenumberreceipt.setText("Hospital No "+dataItems.getAppointment().getProviderMobile());
-            binding.doctorlocation.setText(dataItems.getAppointment().getRegion());
+            binding.doctorlocation.setText(dataItems.getAppointment().getArea());
             binding.patientslot.setText(dataItems.getAppointment().getPatientMobile());
             if(dataItems.getAppointment().getAppointmentMode().equals("1"))
             {
@@ -335,8 +337,17 @@ public class ViewreceiptActivity extends LanguageBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if(from==1)
+        {
         Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+        else {
+            Intent intent = new Intent(this, AppointmentsSummaryActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+
+        }
 }

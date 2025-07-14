@@ -16,6 +16,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        tools:ignore="CoarseFineLocation" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".CaafisomApp"
@@ -28,6 +32,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CaafisomUser"
         android:usesCleartextTraffic="true" >
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_API_KEY" />
+
         <activity
             android:name=".CropImageActivity"
             android:exported="false" />
@@ -87,13 +107,10 @@
             android:name=".ChangePasswordActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
         <activity
             android:name=".DoctorAppointmentActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
-
         <activity
             android:name=".ProfileUpdateActivity"
             android:exported="false"
@@ -158,8 +175,7 @@
         <activity
             android:name=".UpdateProfile"
             android:exported="true"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
-            />
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
             android:name=".AppointmentsActivity"
             android:exported="true"
@@ -176,24 +192,24 @@
             android:name=".DashBoardActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-        <activity android:name=".AppointmentsSummaryActivity"
+        <activity
+            android:name=".AppointmentsSummaryActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
-
-        <activity android:name=".Activity.CoupnsActivity"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+        <activity
+            android:name=".Activity.CoupnsActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-        <activity android:name=".Activity.CouponDetailsActivity"
+        <activity
+            android:name=".Activity.CouponDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
-
         <activity
             android:name=".ProfileActivity"
             android:exported="true"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
-        <activity android:name=".Activity.SearchActivity"
+        <activity
+            android:name=".Activity.SearchActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
         <activity
@@ -209,13 +225,11 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
         <activity
             android:name=".Activity.NewVerifyOtpActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents.NoActionBar" />
-
         <activity
             android:name=".Activity.UserLocationScreenActivity"
             android:exported="true"
@@ -245,12 +259,10 @@
             android:name=".WebViewActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity
             android:name=".MedicalMembersListActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity
             android:name=".AddMedicalRecordActivity"
             android:exported="true"
@@ -268,8 +280,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-
+            android:theme="@style/Theme.AppCompat.NoActionBar" /> <!-- <meta-data -->
+        <!-- android:name="com.google.android.geo.API_KEY" -->
+        <!-- android:value="@string/google_maps_key" /> -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -278,10 +294,15 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name=".Activity.SpecializationActivity"
             android:exported="true"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name=".Activity.ChangeMobileNumberActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -296,12 +317,16 @@
             </intent-filter>
         </activity>
 
+
+
         <activity
             android:name=".filter.DoctorFilterBottomSheet"
             android:theme="@style/Theme.App.BottomDialog"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Activity.TermsWebViewActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".Activity.TermsWebViewActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher_round" />

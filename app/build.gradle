@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 /*def localProperties = new Properties()
@@ -169,6 +170,11 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.6'
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'com.google.android.libraries.places:places:3.4.0'
 
 
 

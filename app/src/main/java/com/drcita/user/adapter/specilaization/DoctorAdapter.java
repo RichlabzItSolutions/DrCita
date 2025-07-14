@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -69,7 +70,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         }
 
         holder.tvExperience.setText(doctor.getExperience() + " Years Exp.");
-        holder.tvRating.setText("Rating: " + doctor.getRating());
+        holder.tvRating.setText("Rating: " + doctor.getRating()+"/5");
         holder.tvSpecialization.setText(TextUtils.join(", ", doctor.getSpecializations()));
         holder.tvLanguages.setText(TextUtils.join(", ", doctor.getLanguages()));
         holder.tvdesegnation.setText(TextUtils.join(", ", doctor.getQualifications()));
@@ -81,7 +82,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         if (!doctor.getProviders().isEmpty()) {
             ProviderModel provider = doctor.getProviders().get(0);
-            holder.tvHospitalName.setText(provider.getHospitalName());
+            holder.tvHospitalName.setText(provider.getHospitalName()+"\n"+"( "+provider.getArea()+")");
 
             boolean isAvailable = provider.getMorningAvailable() == 1 ||
                     provider.getAfternoonAvailable() == 1 ||
@@ -274,6 +275,8 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_single_select_hospital, null);
         RecyclerView recyclerView = view.findViewById(R.id.rvHospitalList);
+        androidx.appcompat.widget.AppCompatButton btnOk = view.findViewById(R.id.btnOk);
+        androidx.appcompat.widget.AppCompatButton btnCancel = view.findViewById(R.id.btnCancel);
 
         final ProviderModel[] selectedProvider = {null};
 
@@ -283,23 +286,25 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
+        AlertDialog dialog = builder.setView(view).create();
+        btnOk.setOnClickListener(v -> {
+            if (selectedProvider[0] != null) {
+                DoctorModel doctor = doctorList.get(doctorPosition);
+                List<ProviderModel> providerList = doctor.getProviders();
 
-        builder.setView(view)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    if (selectedProvider[0] != null) {
-                        DoctorModel doctor = doctorList.get(doctorPosition);
-                        List<ProviderModel> providerList = doctor.getProviders();
+                providerList.remove(selectedProvider[0]);
+                providerList.add(0, selectedProvider[0]);
 
-                        providerList.remove(selectedProvider[0]);
-                        providerList.add(0, selectedProvider[0]);
+                notifyItemChanged(doctorPosition);
+                dialog.dismiss();
+            } else {
+                Toast.makeText(context, "No hospital selected", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-                        notifyItemChanged(doctorPosition);
-                    } else {
-                        Toast.makeText(context, "No hospital selected", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+
     }
 
 }

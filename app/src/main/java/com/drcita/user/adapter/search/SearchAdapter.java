@@ -62,7 +62,12 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (holder instanceof HeaderViewHolder) {
             ((HeaderViewHolder) holder).title.setText(item.getTitle());
         } else if (holder instanceof NameViewHolder) {
-            ((NameViewHolder) holder).name.setText(item.getName());
+            ((NameViewHolder) holder).name.setText(
+                    item.getArea() != null && !item.getArea().isEmpty()
+                            ? item.getName() + " (" + item.getArea() + ")"
+                            : item.getName()
+            );
+
 
             if (item.isPlaceholder()) {
                 ((NameViewHolder) holder).imgArrow.setVisibility(View.GONE);

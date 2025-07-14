@@ -165,14 +165,27 @@ public class AddMedicalRecordActivity extends LanguageBaseActivity {
             long maxSizeInBytes = 5 * 1024 * 1024; // 5 MB
             return file.length() <= maxSizeInBytes;
         }
-
-
     private void startCrop(Uri sourceUri) {
-        Uri destUri = Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + "_cropped.jpg"));
+        File destinationFile = new File(getCacheDir(), System.currentTimeMillis() + "_cropped.jpg");
+        Uri destUri = Uri.fromFile(destinationFile);
+
+        UCrop.Options options = new UCrop.Options();
+        options.setFreeStyleCropEnabled(true); // Allow user to freely select the crop box
+        options.setCompressionQuality(90);     // Set quality if needed
+        options.setHideBottomControls(false);  // Show crop rotate/scale controls
+
         UCrop.of(sourceUri, destUri)
-                .withAspectRatio(1, 1)
+                .withOptions(options)
                 .start(this);
     }
+
+
+//    private void startCrop(Uri sourceUri) {
+//        Uri destUri = Uri.fromFile(new File(getCacheDir(), System.currentTimeMillis() + "_cropped.jpg"));
+//        UCrop.of(sourceUri, destUri)
+//                .withAspectRatio(1, 1)
+//                .start(this);
+//    }
 
     private File copyUriToTempFile(Uri uri, String fileName) {
         try {

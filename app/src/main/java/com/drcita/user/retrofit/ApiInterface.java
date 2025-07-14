@@ -51,6 +51,7 @@ import com.drcita.user.models.hospitals.HospitalsResponse;
 import com.drcita.user.models.hospitals.SingleDocterRequest;
 import com.drcita.user.models.hospitals.SingleDoctorResponse;
 import com.drcita.user.models.language.UpdateLanguageRequest;
+import com.drcita.user.models.login.ChangeMobileNumber;
 import com.drcita.user.models.login.LoginRequest;
 import com.drcita.user.models.login.LoginResponse;
 import com.drcita.user.models.medicalrecords.GetMedicalRecordsRequest;
@@ -360,6 +361,9 @@ public interface ApiInterface {
 
     @POST("user/fetchCouponDetails")
     Call<CouponDetailsResponse> getCouponDetails(@Body CouponDetailRequest request);
+
+    @POST("user/changeMobile")
+    Call<LoginResponse> changeMobile(@Body ChangeMobileNumber request);
 
 
 

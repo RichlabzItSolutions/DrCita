@@ -216,7 +216,7 @@ public class UserLocationScreenActivity  extends LanguageBaseActivity {
                                 adapter.setDropDownViewResource(R.layout.spinner_item);
                                 locationBinding.spStates.setAdapter(adapter);
                             }
-                    else {
+                            else {
                                 try {
                                     Constants.displayError(response.errorBody().string(), getBaseContext());
                                 } catch (IOException e) {
@@ -256,15 +256,20 @@ public class UserLocationScreenActivity  extends LanguageBaseActivity {
                     cityList = response.body().getData();
                     cityNames.clear();
                     cityNames.add("Select City");
-
                     for (CityResponse.City city : cityList) {
                         cityNames.add(city.getCityName());
                     }
-
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(UserLocationScreenActivity.this, R.layout.spinner_item, cityNames);
                             adapter.setDropDownViewResource(R.layout.spinner_item);
                     locationBinding.spCities.setAdapter(adapter);
                 }
+                        else {
+                            cityNames.clear();
+                            cityNames.add("Select City");
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(UserLocationScreenActivity.this, R.layout.spinner_item, cityNames);
+                            adapter.setDropDownViewResource(R.layout.spinner_item);
+                            locationBinding.spCities.setAdapter(adapter);
+                        }
 
                     }
                 }

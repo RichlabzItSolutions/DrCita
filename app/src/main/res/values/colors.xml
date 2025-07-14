@@ -35,5 +35,6 @@
     <color name="green_primary">#4CAF50</color>
     <color name="lightGray">#F5F5F5</color>
     <color name="blue">#1976D2</color>
+    <color name="red_primary">#F44336</color>
 
 </resources>

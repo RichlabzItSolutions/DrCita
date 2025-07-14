@@ -51,7 +51,7 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="appointmentbookedsucessful">Appointment Booked Successfully</string>
     <string name="appointmentbookedwith">Appointment booked with</string>
     <string name="viewreceipt">View Receipt</string>
-    <string name="region">Region</string>
+    <string name="region">Change Mobile</string>
     <string name="updateregion">Update Region</string>
     <string name="resetpassword">Change password</string>
     <string name="setthenewpassword">Create a new password so you can access your account and all the features of the program.</string>
@@ -255,8 +255,10 @@ With the largest network of doctors and healthcare providers from top clinics an
     <string name="other_comments" translatable="false">Other\n</string>
     <string name="no_doctors_available" translatable="false">No Doctors Available</string>
     <string name="login">Login</string>
+    <string name="mapkey">AIzaSyC68uSRK23hrzev5tCx1ePVfNiLeMhEP4c</string>
     <string-array name="meeting_options">
         <item>One to One Meeting</item>
         <item>Group Meeting</item>
     </string-array>
+
 </resources>

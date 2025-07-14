@@ -31,7 +31,7 @@ public class SpecializationActivity extends LanguageBaseActivity {
     CategoriWiseSpecializationAdapter adapter;
     private LinearLayout categoryTabs;
     private List<Specialization> specializationList = new ArrayList<>();
-    int position = 2;
+    int position = 0;
     private int departmentId;
 
 
@@ -47,12 +47,12 @@ public class SpecializationActivity extends LanguageBaseActivity {
             departmentId = getIntent().getIntExtra("specialization", 0);
             loadSpecializations(departmentId);
         }
+        searchbinding.llBack.setOnClickListener(view -> finish());
     }
 
     private void setupCategoryTabs() {
 
         try {
-
             showLoadingDialog();
             if (Constants.haveInternet(getApplicationContext())) {
 
@@ -86,7 +86,7 @@ public class SpecializationActivity extends LanguageBaseActivity {
     }
 
     private void setupRecyclerView() {
-        searchbinding.search.setLayoutManager(new GridLayoutManager(this, 5));
+        searchbinding.search.setLayoutManager(new GridLayoutManager(this, 2));
         adapter = new CategoriWiseSpecializationAdapter(this, specializationList);
         searchbinding.search.setAdapter(adapter);
     }
@@ -95,8 +95,6 @@ public class SpecializationActivity extends LanguageBaseActivity {
         showLoadingDialog();
         if (Constants.haveInternet(getApplicationContext())) {
             SpecializationRequest specializationRequest = new SpecializationRequest(String.valueOf(departmentId));
-
-
             ApiClient.getRestAPI().getSpecoilizationByDepartment(specializationRequest).enqueue(new Callback<SpecializationResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<SpecializationResponse> call, @NonNull retrofit2.Response<SpecializationResponse> response) {
@@ -168,6 +166,8 @@ public class SpecializationActivity extends LanguageBaseActivity {
             // Highlight the first tab if any
             if (categoryTabs.getChildCount() > 0) {
                 ((TextView) categoryTabs.getChildAt(position)).setBackgroundResource(R.drawable.bg_tab_selected);
+                ((TextView) categoryTabs.getChildAt(position)).setTextColor(Color.WHITE); // selected tab text color
+
             }
         }catch (Exception ex)
         {

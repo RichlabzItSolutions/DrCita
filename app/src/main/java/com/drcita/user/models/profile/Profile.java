@@ -17,6 +17,8 @@ public class Profile {
     private int bloodGroupId;
     private String bloodGroup; // Nullable
 
+    private int foodType;
+
     public int getSubUserId() {
         return subUserId;
     }
@@ -137,6 +139,14 @@ public class Profile {
         this.bloodGroup = bloodGroup;
     }
 
+    public int getFoodType() {
+        return foodType;
+    }
+
+    public void setFoodType(int foodType) {
+        this.foodType = foodType;
+    }
+
     @Override
     public String toString() {
         return "Profile{" +
@@ -155,6 +165,7 @@ public class Profile {
                 ", pastSurgeries=" + pastSurgeries +
                 ", bloodGroupId=" + bloodGroupId +
                 ", bloodGroup='" + bloodGroup + '\'' +
+                ", foodType=" + foodType +
                 '}';
     }
 }

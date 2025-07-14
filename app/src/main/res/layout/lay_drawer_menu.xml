@@ -32,7 +32,7 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:background="@drawable/usericon"/>
+                android:background="@drawable/usericon" />
             <TextView
                 android:id="@+id/profileTV"
                 android:layout_width="0dp"
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -87,6 +87,7 @@
             <ImageView
                 android:layout_width="45dp"
                 android:layout_height="45dp"
+                app:tint="@color/green"
                 android:background="@drawable/appointments"/>
             <TextView
                 android:id="@+id/appoitmentsTV"
@@ -112,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="20dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -165,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -218,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -231,6 +232,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="70dp"
+        android:visibility="gone"
         app:strokeColor="#ebebeb"
         app:cardBackgroundColor="@color/white"
         app:strokeWidth="1dp"
@@ -271,7 +273,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -324,7 +326,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24">
 
             </ImageView>
@@ -376,7 +378,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
-                    android:tint="@color/green"
+                    app:tint="@color/green"
                     android:src="@drawable/ic_baseline_chevron_right_24"/>
 
 
@@ -430,7 +432,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
-                android:tint="@color/green"
+                app:tint="@color/green"
                 android:src="@drawable/ic_baseline_chevron_right_24"/>
 
 

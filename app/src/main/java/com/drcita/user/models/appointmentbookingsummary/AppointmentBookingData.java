@@ -9,6 +9,15 @@ public class AppointmentBookingData {
     private String doctorName;
     private String scanName;
     private String hospitalName;
+    private String area;
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     private String paidAmount;
 
